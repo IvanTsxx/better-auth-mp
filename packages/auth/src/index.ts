@@ -9,9 +9,9 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
 
-  trustedOrigins: [env.CORS_ORIGIN],
   emailAndPassword: {
     enabled: true,
   },
   plugins: [nextCookies()],
+  trustedOrigins: [env.CORS_ORIGIN],
 });

@@ -26,14 +26,14 @@ generator client {
 In `prisma.config.ts`:
 
 ```typescript
-import { defineConfig, env } from 'prisma/config'
+import { defineConfig, env } from "prisma/config";
 
 export default defineConfig({
-  schema: 'prisma/schema.prisma',
+  schema: "prisma/schema.prisma",
   datasource: {
-    url: env('DATABASE_URL'),
+    url: env("DATABASE_URL"),
   },
-})
+});
 ```
 
 ## 3. Environment Variable
@@ -65,14 +65,14 @@ Prisma ORM 7 uses the query compiler by default, so you must use a driver adapte
 2. Instantiate Prisma Client with the adapter:
 
    ```typescript
-   import { PrismaClient } from '../generated/client'
-   import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3'
+   import { PrismaClient } from "../generated/client";
+   import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 
    const adapter = new PrismaBetterSqlite3({
-     url: process.env.DATABASE_URL ?? 'file:./dev.db',
-   })
+     url: process.env.DATABASE_URL ?? "file:./dev.db",
+   });
 
-   const prisma = new PrismaClient({ adapter })
+   const prisma = new PrismaClient({ adapter });
    ```
 
 ## Using Driver Adapter (LibSQL / Turso)
@@ -88,14 +88,14 @@ For edge compatibility or Turso:
 2. Instantiate:
 
    ```typescript
-   import { PrismaClient } from '../generated/client'
-   import { PrismaLibSql } from '@prisma/adapter-libsql'
+   import { PrismaClient } from "../generated/client";
+   import { PrismaLibSql } from "@prisma/adapter-libsql";
 
    const adapter = new PrismaLibSql({
      url: process.env.TURSO_DATABASE_URL,
      authToken: process.env.TURSO_AUTH_TOKEN,
-   })
-   const prisma = new PrismaClient({ adapter })
+   });
+   const prisma = new PrismaClient({ adapter });
    ```
 
 ## Limitations

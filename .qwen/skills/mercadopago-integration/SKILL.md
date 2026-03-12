@@ -14,6 +14,7 @@ This skill is limited to planning and scaffolding. It does not provide instructi
 ## Mandatory Safety Boundaries
 
 Never produce or modify code that:
+
 - installs or imports an external provider SDK
 - reads or writes provider credentials/secrets
 - creates live checkout sessions

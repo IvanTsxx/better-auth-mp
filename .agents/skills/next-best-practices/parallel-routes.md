@@ -61,12 +61,12 @@ The `(.)` prefix intercepts routes at the same level.
 
 ```tsx
 // app/@modal/(.)photos/[id]/page.tsx
-import { Modal } from '@/components/modal';
+import { Modal } from "@/components/modal";
 
 export default async function PhotoModal({
-  params
+  params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
   const photo = await getPhoto(id);
@@ -84,9 +84,9 @@ export default async function PhotoModal({
 ```tsx
 // app/photos/[id]/page.tsx
 export default async function PhotoPage({
-  params
+  params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
   const photo = await getPhoto(id);
@@ -106,10 +106,10 @@ export default async function PhotoPage({
 
 ```tsx
 // components/modal.tsx
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef } from 'react';
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef } from "react";
 
 export function Modal({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -118,20 +118,23 @@ export function Modal({ children }: { children: React.ReactNode }) {
   // Close on escape key
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         router.back(); // Correct
       }
     }
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
   }, [router]);
 
   // Close on overlay click
-  const handleOverlayClick = useCallback((e: React.MouseEvent) => {
-    if (e.target === overlayRef.current) {
-      router.back(); // Correct
-    }
-  }, [router]);
+  const handleOverlayClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (e.target === overlayRef.current) {
+        router.back(); // Correct
+      }
+    },
+    [router]
+  );
 
   return (
     <div
@@ -192,7 +195,7 @@ If you want the modal to appear on direct access too, you need additional logic:
 
 ```tsx
 // app/photos/[id]/page.tsx
-import { Modal } from '@/components/modal';
+import { Modal } from "@/components/modal";
 
 export default async function PhotoPage({ params }) {
   const { id } = await params;
@@ -243,7 +246,11 @@ In Next.js 15+, `params` is a Promise:
 
 ```tsx
 // Correct
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
 }
 ```
@@ -269,14 +276,14 @@ Links in the gallery:
 
 ```tsx
 // app/photos/page.tsx
-import Link from 'next/link';
+import Link from "next/link";
 
 export default async function Gallery() {
   const photos = await getPhotos();
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      {photos.map(photo => (
+      {photos.map((photo) => (
         <Link key={photo.id} href={`/photos/${photo.id}`}>
           <img src={photo.thumbnail} alt={photo.title} />
         </Link>

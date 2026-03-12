@@ -75,12 +75,12 @@ Prisma ORM 7 uses the query compiler by default, which **requires a driver adapt
 Example (PostgreSQL):
 
 ```ts
-import 'dotenv/config'
-import { PrismaClient } from '../generated/client'
-import { PrismaPg } from '@prisma/adapter-pg'
+import "dotenv/config";
+import { PrismaClient } from "../generated/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
-const prisma = new PrismaClient({ adapter })
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter });
 ```
 
 ## Prisma Client Setup (Required)
@@ -112,11 +112,11 @@ Prisma Client must be installed and generated for any database.
 1. Instantiate Prisma Client with the database-specific driver adapter:
 
    ```typescript
-   import { PrismaClient } from '../generated/client'
-   import { PrismaPg } from '@prisma/adapter-pg'
+   import { PrismaClient } from "../generated/client";
+   import { PrismaPg } from "@prisma/adapter-pg";
 
-   const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
-   const prisma = new PrismaClient({ adapter })
+   const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+   const prisma = new PrismaClient({ adapter });
    ```
 
 1. Re-run `prisma generate` after every schema change.

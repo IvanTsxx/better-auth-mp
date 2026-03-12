@@ -85,10 +85,10 @@ generator client {
 
 ```typescript
 // Before (v6)
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
 // After (v7)
-import { PrismaClient } from '../generated/client'
+import { PrismaClient } from "../generated/client";
 ```
 
 ## Common Patterns
@@ -143,5 +143,5 @@ generated/
 Import the client:
 
 ```typescript
-import { PrismaClient, Prisma } from '../generated/client'
+import { PrismaClient, Prisma } from "../generated/client";
 ```

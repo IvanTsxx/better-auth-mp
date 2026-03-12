@@ -1,16 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  testDir: "./apps/web/e2e",
-  fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: "html",
-  use: {
-    baseURL: "http://localhost:3001",
-    trace: "on-first-retry",
-  },
+  fullyParallel: true,
   projects: [
     {
       name: "chromium",
@@ -25,9 +17,17 @@ export default defineConfig({
       use: { ...devices["Desktop Safari"] },
     },
   ],
+  reporter: "html",
+  retries: process.env.CI ? 2 : 0,
+  testDir: "./apps/web/e2e",
+  use: {
+    baseURL: "http://localhost:3001",
+    trace: "on-first-retry",
+  },
   webServer: {
     command: "bun dev",
-    url: "http://localhost:3001",
     reuseExistingServer: !process.env.CI,
+    url: "http://localhost:3001",
   },
+  workers: process.env.CI ? 1 : undefined,
 });

@@ -54,30 +54,30 @@ Use `next/link` for internal navigation instead of `<a>` tags.
 
 ```tsx
 // Bad: Plain anchor tag
-<a href="/about">About</a>
+<a href="/about">About</a>;
 
 // Good: Next.js Link
-import Link from 'next/link'
+import Link from "next/link";
 
-<Link href="/about">About</Link>
+<Link href="/about">About</Link>;
 ```
 
 Active link styling:
 
 ```tsx
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function NavLink({ href, children }) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
-    <Link href={href} className={pathname === href ? 'active' : ''}>
+    <Link href={href} className={pathname === href ? "active" : ""}>
       {children}
     </Link>
-  )
+  );
 }
 ```
 
@@ -86,23 +86,23 @@ export function NavLink({ href, children }) {
 ```tsx
 // app/blog/[slug]/page.tsx
 export async function generateStaticParams() {
-  const posts = await getPosts()
-  return posts.map((post) => ({ slug: post.slug }))
+  const posts = await getPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 ```
 
 ### After Response
 
 ```tsx
-import { after } from 'next/server'
+import { after } from "next/server";
 
 export async function POST(request: Request) {
-  const data = await processRequest(request)
+  const data = await processRequest(request);
 
   after(async () => {
-    await logAnalytics(data)
-  })
+    await logAnalytics(data);
+  });
 
-  return Response.json({ success: true })
+  return Response.json({ success: true });
 }
 ```

@@ -27,14 +27,14 @@ generator client {
 In `prisma.config.ts`:
 
 ```typescript
-import { defineConfig, env } from 'prisma/config'
+import { defineConfig, env } from "prisma/config";
 
 export default defineConfig({
-  schema: 'prisma/schema.prisma',
+  schema: "prisma/schema.prisma",
   datasource: {
-    url: env('DATABASE_URL'),
+    url: env("DATABASE_URL"),
   },
-})
+});
 ```
 
 ## 3. Environment Variable
@@ -71,12 +71,12 @@ Prisma ORM 7 uses the query compiler by default, so you must use a driver adapte
 2. Instantiate Prisma Client with the adapter:
 
    ```typescript
-   import 'dotenv/config'
-   import { PrismaClient } from '../generated/client'
-   import { PrismaPg } from '@prisma/adapter-pg'
+   import "dotenv/config";
+   import { PrismaClient } from "../generated/client";
+   import { PrismaPg } from "@prisma/adapter-pg";
 
-   const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
-   const prisma = new PrismaClient({ adapter })
+   const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+   const prisma = new PrismaClient({ adapter });
    ```
 
 ## Common Issues

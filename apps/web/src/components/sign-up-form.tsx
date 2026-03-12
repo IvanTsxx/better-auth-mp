@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import z from "zod";
+import { z } from "zod";
 
 import { authClient } from "@/lib/auth-client";
 
@@ -10,38 +10,42 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () => void }) {
+export default function SignUpForm({
+  onSwitchToSignIn,
+}: {
+  onSwitchToSignIn: () => void;
+}) {
   const router = useRouter();
   const { isPending } = authClient.useSession();
 
   const form = useForm({
     defaultValues: {
       email: "",
-      password: "",
       name: "",
+      password: "",
     },
     onSubmit: async ({ value }) => {
       await authClient.signUp.email(
         {
           email: value.email,
-          password: value.password,
           name: value.name,
+          password: value.password,
         },
         {
+          onError: (error) => {
+            toast.error(error.error.message || error.error.statusText);
+          },
           onSuccess: () => {
             router.push("/dashboard");
             toast.success("Sign up successful");
           },
-          onError: (error) => {
-            toast.error(error.error.message || error.error.statusText);
-          },
-        },
+        }
       );
     },
     validators: {
       onSubmit: z.object({
-        name: z.string().min(2, "Name must be at least 2 characters"),
         email: z.email("Invalid email address"),
+        name: z.string().min(2, "Name must be at least 2 characters"),
         password: z.string().min(8, "Password must be at least 8 characters"),
       }),
     },

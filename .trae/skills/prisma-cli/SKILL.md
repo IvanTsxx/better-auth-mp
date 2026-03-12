@@ -184,19 +184,19 @@ prisma format
 Prisma 7 uses `prisma.config.ts` for CLI configuration:
 
 ```typescript
-import 'dotenv/config'
-import { defineConfig, env } from 'prisma/config'
+import "dotenv/config";
+import { defineConfig, env } from "prisma/config";
 
 export default defineConfig({
-  schema: 'prisma/schema.prisma',
+  schema: "prisma/schema.prisma",
   migrations: {
-    path: 'prisma/migrations',
-    seed: 'tsx prisma/seed.ts',
+    path: "prisma/migrations",
+    seed: "tsx prisma/seed.ts",
   },
   datasource: {
-    url: env('DATABASE_URL'),
+    url: env("DATABASE_URL"),
   },
-})
+});
 ```
 
 ### Removed Flags
@@ -212,7 +212,7 @@ Environment variables are no longer auto-loaded. Use `dotenv`:
 
 ```typescript
 // prisma.config.ts
-import 'dotenv/config'
+import "dotenv/config";
 ```
 
 ## Rule Files

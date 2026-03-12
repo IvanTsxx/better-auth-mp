@@ -74,6 +74,7 @@ Brief explanation of the rule and why it matters.
 
 ```typescript
 // Bad code example
+```
 ````
 
 **Correct (description of what's right):**

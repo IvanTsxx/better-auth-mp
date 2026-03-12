@@ -2,32 +2,19 @@
   "mcp": {
     "context7": {
       "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "@upstash/context7-mcp"
-      ],
+      "command": ["npx", "-y", "@upstash/context7-mcp"],
       "environment": {},
       "enabled": true
     },
     "shadcn": {
       "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "shadcn@latest",
-        "mcp"
-      ],
+      "command": ["npx", "-y", "shadcn@latest", "mcp"],
       "environment": {},
       "enabled": true
     },
     "next-devtools": {
       "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "next-devtools-mcp@latest"
-      ],
+      "command": ["npx", "-y", "next-devtools-mcp@latest"],
       "environment": {},
       "enabled": true
     },

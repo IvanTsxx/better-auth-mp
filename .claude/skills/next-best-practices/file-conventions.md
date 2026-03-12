@@ -97,8 +97,8 @@ Prefix with `_` to exclude from routing.
 
 ```ts
 // middleware.ts (root of project)
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   // Auth, redirects, rewrites, etc.
@@ -106,7 +106,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/api/:path*'],
+  matcher: ["/dashboard/:path*", "/api/:path*"],
 };
 ```
 
@@ -116,8 +116,8 @@ Renamed for clarity - same capabilities, different names:
 
 ```ts
 // proxy.ts (root of project)
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function proxy(request: NextRequest) {
   // Same logic as middleware
@@ -125,7 +125,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const proxyConfig = {
-  matcher: ['/dashboard/:path*', '/api/:path*'],
+  matcher: ["/dashboard/:path*", "/api/:path*"],
 };
 ```
 

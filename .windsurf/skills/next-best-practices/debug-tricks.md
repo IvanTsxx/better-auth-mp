@@ -88,7 +88,10 @@ Returns path to `<distDir>/logs/next-development.log`
 Locate a Server Action by ID:
 
 ```json
-{ "name": "get_server_action_by_id", "arguments": { "actionId": "<action-id>" } }
+{
+  "name": "get_server_action_by_id",
+  "arguments": { "actionId": "<action-id>" }
+}
 ```
 
 ### Example: Get Errors

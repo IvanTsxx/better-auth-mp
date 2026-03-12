@@ -27,14 +27,14 @@ generator client {
 In `prisma.config.ts`:
 
 ```typescript
-import { defineConfig, env } from 'prisma/config'
+import { defineConfig, env } from "prisma/config";
 
 export default defineConfig({
-  schema: 'prisma/schema.prisma',
+  schema: "prisma/schema.prisma",
   datasource: {
-    url: env('DATABASE_URL'),
+    url: env("DATABASE_URL"),
   },
-})
+});
 ```
 
 ## 3. Environment Variable
@@ -70,20 +70,20 @@ Prisma ORM 7 uses the query compiler by default, so you must use a driver adapte
 2. Instantiate Prisma Client with the adapter:
 
    ```typescript
-   import 'dotenv/config'
-   import { PrismaClient } from '../generated/client'
-   import { PrismaMariaDb } from '@prisma/adapter-mariadb'
+   import "dotenv/config";
+   import { PrismaClient } from "../generated/client";
+   import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 
    const adapter = new PrismaMariaDb({
-     host: 'localhost',
+     host: "localhost",
      port: 3306,
      connectionLimit: 5,
      user: process.env.MYSQL_USER,
      password: process.env.MYSQL_PASSWORD,
      database: process.env.MYSQL_DATABASE,
-   })
+   });
 
-   const prisma = new PrismaClient({ adapter })
+   const prisma = new PrismaClient({ adapter });
    ```
 
 ## PlanetScale Setup

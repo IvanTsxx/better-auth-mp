@@ -3,6 +3,6 @@ import { z } from "zod";
 
 export const env = createEnv({
   client: {},
-  runtimeEnv: {},
   emptyStringAsUndefined: true,
+  runtimeEnv: {},
 });

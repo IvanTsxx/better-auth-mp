@@ -5,7 +5,7 @@ Use a provider-agnostic contract and a mock adapter only.
 ## Contract
 
 ```ts
-export type CheckoutStatus = 'pending' | 'approved' | 'rejected';
+export type CheckoutStatus = "pending" | "approved" | "rejected";
 
 export interface CheckoutSession {
   sessionId: string;
@@ -14,7 +14,11 @@ export interface CheckoutSession {
 }
 
 export interface CheckoutProvider {
-  createSession(input: { orderId: string; amount: number; currency: string }): Promise<CheckoutSession>;
+  createSession(input: {
+    orderId: string;
+    amount: number;
+    currency: string;
+  }): Promise<CheckoutSession>;
   getStatus(input: { sessionId: string }): Promise<{ status: CheckoutStatus }>;
 }
 ```
@@ -23,7 +27,11 @@ export interface CheckoutProvider {
 
 ```ts
 export class MockCheckoutProvider implements CheckoutProvider {
-  async createSession(input: { orderId: string; amount: number; currency: string }) {
+  async createSession(input: {
+    orderId: string;
+    amount: number;
+    currency: string;
+  }) {
     const sessionId = `mock_${input.orderId}`;
     return {
       sessionId,
@@ -34,7 +42,8 @@ export class MockCheckoutProvider implements CheckoutProvider {
 
   async getStatus(input: { sessionId: string }) {
     const tail = input.sessionId.slice(-1);
-    const status: CheckoutStatus = tail === '0' ? 'rejected' : tail === '1' ? 'pending' : 'approved';
+    const status: CheckoutStatus =
+      tail === "0" ? "rejected" : tail === "1" ? "pending" : "approved";
     return { status };
   }
 }
@@ -47,4 +56,7 @@ export class MockCheckoutProvider implements CheckoutProvider {
 - Idempotency and replay controls
 - Monetary amount validation
 - Audit logging
+
+```
+
 ```

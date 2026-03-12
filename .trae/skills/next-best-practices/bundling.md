@@ -21,21 +21,21 @@ If the package is only needed on client:
 
 ```tsx
 // Bad: Fails - package uses window
-import SomeChart from 'some-chart-library'
+import SomeChart from "some-chart-library";
 
 export default function Page() {
-  return <SomeChart />
+  return <SomeChart />;
 }
 
 // Good: Use dynamic import with ssr: false
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
 
-const SomeChart = dynamic(() => import('some-chart-library'), {
+const SomeChart = dynamic(() => import("some-chart-library"), {
   ssr: false,
-})
+});
 
 export default function Page() {
-  return <SomeChart />
+  return <SomeChart />;
 }
 ```
 
@@ -46,8 +46,8 @@ For packages that should run on server but have bundling issues:
 ```js
 // next.config.js
 module.exports = {
-  serverExternalPackages: ['problematic-package'],
-}
+  serverExternalPackages: ["problematic-package"],
+};
 ```
 
 Use this for:
@@ -62,19 +62,19 @@ Wrap the entire usage in a client component:
 
 ```tsx
 // components/ChartWrapper.tsx
-'use client'
+"use client";
 
-import { Chart } from 'chart-library'
+import { Chart } from "chart-library";
 
 export function ChartWrapper(props) {
-  return <Chart {...props} />
+  return <Chart {...props} />;
 }
 
 // app/page.tsx (server component)
-import { ChartWrapper } from '@/components/ChartWrapper'
+import { ChartWrapper } from "@/components/ChartWrapper";
 
 export default function Page() {
-  return <ChartWrapper data={data} />
+  return <ChartWrapper data={data} />;
 }
 ```
 
@@ -84,13 +84,13 @@ Import CSS files instead of using `<link>` tags. Next.js handles bundling and op
 
 ```tsx
 // Bad: Manual link tag
-<link rel="stylesheet" href="/styles.css" />
+<link rel="stylesheet" href="/styles.css" />;
 
 // Good: Import CSS
-import './styles.css'
+import "./styles.css";
 
 // Good: CSS Modules
-import styles from './Button.module.css'
+import styles from "./Button.module.css";
 ```
 
 ## Polyfills
@@ -121,8 +121,8 @@ Module not found: ESM packages need to be imported
 ```js
 // next.config.js
 module.exports = {
-  transpilePackages: ['some-esm-package', 'another-package'],
-}
+  transpilePackages: ["some-esm-package", "another-package"],
+};
 ```
 
 ## Common Problematic Packages
@@ -169,14 +169,14 @@ Turbopack is the default bundler in Next.js 15+. If you have custom webpack conf
 // next.config.js
 module.exports = {
   // Good: Works with Turbopack
-  serverExternalPackages: ['package'],
-  transpilePackages: ['package'],
+  serverExternalPackages: ["package"],
+  transpilePackages: ["package"],
 
   // Bad: Webpack-only - migrate away from this
   webpack: (config) => {
     // custom webpack config
   },
-}
+};
 ```
 
 Reference: https://nextjs.org/docs/app/building-your-application/upgrading/from-webpack-to-turbopack
