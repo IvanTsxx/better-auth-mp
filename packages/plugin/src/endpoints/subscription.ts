@@ -410,11 +410,13 @@ export const createSubscriptionEndpoints = (
   getSubscriptions: createAuthEndpoint(
     "/mercado-pago/get-subscriptions",
     {
-      body: z.object({
-        filters: SubscriptionFiltersSchema.optional(),
-        limit: z.number().min(1).max(100).default(20),
-        offset: z.number().min(0).default(0),
-      }),
+      body: z
+        .object({
+          filters: SubscriptionFiltersSchema.optional(),
+          limit: z.number().min(1).max(100).optional(),
+          offset: z.number().min(0).optional(),
+        })
+        .optional(),
       method: "POST",
     },
     async (ctx) => {
@@ -423,7 +425,8 @@ export const createSubscriptionEndpoints = (
         throw new APIError("UNAUTHORIZED");
       }
 
-      const { filters, limit, offset } = ctx.body;
+      const body = ctx.body || {};
+      const { filters, limit = 20, offset = 0 } = body;
 
       const whereConditions: { field: string; value: string }[] = [
         { field: "userId", value: session.user.id },

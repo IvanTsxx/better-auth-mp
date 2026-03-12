@@ -1,5 +1,5 @@
 import { APIError, createAuthEndpoint } from "better-auth/api";
-import { Payment } from "mercadopago";
+import { Payment, PreApproval } from "mercadopago";
 import type { MercadoPagoConfig } from "mercadopago";
 
 import {
@@ -12,6 +12,7 @@ import type {
   MercadoPagoPaymentNotification,
   MercadoPagoPaymentRecord,
   MercadoPagoPluginOptions,
+  MercadoPagoSubscriptionRecord,
 } from "../types";
 
 export const createWebhookEndpoint = (
@@ -34,6 +35,52 @@ export const createWebhookEndpoint = (
         });
       }
 
+      // Get URL params - MercadoPago can send type in body or query params
+      const url = ctx.request?.url || "";
+      const urlParams = new URL(url, "http://localhost").searchParams;
+
+      // Get notification type from body or query params
+      const bodyType = (ctx.body as { type?: string })?.type;
+      const queryType = urlParams.get("type");
+      const notificationType = bodyType || queryType;
+
+      console.log(">>> MP WEBHOOK notification type:", notificationType);
+
+      // Handle subscription events: subscription_preapproval and subscription_authorized_payment
+      if (
+        notificationType === "subscription_preapproval" ||
+        notificationType === "subscription_authorized_payment"
+      ) {
+        let notification: MercadoPagoPaymentNotification;
+        try {
+          notification = ctx.body;
+        } catch {
+          throw new APIError("BAD_REQUEST", {
+            message: "Invalid JSON payload",
+          });
+        }
+
+        return await handleSubscriptionWebhook(
+          ctx as unknown as {
+            context: { adapter: unknown; logger: unknown };
+            json: (data: unknown) => unknown;
+          },
+          notification,
+          client,
+          options
+        );
+      }
+
+      // Handle payment events - get payment ID from body or query params
+      const dataIdFromQuery = urlParams.get("data.id");
+      const paymentIdFromBody = (ctx.body as { data?: { id?: string } })?.data
+        ?.id;
+      const paymentIdParam = dataIdFromQuery || paymentIdFromBody;
+
+      if (!paymentIdParam) {
+        return ctx.json({ received: true });
+      }
+
       let notification: MercadoPagoPaymentNotification;
       try {
         notification = ctx.body;
@@ -41,10 +88,6 @@ export const createWebhookEndpoint = (
         throw new APIError("BAD_REQUEST", {
           message: "Invalid JSON payload",
         });
-      }
-
-      if (notification.type !== "payment" || !notification.data?.id) {
-        return ctx.json({ received: true });
       }
 
       if (!ctx.request) {
@@ -167,6 +210,187 @@ export const createWebhookEndpoint = (
     }
   ),
 });
+
+/**
+ * Handle subscription_preapproval webhook events
+ */
+async function handleSubscriptionWebhook(
+  ctx: {
+    context: { adapter: unknown; logger: unknown };
+    json: (data: unknown) => unknown;
+  },
+  notification: MercadoPagoPaymentNotification,
+  client: MercadoPagoConfig,
+  options: MercadoPagoPluginOptions
+) {
+  console.log(">>> MP SUBSCRIPTION WEBHOOK:", notification);
+
+  // For subscriptions, use only subscriptionId as key
+  // We need to process all updates to check if status changed
+  const webhookId = `mp:webhook:subscription:${notification.data.id}`;
+  console.log(">>> Subscription webhook idempotency key:", webhookId);
+
+  if (idempotencyStore.get(webhookId)) {
+    console.log(
+      ">>> Subscription webhook already processed once, checking status anyway..."
+    );
+  } else {
+    idempotencyStore.set(webhookId, true, 24 * 60 * 60 * 1000);
+  }
+
+  try {
+    const subscriptionId = notification.data.id.toString();
+
+    const mpSubscription = await (
+      new PreApproval(client) as unknown as {
+        get: (config: { id: string }) => Promise<{
+          id: string;
+          status: string;
+          external_reference?: string;
+          reason?: string;
+          payer_email?: string;
+          auto_recurring?: {
+            frequency: number;
+            frequency_type: string;
+            transaction_amount: number;
+            currency_id: string;
+          };
+        }>;
+      }
+    ).get({ id: subscriptionId });
+
+    console.log(
+      ">>> MP Subscription status from MP:",
+      mpSubscription.status,
+      "subscriptionId:",
+      subscriptionId
+    );
+
+    // Buscar la suscripción por mpSubscriptionId
+    const existingSubscription: MercadoPagoSubscriptionRecord | null = await (
+      ctx.context.adapter as {
+        findOne: (config: {
+          model: string;
+          where: { field: string; value: string }[];
+        }) => Promise<{
+          id: string;
+          externalReference: string;
+          userId: string;
+          mpSubscriptionId?: string;
+          status: string;
+          reason?: string;
+          payerEmail?: string;
+          transactionAmount?: number;
+          currencyId?: string;
+          createdAt: Date;
+          updatedAt: Date;
+        } | null>;
+      }
+    ).findOne({
+      model: "mercadoPagoSubscription",
+      where: [{ field: "mpSubscriptionId", value: subscriptionId }],
+    });
+
+    if (!existingSubscription) {
+      console.log(
+        ">>> Subscription not found in DB, creating new record with mpSubscriptionId:",
+        subscriptionId
+      );
+      // Si no existe, creamos la suscripción (para el caso de webhooks que llegan antes de que se guarde localmente)
+      // Esto es improbable pero posible en casos de race conditions
+      return ctx.json({ received: true });
+    }
+
+    console.log(
+      ">>> Found subscription in DB:",
+      existingSubscription.id,
+      "current status:",
+      existingSubscription.status,
+      "new status:",
+      mpSubscription.status
+    );
+
+    // Solo actualizamos si el status cambió o si es "authorized" (como en la docs)
+    if (existingSubscription.status !== mpSubscription.status) {
+      // Map MP subscription status to result type
+      const subscriptionResultType = getSubscriptionResultType(
+        mpSubscription.status
+      );
+
+      // Update subscription status in database
+      await (
+        ctx.context.adapter as {
+          update: (config: {
+            model: string;
+            update: Record<string, unknown>;
+            where: { field: string; value: string }[];
+          }) => Promise<void>;
+        }
+      ).update({
+        model: "mercadoPagoSubscription",
+        update: {
+          status: mpSubscription.status,
+          updatedAt: new Date(),
+        },
+        where: [{ field: "id", value: existingSubscription.id }],
+      });
+
+      console.log(
+        `>>> Subscription ${subscriptionId} status updated to: ${mpSubscription.status} (${subscriptionResultType})`
+      );
+    } else {
+      console.log(
+        ">>> Subscription status unchanged:",
+        mpSubscription.status,
+        "- no update needed"
+      );
+    }
+
+    // Call the subscription update callback if provided
+    if (options.onSubscriptionUpdate) {
+      await options.onSubscriptionUpdate({
+        mpSubscription,
+        status: mpSubscription.status,
+        subscription: existingSubscription,
+      });
+    }
+  } catch (error) {
+    (
+      ctx.context.logger as {
+        error: (msg: string, data: Record<string, unknown>) => void;
+      }
+    ).error("Error processing MP subscription webhook", {
+      error,
+      notification,
+    });
+  }
+
+  return ctx.json({ received: true });
+}
+
+/**
+ * Maps MercadoPago subscription status to a simplified result type
+ */
+function getSubscriptionResultType(
+  mpStatus: string
+): "success" | "pending" | "error" {
+  switch (mpStatus) {
+    case "authorized": {
+      return "success";
+    }
+    case "pending": {
+      return "pending";
+    }
+    case "cancelled":
+    case "expired":
+    case "unpaid": {
+      return "error";
+    }
+    default: {
+      return "pending";
+    }
+  }
+}
 
 /**
  * Maps MercadoPago payment status to a simplified result type
