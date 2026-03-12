@@ -11,7 +11,8 @@
       "zod": "^4.1.13",
       "typescript": "^5",
       "@prisma/client": "^7.4.2",
-      "better-auth": "^1.5.1"
+      "better-auth": "^1.5.1",
+      "@better-fetch/fetch": "^1.1.21"
     }
   },
   "type": "module",

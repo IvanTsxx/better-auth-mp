@@ -38,6 +38,9 @@
     },
     "@prisma/client": {
       "optional": false
+    },
+    "@better-fetch/fetch": {
+      "optional": false
     }
   }
 }

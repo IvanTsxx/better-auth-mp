@@ -13,6 +13,8 @@
     "@base-ui/react": "^1.0.0",
     "@better-auth-mercadopago/auth": "workspace:*",
     "@better-auth-mercadopago/env": "workspace:*",
+    "@better-auth-mercadopago/plugin": "workspace:*",
+    "@better-fetch/fetch": "catalog:",
     "@fontsource-variable/jetbrains-mono": "^5.2.5",
     "@prisma/client": "catalog:",
     "@tanstack/react-form": "^1.27.3",
