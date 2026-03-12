@@ -57,11 +57,11 @@ const PRODUCTOS_DEMO = [
 /**
  * Formatear precio de centavos a moneda
  */
-function formatPrice(cents: number, currency = "ARS"): string {
+function formatPrice(value: number, currency = "ARS"): string {
   return new Intl.NumberFormat("es-AR", {
     currency,
     style: "currency",
-  }).format(cents / 100);
+  }).format(value);
 }
 
 export default function PaymentsPage() {
@@ -71,7 +71,7 @@ export default function PaymentsPage() {
   const [quantity, setQuantity] = useState<Record<string, number>>({
     prod_001: 1,
   });
-  const [email, setEmail] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -109,46 +109,42 @@ export default function PaymentsPage() {
     0
   );
 
-  const handleCheckout = async () => {
-    if (!email) {
-      setError("Por favor ingresa tu email");
-      return;
-    }
-
+  const handleCheckout = () => {
     if (selectedItems.length === 0) {
       setError("Selecciona al menos un producto");
       return;
     }
 
-    setIsLoading(true);
     setError(null);
 
-    try {
-      const result = await authClient.mercadopago.createPayment({
-        backUrls: {
-          failure: `${window.location.origin}/payments/failure`,
-          pending: `${window.location.origin}/payments/pending`,
-          success: `${window.location.origin}/payments/success`,
-        },
-        items: selectedItems,
-      });
+    // Usamos toast.promise para manejar el estado de la promesa
+    toast.promise(
+      async () => {
+        setIsLoading(true);
+        const result = await authClient.mercadopago.createPayment({
+          backUrls: {
+            failure: `${window.location.origin}/payments/failure`,
+            pending: `${window.location.origin}/payments/pending`,
+            success: `${window.location.origin}/payments/success`,
+          },
+          items: selectedItems,
+        });
 
-      console.log("Pago creado:", result);
-      // Redirect to MercadoPago checkout
-      if (result.data) {
+        if (!result.data) {
+          throw new Error(result.error?.message || "Error desconocido");
+        }
+
+        // Redirigimos al checkout de MercadoPago
         window.location.href = result.data.checkoutUrl;
-        toast.success(`Pago creado! Preference ID: ${result.data.checkoutUrl}`);
-      } else {
-        toast.error(
-          `Algo salio mal: ${result.error.message || result.error.status}`
-        );
+        return result.data;
+      },
+      {
+        error: (err) => `Error al crear el pago: ${err.message || err}`,
+        loading: "Creando pago...",
+        success: (data) => `Pago creado! Redirigiendo a MercadoPago`,
+        finally: () => setIsLoading(false),
       }
-    } catch (err) {
-      console.error("Error al crear pago:", err);
-      setError("Error al crear el pago. Intenta de nuevo.");
-    } finally {
-      setIsLoading(false);
-    }
+    );
   };
 
   return (
@@ -268,22 +264,6 @@ export default function PaymentsPage() {
                 )}
               </div>
 
-              {/* Email */}
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="tu@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <p className="text-xs text-muted-foreground">
-                  El recibo será enviado a este email
-                </p>
-              </div>
-
               {/* Error */}
               {error && (
                 <div className="text-sm text-destructive bg-destructive/10 p-2 rounded">
@@ -295,7 +275,7 @@ export default function PaymentsPage() {
               <Button
                 className="w-full"
                 size="lg"
-                disabled={selectedItems.length === 0 || !email || isLoading}
+                disabled={selectedItems.length === 0 || isLoading}
                 onClick={handleCheckout}
               >
                 {isLoading ? (
@@ -324,17 +304,14 @@ export default function PaymentsPage() {
             </CardHeader>
             <CardContent>
               <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-xs">
-                <code>{`await mercadopago.createPayment({
-  items: [
-    {
-      id: "prod_001",
-      title: "Membresía Premium",
-      description: "Acceso completo",
-      quantity: 1,
-      unitPrice: 1500,
-    },
-  ],
-  email: "usuario@ejemplo.com",
+                <code>{`
+await authClient.mercadopago.createPayment({
+  backUrls: {
+    failure: "${window.location.origin}/payments/failure",
+    pending: "${window.location.origin}/payments/pending",
+    success: "${window.location.origin}/payments/success",
+  },
+  items: selectedItems,
 });`}</code>
               </pre>
             </CardContent>
