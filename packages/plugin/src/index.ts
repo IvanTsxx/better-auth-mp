@@ -36,7 +36,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
   return {
     endpoints: {
       createPayment: createAuthEndpoint(
-        "/mercadopago/create-payment",
+        "/mercado-pago/create-payment",
         {
           body: z.object({
             ...MercadoPagoPreferenceSchema.shape,
@@ -192,7 +192,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
       ),
 
       getPayment: createAuthEndpoint(
-        "/mercadopago/get-payment",
+        "/mercado-pago/get-payment",
         {
           body: z.object({
             externalReference: z.string(),
@@ -226,7 +226,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
       ),
 
       getPayments: createAuthEndpoint(
-        "/mercadopago/get-payments",
+        "/mercado-pago/get-payments",
         {
           body: z.object({
             filters: z
@@ -295,11 +295,14 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
       ),
 
       webhook: createAuthEndpoint(
-        "/mercadopago/webhook",
+        "/mercado-pago/webhook",
         {
           method: "POST",
+          secured: false,
         },
         async (ctx) => {
+          console.log(">>> MP WEBHOOK");
+
           const webhookRateLimitKey = "webhook:global";
           if (!rateLimiter.check(webhookRateLimitKey, 1000, 60 * 1000)) {
             throw new APIError("TOO_MANY_REQUESTS", {
@@ -330,6 +333,10 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
             const xSignature = ctx.request.headers.get("x-signature");
             const xRequestId = ctx.request.headers.get("x-request-id");
             const dataId = notification.data.id.toString();
+
+            console.log(">>> MP WEBHOOK X-SIGNATURE:", xSignature);
+            console.log(">>> MP WEBHOOK X-REQUEST-ID:", xRequestId);
+            console.log(">>> MP WEBHOOK DATA ID:", dataId);
 
             const isValid = verifyWebhookSignature({
               dataId,
@@ -431,7 +438,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
         }
       ),
     },
-    id: "mercadopago",
+    id: "mercado-pago",
     schema: {
       mercadoPagoPayment: {
         fields: {

@@ -9,7 +9,7 @@
 // - Use constant-time comparison to prevent timing attacks
 // - Store webhookSecret securely
 
-import { createHmac, timingSafeEqual } from "node:crypto";
+import crypto, { createHmac, timingSafeEqual } from "node:crypto";
 
 interface VerifyWebhookSignatureParams {
   /** Signature header from MP */
@@ -23,63 +23,46 @@ interface VerifyWebhookSignatureParams {
 }
 
 /**
- * Verify webhook signature from MercadoPago
- *
- * MercadoPago sends a signature in the x-signature header
- * that needs to be verified against the payload.
- *
- * The signature is generated as:
- * sha256(id + ":" + secret)
- *
- * @returns {boolean} true if signature is valid, false otherwise
+ * Verify Mercado Pago webhook signature
+ * https://www.mercadopago.com/developers/en/docs/subscriptions/additional-content/security/signature
  */
 export function verifyWebhookSignature(
   params: VerifyWebhookSignatureParams
 ): boolean {
   const { xSignature, xRequestId, dataId, secret } = params;
 
-  // If no signature provided, reject (security first)
   if (!xSignature || !xRequestId) {
     return false;
   }
 
-  try {
-    // The signature format from MP is: timestamp,signature
-    // We need to verify the signature part
-    const parts = xSignature.split(",");
+  // Parse x-signature header
+  // Format: "ts=1234567890,v1=hash"
+  const parts = xSignature.split(",");
+  const ts = parts.find((p) => p.startsWith("ts="))?.split("=")[1];
+  const hash = parts.find((p) => p.startsWith("v1="))?.split("=")[1];
 
-    if (parts.length !== 2) {
-      return false;
-    }
-
-    const timestamp = parts[0]?.split("=")[1];
-    const signature = parts[1]?.split("=")[1];
-
-    if (!timestamp || !signature) {
-      return false;
-    }
-
-    // Generate our own signature
-    // Format: sha256(timestamp:id:secret)
-    const payload = `${timestamp}:${dataId}:${secret}`;
-    const expectedSignature = createHmac("sha256", secret)
-      .update(payload)
-      .digest("hex");
-
-    // Use timing-safe comparison to prevent timing attacks
-    const sigBuffer = Buffer.from(signature, "hex");
-    const expectedBuffer = Buffer.from(expectedSignature, "hex");
-
-    // If lengths don't match, reject
-    if (sigBuffer.length !== expectedBuffer.length) {
-      return false;
-    }
-
-    return timingSafeEqual(sigBuffer, expectedBuffer);
-  } catch {
-    // Any error means verification failed
+  if (!ts || !hash) {
     return false;
   }
+
+  // Build the manifest (exactly as MP does)
+  const manifest = `id:${dataId};request-id:${xRequestId};ts:${ts};`;
+
+  // Create HMAC SHA256
+  const hmac = crypto.createHmac("sha256", secret);
+  hmac.update(manifest);
+  const expectedHash = hmac.digest("hex");
+
+  // Compare hashes (constant-time comparison)
+  // Ensure both buffers have the same length before comparing
+  const hashBuffer = Buffer.from(hash);
+  const expectedBuffer = Buffer.from(expectedHash);
+
+  if (hashBuffer.length !== expectedBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(hashBuffer, expectedBuffer);
 }
 
 /**

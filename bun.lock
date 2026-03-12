@@ -6,7 +6,6 @@
       "name": "better-auth-mercadopago",
       "dependencies": {
         "@better-auth-mercadopago/env": "workspace:*",
-        "@better-fetch/fetch": "^1.1.21",
         "dotenv": "catalog:",
         "zod": "catalog:",
       },
@@ -58,6 +57,7 @@
         "@better-auth-mercadopago/auth": "workspace:*",
         "@better-auth-mercadopago/env": "workspace:*",
         "@better-auth-mercadopago/plugin": "workspace:*",
+        "@better-fetch/fetch": "catalog:",
         "@fontsource-variable/jetbrains-mono": "^5.2.5",
         "@prisma/client": "catalog:",
         "@tanstack/react-form": "^1.27.3",
@@ -105,6 +105,7 @@
         "@better-auth-mercadopago/env": "workspace:*",
         "@better-auth-mercadopago/plugin": "workspace:*",
         "@better-auth/prisma-adapter": "^1.5.1",
+        "@better-fetch/fetch": "catalog:",
         "better-auth": "catalog:",
         "dotenv": "catalog:",
         "zod": "catalog:",
@@ -169,6 +170,7 @@
     },
   },
   "catalog": {
+    "@better-fetch/fetch": "^1.1.21",
     "@prisma/client": "^7.4.2",
     "better-auth": "^1.5.1",
     "dotenv": "^17.2.2",
