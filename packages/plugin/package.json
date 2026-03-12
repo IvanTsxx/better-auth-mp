@@ -1,0 +1,43 @@
+{
+  "name": "@better-auth-mercadopago/plugin",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./server": {
+      "default": "./src/server/index.ts"
+    },
+    "./client": {
+      "default": "./src/client/index.ts"
+    },
+    "./types": {
+      "default": "./src/types.ts"
+    }
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mercadopago/sdk-js": "^0.0.3",
+    "mercadopago": "^2.3.0",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@better-auth-mercadopago/config": "workspace:*",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "@prisma/client": "catalog:",
+    "better-auth": "catalog:"
+  },
+  "peerDependenciesMeta": {
+    "better-auth": {
+      "optional": false
+    },
+    "@prisma/client": {
+      "optional": false
+    }
+  }
+}
