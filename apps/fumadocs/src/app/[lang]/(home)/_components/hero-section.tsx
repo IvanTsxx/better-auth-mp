@@ -1,50 +1,67 @@
+import { ShieldAlert } from "lucide-react";
 import Link from "next/link";
 
-export function HeroSection() {
+export function HeroSection({ lang }: { lang: string }) {
   return (
-    <section className="sticky top-0 flex flex-col items-center justify-center  text-center overflow-hidden col-span-4 border-r border-zinc-800 px-4">
-      <div className="relative">
-        {/* Background Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+    <>
+      {/* Top Logo */}
+      <div className="flex items-center gap-3 z-10 w-fit">
+        <div className="w-5 h-5 bg-white flex items-center justify-center">
+          <span className="text-[10px] font-black text-black leading-none">
+            MP
+          </span>
+        </div>
+        <span className="font-mono font-bold tracking-[0.2em] text-[13px] text-zinc-100">
+          MERCADOPAGO-PLUGIN.
+        </span>
+      </div>
 
-        <div className="relative z-10 space-y-8 max-w-4xl px-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-sm font-medium text-zinc-300">
-            <span className="flex h-2 w-2 rounded-full bg-blue-500"></span>
-            MercadoPago Plugin is now in beta
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-tight">
-            The most comprehensive <br />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-blue-600">
-              payment plugin
-            </span>{" "}
-            for Next.js
-          </h1>
-
-          <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
-            Seamlessly integrate MercadoPago checkout into your application with
-            zero configuration. Support for localized payments, subscriptions,
-            and split payments out of the box.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Link
-              href="/docs"
-              className="flex items-center justify-center px-6 py-3 text-sm font-medium text-black bg-white rounded-md hover:bg-zinc-200 transition-colors w-full sm:w-auto"
-            >
-              Get Started
-            </Link>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-transparent border border-zinc-700 rounded-md hover:bg-zinc-800 transition-colors w-full sm:w-auto"
-            >
-              GitHub
-            </a>
-          </div>
+      {/* Background Graphic Mockup (Logo gigante difuminado / con grano) */}
+      {/* Nota: El logo de fondo de MP lo configuras en este div reemplazando el texto. */}
+      <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-40 select-none overflow-hidden mix-blend-screen">
+        <div className="w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px] absolute" />
+        <div className="absolute text-[300px] font-black tracking-tighter text-zinc-800/40 font-sans rotate-[-8deg] drop-shadow-2xl">
+          MP
         </div>
       </div>
-    </section>
+
+      {/* Main Content */}
+      <div className="z-10 mt-auto mb-20 space-y-4">
+        <div className="flex items-center gap-2 text-zinc-300 font-mono text-xs mb-8">
+          <ShieldAlert size={14} className="text-zinc-400" />
+          <span>
+            {lang === "en" ? "Configure Your Payments" : "Configura tus pagos"}
+          </span>
+        </div>
+
+        <h1 className="text-4xl lg:text-5xl xl:text-6xl font-medium tracking-tight text-zinc-100 leading-[1.1] max-w-lg">
+          {lang === "es"
+            ? "El plugin mas completo de mercadopago"
+            : "The most complete mercadopago plugin"}
+          <br />
+          <span className="text-zinc-400 font-normal">
+            {lang === "es" ? "para better-auth" : "for better-auth"}
+          </span>
+        </h1>
+      </div>
+
+      {/* Buttons */}
+      <div className="z-10 flex items-center gap-px bg-zinc-800 p-px rounded-[6px] w-fit shadow-2xl shadow-black">
+        <Link
+          href={`/${lang}/docs`}
+          className="px-8 py-2.5 bg-white text-black text-sm font-semibold rounded-l-[5px] hover:bg-zinc-200 transition-colors"
+        >
+          Get Started
+        </Link>
+        <Link
+          href="https://www.npmjs.com/package/better-auth-mercadopago"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-8 py-2.5 bg-[#09090b] text-zinc-300 text-sm font-medium rounded-r-[5px] hover:text-white hover:bg-zinc-900 transition-colors"
+        >
+          NPM
+        </Link>
+      </div>
+    </>
   );
 }

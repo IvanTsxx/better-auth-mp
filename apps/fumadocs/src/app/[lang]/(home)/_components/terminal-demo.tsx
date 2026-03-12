@@ -5,7 +5,10 @@ import { useState } from "react";
 
 export function TerminalDemo() {
   const [copied, setCopied] = useState(false);
-  const command = "npx mercadopago-plugin init";
+  const command = "npx auth init";
+  const [activeTab, setActiveTab] = useState("CLI");
+
+  const tabs = ["CLI", "Prompt", "MCP", "Skills"];
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(command);
@@ -14,29 +17,31 @@ export function TerminalDemo() {
   };
 
   return (
-    <div className="rounded-lg border border-zinc-800 bg-zinc-950/50 backdrop-blur-sm shadow-2xl overflow-hidden">
-      <div className="flex items-center px-4 py-3 border-b border-zinc-800 bg-zinc-900/50">
-        <div className="flex gap-2">
-          <div className="w-3 h-3 rounded-full bg-zinc-700" />
-          <div className="w-3 h-3 rounded-full bg-zinc-700" />
-          <div className="w-3 h-3 rounded-full bg-zinc-700" />
-        </div>
-        <div className="flex-1 flex justify-center space-x-4 text-xs text-zinc-500 font-medium">
-          <span className="text-zinc-300 border-b border-zinc-300 pb-1">
-            CLI
-          </span>
-          <span>Manual</span>
-        </div>
+    <div className="border border-zinc-800/60 bg-[#09090b] rounded-md overflow-hidden font-mono text-sm max-w-4xl shadow-2xl">
+      <div className="flex items-center gap-8 px-5 pt-3 border-b border-zinc-800/60 bg-[#0a0a0a]">
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`text-[12px] pb-[10px] border-b-2 transition-colors -mb-px px-1 tracking-wide ${
+              activeTab === tab
+                ? "border-zinc-300 text-zinc-300"
+                : "border-transparent text-zinc-600 hover:text-zinc-400"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
 
-      <div className="p-4 flex items-center justify-between group">
-        <code className="font-mono text-sm text-blue-400">
-          <span className="text-pink-500">npx</span> mercadopago-plugin init
+      <div className="p-5 flex items-center justify-between group bg-[#09090b]">
+        <code className="text-zinc-300 text-[13px] tracking-wide">
+          <span className="text-[#c678dd]">npx</span> mp-plugin init
         </code>
 
         <button
           onClick={handleCopy}
-          className="p-2 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+          className="p-1.5 rounded-md hover:bg-zinc-800 text-zinc-500 hover:text-zinc-300 transition-colors"
           aria-label="Copy command"
         >
           {copied ? <Check size={16} /> : <Copy size={16} />}

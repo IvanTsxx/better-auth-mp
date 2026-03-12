@@ -21,7 +21,7 @@ export const i18nUI = defineI18nUI(i18n, {
   },
 });
 
-export function baseOptions(lang?: string): BaseLayoutProps {
+export function baseOptions(_lang?: string): BaseLayoutProps {
   return {
     githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
     i18n,
