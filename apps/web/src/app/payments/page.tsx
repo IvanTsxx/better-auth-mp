@@ -1,9 +1,6 @@
 "use client";
 
-import type {
-  MercadopagoItem,
-  CreatePaymentInput,
-} from "@better-auth-mercadopago/plugin/types";
+import type { MercadopagoItem } from "@better-auth-mercadopago/plugin/types";
 import {
   CreditCard,
   ShoppingCart,
@@ -98,6 +95,7 @@ export default function PaymentsPage() {
   const selectedItems: MercadopagoItem[] = PRODUCTOS_DEMO.filter((p) =>
     selectedProducts.has(p.id)
   ).map((product) => ({
+    currencyId: "ARS",
     description: product.description,
     id: product.id,
     pictureUrl: product.image,
@@ -126,15 +124,25 @@ export default function PaymentsPage() {
     setError(null);
 
     try {
-      const result = await authClient.mpClient.createPayment({
-        email,
-        externalReference: `demo_order_${Date.now()}`,
+      const result = await authClient.mercadopago.createPayment({
+        backUrls: {
+          failure: `${window.location.origin}/payments/failure`,
+          pending: `${window.location.origin}/payments/pending`,
+          success: `${window.location.origin}/payments/success`,
+        },
         items: selectedItems,
-      } as CreatePaymentInput);
+      });
 
       console.log("Pago creado:", result);
-      // En producción, redirigirías: window.location.href = result.paymentLink;
-      toast.success(`Pago creado! Link: ${result.paymentLink}`);
+      // Redirect to MercadoPago checkout
+      if (result.data) {
+        window.location.href = result.data.checkoutUrl;
+        toast.success("Pago creado! Preference ID: " + result.data.checkoutUrl);
+      } else {
+        toast.error(
+          "Algo salio mal: " + (result.error.message || result.error.status)
+        );
+      }
     } catch (err) {
       console.error("Error al crear pago:", err);
       setError("Error al crear el pago. Intenta de nuevo.");

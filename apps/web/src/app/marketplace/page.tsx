@@ -1,10 +1,6 @@
 "use client";
 
-import { createMercadopagoClient } from "@better-auth-mercadopago/plugin/client";
-import type {
-  MercadopagoItem,
-  CreatePaymentInput,
-} from "@better-auth-mercadopago/plugin/types";
+import type { MercadopagoItem } from "@better-auth-mercadopago/plugin/types";
 import {
   Store,
   Users,
@@ -15,6 +11,7 @@ import {
   User,
 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,8 +24,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
-
-const mercadopago = createMercadopagoClient(authClient);
 
 /**
  * Productos de marketplace de demo
@@ -109,6 +104,7 @@ export default function MarketplacePage() {
     try {
       const items: MercadopagoItem[] = [
         {
+          currencyId: "ARS",
           description: selectedProduct.description,
           id: selectedProduct.id,
           quantity,
@@ -117,13 +113,13 @@ export default function MarketplacePage() {
         },
       ];
 
-      const result = await mercadopago.createPayment({
+      const result = await authClient.mercadoPago.createPayment({
         email,
         externalReference: `demo_mp_${Date.now()}`,
         items,
         sellerEmail: selectedProduct.seller.email,
         splitEnabled: true,
-      } as CreatePaymentInput);
+      });
 
       console.log("Pago de marketplace:", {
         paymentLink: result.paymentLink,
@@ -135,7 +131,7 @@ export default function MarketplacePage() {
         },
       });
 
-      alert(`Pago creado! Link: ${result.paymentLink}`);
+      toast.success(`Pago creado! Link: ${result.paymentLink}`);
     } catch (err) {
       console.error("Error en pago de marketplace:", err);
       setError("Error al crear el pago. Intenta de nuevo.");
@@ -224,7 +220,7 @@ export default function MarketplacePage() {
                       value={quantity}
                       onChange={(e) =>
                         setQuantity(
-                          Math.max(1, Number.parseInt(e.target.value) || 1)
+                          Math.max(1, Number.parseInt(e.target.value, 10) || 1)
                         )
                       }
                       className="w-20"

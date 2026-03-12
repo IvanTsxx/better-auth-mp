@@ -1,27 +1,13 @@
-import type { BetterFetchOption } from "@better-fetch/fetch";
 import type { BetterAuthClientPlugin } from "better-auth/client";
 
-import type { mercadopagoPlugin } from "@/index";
+import type { mercadoPagoPlugin } from "./index";
 
-export const mercadopagoPluginClient = () =>
+export const mercadopagoClient = () =>
   ({
-    $InferServerPlugin: {} as ReturnType<typeof mercadopagoPlugin>,
-    getActions: ($fetch) => ({
-      myCustomAction: async (
-        data: {
-          foo: string;
-        },
-        fetchOptions?: BetterFetchOption
-      ) => {
-        const res = await $fetch("/mercadopago/action", {
-          body: {
-            foo: data.foo,
-          },
-          method: "POST",
-          ...fetchOptions,
-        });
-        return res;
-      },
-    }),
+    $InferServerPlugin: {} as ReturnType<typeof mercadoPagoPlugin>,
+
     id: "mercadopago",
   }) satisfies BetterAuthClientPlugin;
+
+// Export the client plugin
+export const mercadopagoPluginClient = mercadopagoClient;
