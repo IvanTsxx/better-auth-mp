@@ -5,7 +5,7 @@ import { source } from "@/lib/source";
 
 export async function GET(
   _req: Request,
-  { params }: RouteContext<"/[lang]/llms.mdx/[[...slug]]">
+  { params }: { params: Promise<{ lang: string; slug?: string[] }> }
 ) {
   const { slug, lang } = await params;
 
