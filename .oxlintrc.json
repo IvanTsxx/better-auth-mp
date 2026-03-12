@@ -13,7 +13,8 @@
     "no-negated-condition": "off",
     "complexity": "off",
     "unicorn/catch-error-name": "off",
-    "curly": "off"
+    "curly": "off",
+    "no-relative-parent-imports": "off"
   },
   "ignorePatterns": [
     ".next/**",

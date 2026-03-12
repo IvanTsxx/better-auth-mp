@@ -1,7 +1,3 @@
-// ============================================
-// SECURITY MODULE - Exports
-// ============================================
-
 export { rateLimiter } from "./rate-limiter";
 export { idempotencyStore, validateIdempotencyKey } from "./idempotency";
 export {
