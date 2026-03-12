@@ -23,8 +23,8 @@ export const i18nUI = defineI18nUI(i18n, {
 
 export function baseOptions(lang?: string): BaseLayoutProps {
   return {
-    i18n,
     githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
+    i18n,
     nav: {
       title: "Better Auth Mercado Pago Plugin",
     },

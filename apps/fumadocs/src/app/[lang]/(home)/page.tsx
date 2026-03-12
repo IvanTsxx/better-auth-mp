@@ -1,16 +1,13 @@
-import Link from "next/link";
+import { FeatureGrid } from "./_components/feature-grid";
+import { HeroSection } from "./_components/hero-section";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col justify-center text-center flex-1">
-      <h1 className="text-2xl font-bold mb-4">Hello World</h1>
-      <p>
-        You can open{" "}
-        <Link href="/docs" className="font-medium underline">
-          /docs
-        </Link>{" "}
-        and see the documentation.
-      </p>
+    <div className="flex flex-col min-h-screen bg-black text-white selection:bg-blue-500/30">
+      <main className="flex-1 grid grid-cols-12 gap-10 px-10 ">
+        <HeroSection />
+        <FeatureGrid />
+      </main>
     </div>
   );
 }

@@ -24,7 +24,6 @@ async function getOgImageData(slug: string[], lang: string) {
 
   return {
     avatarBase64,
-    category: page.data.keywords?.[0] as string | undefined,
     date: lastModified ? new Date(lastModified).toLocaleDateString() : "",
     title: page.data.title,
   };
@@ -32,7 +31,7 @@ async function getOgImageData(slug: string[], lang: string) {
 
 export async function GET(
   _req: Request,
-  { params }: RouteContext<"/[lang]/og/[...slug]">
+  { params }: { params: Promise<{ slug: string[]; lang: string }> }
 ) {
   const { slug, lang } = await params;
 
@@ -71,7 +70,6 @@ export async function GET(
     <BlogPostTemplate
       author="Ivan Bongiovanni"
       avatar={data.avatarBase64}
-      category={data.category}
       date={data.date}
       title={data.title}
     />,

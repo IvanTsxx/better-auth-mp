@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Package,
-  Loader2,
-  Plus,
-  Trash2,
-  CreditCard,
-} from "lucide-react";
+import { Package, Loader2, Plus, Trash2, CreditCard } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -50,7 +44,9 @@ export default function PlansPage() {
   const [planName, setPlanName] = useState("");
   const [planDescription, setPlanDescription] = useState("");
   const [planPrice, setPlanPrice] = useState("");
-  const [planFrequency, setPlanFrequency] = useState<"1" | "3" | "6" | "12">("1");
+  const [planFrequency, setPlanFrequency] = useState<"1" | "3" | "6" | "12">(
+    "1"
+  );
 
   const priceCents = Number.parseInt(planPrice, 10) || 0;
 
@@ -81,14 +77,14 @@ export default function PlansPage() {
     setCreating(true);
     try {
       const result = await authClient.mercadoPago.createPlan({
-        name: planName,
-        description: planDescription || undefined,
         autoRecurring: {
           currencyId: "ARS",
           frequency: Number.parseInt(planFrequency, 10),
           frequencyType: "months",
           transactionAmount: priceCents,
         },
+        description: planDescription || undefined,
+        name: planName,
       });
 
       if (result.error) {
@@ -126,7 +122,8 @@ export default function PlansPage() {
           <CardHeader>
             <CardTitle>Crear Nuevo Plan</CardTitle>
             <CardDescription>
-              Los planes permiten a usuarios suscribirse con pago automático de tarjeta
+              Los planes permiten a usuarios suscribirse con pago automático de
+              tarjeta
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -181,7 +178,9 @@ export default function PlansPage() {
 
             <div className="rounded-lg bg-muted p-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Precio por mes</span>
+                <span className="text-sm text-muted-foreground">
+                  Precio por mes
+                </span>
                 <span className="text-2xl font-bold">
                   {formatPrice(priceCents)}
                 </span>
@@ -214,7 +213,8 @@ export default function PlansPage() {
           <CardHeader>
             <CardTitle>Planes Existentes</CardTitle>
             <CardDescription>
-              {plans.length} plan{plans.length !== 1 ? "es" : ""} creado{plans.length !== 1 ? "s" : ""}
+              {plans.length} plan{plans.length !== 1 ? "es" : ""} creado
+              {plans.length !== 1 ? "s" : ""}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -243,7 +243,10 @@ export default function PlansPage() {
                       <p className="text-lg font-bold mt-1">
                         {formatPrice(plan.transactionAmount)}
                         <span className="text-sm font-normal text-muted-foreground">
-                          /{plan.autoRecurringFrequencyType === "months" ? "mes" : ""}
+                          /
+                          {plan.autoRecurringFrequencyType === "months"
+                            ? "mes"
+                            : ""}
                         </span>
                       </p>
                     </div>
@@ -262,9 +265,12 @@ export default function PlansPage() {
         {/* Usage Example */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Ejemplo: Crear Suscripción con Plan</CardTitle>
+            <CardTitle className="text-sm">
+              Ejemplo: Crear Suscripción con Plan
+            </CardTitle>
             <CardDescription>
-              Para crear una suscripción usando un plan, necesitás obtener un cardTokenId del cliente
+              Para crear una suscripción usando un plan, necesitás obtener un
+              cardTokenId del cliente
             </CardDescription>
           </CardHeader>
           <CardContent>
