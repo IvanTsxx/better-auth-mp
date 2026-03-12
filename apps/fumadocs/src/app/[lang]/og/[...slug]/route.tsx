@@ -9,9 +9,6 @@ import { getPageImage, source } from "@/lib/source";
 import BlogPostTemplate from "@/takumi/takumi-template/src/templates/blog-post-template";
 
 async function getOgImageData(slug: string[], lang: string) {
-  "use cache";
-  cacheLife("max");
-
   const page = source.getPage(slug, lang);
   if (!page) {
     return null;
@@ -38,9 +35,11 @@ export async function GET(
   // Handle home page first — source.getPage([], lang) may return null
   // for non-default languages (e.g. "en"), causing notFound() before
   // the isHomePage check was ever reached.
-  const isHomePage = slug.length === 1 && slug[0] === "image.webp";
+  const isHomePage = slug.length === 0;
 
   if (isHomePage) {
+    console.log("isHomePage", isHomePage);
+
     const ogImagePath = `${process.cwd()}/public/es/og-image.webp`;
     const ogImageBuffer = await readFile(ogImagePath);
     const ogImageBase64 = `data:image/webp;base64,${ogImageBuffer.toString("base64")}`;
@@ -72,6 +71,7 @@ export async function GET(
       avatar={data.avatarBase64}
       date={data.date}
       title={data.title}
+      category="plugin"
     />,
     {
       format: "webp",

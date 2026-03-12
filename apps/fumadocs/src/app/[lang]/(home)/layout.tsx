@@ -25,7 +25,7 @@ export default async function Layout({
       nav={{
         enabled: false,
       }}
-      className={`${geist.className} antialiased`}
+      className={`${geist.className} antialiased grid transition-[grid-template-columns] overflow-x-clip min-h-(--fd-docs-height) [--fd-docs-height:100dvh] [--fd-header-height:0px] [--fd-toc-popover-height:0px] [--fd-sidebar-width:0px] [--fd-toc-width:0px]`}
     >
       {children}
     </HomeLayout>

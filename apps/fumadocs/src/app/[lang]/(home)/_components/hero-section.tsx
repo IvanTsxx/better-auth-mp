@@ -19,13 +19,17 @@ export function HeroSection({ lang }: { lang: string }) {
         </span>
       </div>
 
-      {/* Background Graphic Mockup (Logo gigante difuminado / con grano) */}
-      {/* Nota: El logo de fondo de MP lo configuras en este div reemplazando el texto. */}
-      <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-40 select-none overflow-hidden mix-blend-screen">
-        <div className="w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px] absolute" />
+      <>
+        {/* Gradient Balls */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute bottom-[70%] right-0 h-[240px] w-[240px] rounded-full bg-primary blur-[120px]" />
+        </div>
 
-        <MercadopagoIcon className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[250px] font-black tracking-tighter text-zinc-800/40 font-sans rotate-[-8deg] drop-shadow-2xl" />
-      </div>
+        {/* Tu fondo actual */}
+        <div className="absolute inset-0 pointer-events-none flex  items-center justify-center opacity-40 select-none overflow-hidden">
+          <MercadopagoIcon className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[250px] text-zinc-600 rotate-[-8deg] blur-[1px]" />
+        </div>
+      </>
 
       {/* Main Content */}
       <div className="z-10 mt-auto mb-20 space-y-4">
