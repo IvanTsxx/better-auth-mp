@@ -78,7 +78,7 @@ export const auth = betterAuth({
         // Client Secret para OAuth
         clientSecret: process.env.MP_CLIENT_SECRET,
         // URL de callback para OAuth
-        redirectUri: `${process.env.APP_URL}/api/mercadopago/oauth/callback`,
+        redirectUri: `${process.env.APP_URL}/api/mercado-pago/oauth/callback`,
       }
     })
   ]
@@ -508,21 +508,6 @@ async function createPayment(formData: FormData) {
   redirect(result.checkoutUrl);
 }
 
-// Webhook handler (configurado en MP)
-async function webhookHandler(request: Request) {
-  "use server";
-  
-  // El plugin maneja automáticamente:
-  // - Verificación de firma
-  // - Idempotencia
-  // - Actualización de estado en DB
-  // - Callback onPaymentUpdate
-  
-  return await auth.api.mercadopago.handleWebhook({
-    body: await request.json(),
-    headers: Object.fromEntries(request.headers())
-  });
-}
 ```
 
 ---
@@ -531,23 +516,23 @@ async function webhookHandler(request: Request) {
 
 | Método | Endpoint | Descripción | Auth |
 |--------|----------|-------------|------|
-| POST | `/mercadopago/preference` | Crear preferencia | ✅ Session |
-| GET | `/mercadopago/payment/:externalReference` | Obtener pago | ✅ Session |
-| GET | `/mercadopago/payments` | Listar pagos | ✅ Session |
-| POST | `/mercadopago/subscription` | Crear suscripción | ✅ Session |
-| GET | `/mercadopago/subscription/:id` | Obtener suscripción | ✅ Session |
-| GET | `/mercadopago/subscriptions` | Listar suscripciones | ✅ Session |
-| POST | `/mercadopago/subscription/:id/update` | Actualizar suscripción | ✅ Session |
-| POST | `/mercadopago/subscription/:id/cancel` | Cancelar suscripción | ✅ Session |
-| POST | `/mercadopago/plan` | Crear plan | ✅ Session |
-| GET | `/mercadopago/plan/:id` | Obtener plan | ✅ Session |
-| GET | `/mercadopago/plans` | Listar planes | ✅ Session |
-| GET | `/mercadopago/oauth/authorize` | URL autorización OAuth | ❌ |
-| GET | `/mercadopago/oauth/callback` | Callback OAuth | ❌ |
-| GET | `/mercadopago/seller` | Vendedor conectado | ✅ Session |
-| GET | `/mercadopago/sellers` | Listar vendedores | ✅ Session (admin) |
-| DELETE | `/mercadopago/seller/:userId` | Desconectar vendedor | ✅ Session (admin) |
-| POST | `/mercadopago/webhook` | Webhook de MP | ❌ |
+| POST | `/mercado-pago/preference` | Crear preferencia | ✅ Session |
+| GET | `/mercado-pago/payment/:externalReference` | Obtener pago | ✅ Session |
+| GET | `/mercado-pago/payments` | Listar pagos | ✅ Session |
+| POST | `/mercado-pago/subscription` | Crear suscripción | ✅ Session |
+| GET | `/mercado-pago/subscription/:id` | Obtener suscripción | ✅ Session |
+| GET | `/mercado-pago/subscriptions` | Listar suscripciones | ✅ Session |
+| POST | `/mercado-pago/subscription/:id/update` | Actualizar suscripción | ✅ Session |
+| POST | `/mercado-pago/subscription/:id/cancel` | Cancelar suscripción | ✅ Session |
+| POST | `/mercado-pago/plan` | Crear plan | ✅ Session |
+| GET | `/mercado-pago/plan/:id` | Obtener plan | ✅ Session |
+| GET | `/mercado-pago/plans` | Listar planes | ✅ Session |
+| GET | `/mercado-pago/oauth/authorize` | URL autorización OAuth | ❌ |
+| GET | `/mercado-pago/oauth/callback` | Callback OAuth | ❌ |
+| GET | `/mercado-pago/seller` | Vendedor conectado | ✅ Session |
+| GET | `/mercado-pago/sellers` | Listar vendedores | ✅ Session (admin) |
+| DELETE | `/mercado-pago/seller/:userId` | Desconectar vendedor | ✅ Session (admin) |
+| POST | `/mercado-pago/webhook` | Webhook de MP | ❌ |
 
 ---
 
