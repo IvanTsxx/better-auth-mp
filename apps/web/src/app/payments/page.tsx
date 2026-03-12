@@ -137,10 +137,10 @@ export default function PaymentsPage() {
       // Redirect to MercadoPago checkout
       if (result.data) {
         window.location.href = result.data.checkoutUrl;
-        toast.success("Pago creado! Preference ID: " + result.data.checkoutUrl);
+        toast.success(`Pago creado! Preference ID: ${result.data.checkoutUrl}`);
       } else {
         toast.error(
-          "Algo salio mal: " + (result.error.message || result.error.status)
+          `Algo salio mal: ${result.error.message || result.error.status}`
         );
       }
     } catch (err) {

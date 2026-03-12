@@ -20,7 +20,6 @@ import {
   verifyWebhookSignature,
 } from "./security";
 import type {
-  MercadoPagoPayment,
   MercadoPagoPaymentNotification,
   MercadoPagoPaymentRecord,
   MercadoPagoPluginOptions,
