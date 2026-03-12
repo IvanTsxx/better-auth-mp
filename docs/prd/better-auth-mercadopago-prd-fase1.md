@@ -768,13 +768,9 @@ schema: {
 |------|--------|--------------|
 | payment | payment.created | Crear/actualizar registro |
 | payment | payment.updated | Actualizar estado |
-| subscription | subscription.created | Crear registro |
-| subscription | subscription.updated | Actualizar estado |
-| subscription | subscription.authorized | Activar servicio |
-| subscription | subscription.paused | Pausar servicio |
-| subscription | subscription.resumed | Reactivar servicio |
-| subscription | subscription.cancelled | Cancelar servicio |
-| subscription | subscription.payment_failed | Notificar usuario |
+| subscription_preapproval | subscription_preapproval.created | Crear registro (status: pending) |
+| subscription_preapproval | subscription_preapproval.updated | Actualizar estado (authorized/paused/cancelled) |
+| subscription_authorized_payment | authorized_payment.updated | Actualizar estado (authorized) |
 
 ### 6.2 Verificación de Firma
 
@@ -797,12 +793,18 @@ function verifyWebhookSignature(payload: string, signature: string, secret: stri
 
 ```typescript
 // Notificación recibida de MercadoPago
+// El tipo puede venir en el body o en query params (type)
 interface MPWebhookNotification {
-  type: "payment" | "subscription" | "plan" | "subscription_preapproval";
-  action: string;
+  // Puede venir en body.type o query params ?type=
+  type: "payment" | "subscription_preapproval" | "subscription_authorized_payment" | "plan";
+  action: string; // "created", "updated", etc.
   data: {
     id: string;
   };
+  // Para subscriptions: entity: "preapproval"
+  entity?: string;
+  // Versión del webhook
+  version?: number;
 }
 ```
 
@@ -823,20 +825,21 @@ interface MPWebhookNotification {
 ## 8. Roadmap de Implementación
 
 ### Fase 1: Core + Checkout Pro
-- [ ] Estructura base del plugin
-- [ ] Schema de base de datos
-- [ ] Endpoint crear preferencia
-- [ ] Webhook handler para pagos
-- [ ] Verificación de firma
-- [ ] Idempotencia
-- [ ] Client plugin básico
+- [x] Estructura base del plugin
+- [x] Schema de base de datos
+- [x] Endpoint crear preferencia
+- [x] Webhook handler para pagos
+- [x] Verificación de firma
+- [x] Idempotencia
+- [x] Client plugin básico
 
 ### Fase 2: Suscripciones
-- [ ] Schema de suscripciones y planes
-- [ ] Crear suscripción (sin plan)
+- [x] Schema de suscripciones y planes
+- [x] Crear suscripción (sin plan)
 - [ ] Crear suscripción (con plan)
-- [ ] Webhook handler para suscripciones
-- [ ] Endpoints CRUD (get, list, update, cancel)
+- [x] Webhook handler para suscripciones
+- [x] Endpoints CRUD (get, list, update, cancel)
+- [ ] Suscripciones con plan (card token desde cliente)
 
 ### Fase 3: Marketplace
 - [ ] Schema de vendedores
@@ -847,7 +850,9 @@ interface MPWebhookNotification {
 - [ ] Split de pagos (marketplace_fee)
 
 ### Fase 4: Demo + Docs
-- [ ] Demo en apps/web
+- [x] Demo en apps/web (Checkout Pro)
+- [x] Demo en apps/web (Suscripciones sin plan)
+- [ ] Demo en apps/web (Suscripciones con plan)
 - [ ] Documentación en apps/fumadocs
 
 ---

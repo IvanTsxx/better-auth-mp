@@ -9,7 +9,6 @@ if (!process.env.NEXT_RUNTIME) {
   config({ override: false, path: "../../apps/web/.env" });
 }
 
-
 export const env = createEnv({
   emptyStringAsUndefined: true,
   runtimeEnv: process.env,
