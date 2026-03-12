@@ -5,7 +5,7 @@ const withMDX = createMDX();
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
-  async rewrites() {
+  rewrites() {
     return [
       {
         destination: "/llms.mdx/docs/:path*",

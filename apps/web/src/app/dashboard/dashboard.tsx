@@ -6,5 +6,5 @@ export default function Dashboard({
 }: {
   session: typeof authClient.$Infer.Session;
 }) {
-  return <></>;
+  return <pre>{JSON.stringify(session, null, 2)}</pre>;
 }
