@@ -64,6 +64,23 @@ const UpdateSubscriptionSchema = z.object({
 });
 
 /**
+ * Schema for creating a subscription with plan (requires card token)
+ */
+const CreateSubscriptionWithPlanSchema = z.object({
+  cardTokenId: z.string().min(1),
+  idempotencyKey: z.string().optional(),
+  identification: z
+    .object({
+      number: z.string(),
+      type: z.string(),
+    })
+    .optional(),
+  metadata: z.record(z.string(), z.any()).optional(),
+  payerEmail: z.string().email(),
+  planId: z.string(),
+});
+
+/**
  * Schema for subscription filters
  */
 const SubscriptionFiltersSchema = z.object({
@@ -305,6 +322,125 @@ export const createSubscriptionEndpoints = (
         checkoutUrl: preApproval.init_point,
         status: preApproval.status || "pending",
         subscriptionId: preApproval.id,
+      };
+
+      if (idempotencyKey) {
+        idempotencyStore.set(idempotencyKey, result);
+      }
+
+      return ctx.json(result);
+    }
+  ),
+
+  createSubscriptionWithPlan: createAuthEndpoint(
+    "/mercado-pago/create-subscription-with-plan",
+    {
+      body: CreateSubscriptionWithPlanSchema,
+      method: "POST",
+    },
+    async (ctx): Promise<SubscriptionOutput> => {
+      const session = await getSessionFromCtx(ctx);
+      if (!session) {
+        throw new APIError("UNAUTHORIZED");
+      }
+
+      const rateLimitKey = `subscription:create:${session.user.id}`;
+      if (!rateLimiter.check(rateLimitKey, 10, 60 * 1000)) {
+        throw new APIError("TOO_MANY_REQUESTS", {
+          message:
+            "Too many subscription creation attempts. Please try again later.",
+        });
+      }
+
+      const {
+        planId,
+        payerEmail,
+        cardTokenId,
+        identification,
+        metadata,
+        idempotencyKey,
+      } = ctx.body;
+
+      if (idempotencyKey) {
+        if (!validateIdempotencyKey(idempotencyKey)) {
+          throw new APIError("BAD_REQUEST", {
+            message: "Invalid idempotency key format",
+          });
+        }
+
+        const cachedResult = idempotencyStore.get(idempotencyKey);
+        if (cachedResult) {
+          return ctx.json(cachedResult) as Promise<SubscriptionOutput>;
+        }
+      }
+
+      // Get the plan from DB
+      const plan = await ctx.context.adapter.findOne({
+        model: "mercadoPagoPlan",
+        where: [{ field: "mpPlanId", value: planId }],
+      });
+
+      if (!plan) {
+        throw new APIError("NOT_FOUND", {
+          message: "Plan not found",
+        });
+      }
+
+      const sanitizedMetadata = metadata ? sanitizeMetadata(metadata) : {};
+      const externalReference = generateId();
+
+      // Create subscription with plan using card token
+      const subscription = await (
+        new PreApproval(client) as unknown as {
+          create: (config: {
+            body: Record<string, unknown>;
+            requestOptions?: Record<string, unknown>;
+          }) => Promise<{
+            id: string;
+            status: string;
+            init_point?: string;
+          }>;
+        }
+      ).create({
+        body: {
+          card_token_id: cardTokenId,
+          payer_email: payerEmail,
+          preapproval_plan_id: planId,
+          ...(identification && {
+            payer_identification: identification,
+          }),
+        },
+        requestOptions: idempotencyKey ? { idempotencyKey } : undefined,
+      });
+
+      await ctx.context.adapter.create({
+        data: {
+          autoRecurringFrequency: (plan as { autoRecurringFrequency?: number })
+            .autoRecurringFrequency,
+          autoRecurringFrequencyType: (
+            plan as { autoRecurringFrequencyType?: string }
+          ).autoRecurringFrequencyType,
+          createdAt: new Date(),
+          currencyId: (plan as { currencyId?: string }).currencyId,
+          externalReference,
+          metadata: JSON.stringify(sanitizedMetadata),
+          mpSubscriptionId: subscription.id,
+          payerEmail,
+          planId,
+          reason: (plan as { name?: string }).name,
+          status: subscription.status || "authorized",
+          transactionAmount: (plan as { transactionAmount?: number })
+            .transactionAmount,
+          updatedAt: new Date(),
+          userId: session.user.id,
+        },
+        model: "mercadoPagoSubscription",
+      });
+
+      const result: SubscriptionOutput = {
+        checkoutUrl: subscription.init_point || "",
+        status: subscription.status || "authorized",
+        subscriptionId: subscription.id,
       };
 
       if (idempotencyKey) {
