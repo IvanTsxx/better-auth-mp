@@ -18,4 +18,47 @@ model MercadoPagoPayment {
   @@unique([externalReference])
   @@unique([mercadoPagoPaymentId])
   @@map("mercadoPagoPayment")
+  @@index([userId])
+}
+
+model MercadoPagoPlan {
+  id                         String   @id
+  autoRecurringFrequency     Int
+  autoRecurringFrequencyType String
+  createdAt                  DateTime
+  currencyId                 String
+  description                String?
+  metadata                   String?
+  mpPlanId                   String
+  name                       String
+  transactionAmount          Int
+  updatedAt                  DateTime
+
+  @@unique([mpPlanId])
+  @@map("mercadoPagoPlan")
+}
+
+model MercadoPagoSubscription {
+  id                         String    @id
+  autoRecurringFrequency     Int?
+  autoRecurringFrequencyType String?
+  createdAt                  DateTime
+  currencyId                 String?
+  externalReference          String
+  metadata                   String?
+  mpSubscriptionId           String?
+  nextPaymentDate            DateTime?
+  payerEmail                 String?
+  planId                     String?
+  reason                     String?
+  status                     String
+  transactionAmount          Int?
+  updatedAt                  DateTime
+  userId                     String
+  user                       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([externalReference])
+  @@unique([mpSubscriptionId])
+  @@map("mercadoPagoSubscription")
+  @@index([userId])
 }

@@ -1,7 +1,11 @@
 import type { BetterAuthPlugin } from "better-auth";
 import { MercadoPagoConfig } from "mercadopago";
 
-import { createPreferenceEndpoints, getPaymentResultType } from "./endpoints/preference";
+import {
+  createPreferenceEndpoints,
+  getPaymentResultType,
+} from "./endpoints/preference";
+import { createSubscriptionEndpoints } from "./endpoints/subscription";
 import { createWebhookEndpoint } from "./endpoints/webhook";
 import type { MercadoPagoPluginOptions } from "./types";
 
@@ -12,16 +16,15 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
     accessToken: options.accessToken,
   });
 
-  // Create preference endpoints (createPayment, getPayment, getPayments)
   const preferenceEndpoints = createPreferenceEndpoints(client, options);
-
-  // Create webhook endpoint
   const webhookEndpoints = createWebhookEndpoint(client, options);
+  const subscriptionEndpoints = createSubscriptionEndpoints(client, options);
 
   return {
     endpoints: {
       ...preferenceEndpoints,
       ...webhookEndpoints,
+      ...subscriptionEndpoints,
     },
     id: "mercado-pago",
     schema: {
@@ -47,6 +50,60 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
           preferenceId: { required: true, type: "string" },
           status: { required: true, type: "string" },
           statusDetail: { type: "string" },
+          updatedAt: { required: true, type: "date" },
+          userId: {
+            references: {
+              field: "id",
+              model: "user",
+            },
+            required: true,
+            type: "string",
+          },
+        },
+      },
+      mercadoPagoPlan: {
+        fields: {
+          autoRecurringFrequency: { required: true, type: "number" },
+          autoRecurringFrequencyType: { required: true, type: "string" },
+          createdAt: { required: true, type: "date" },
+          currencyId: { required: true, type: "string" },
+          description: { type: "string" },
+          id: { required: true, type: "string" },
+          metadata: { type: "string" },
+          mpPlanId: {
+            required: true,
+            type: "string",
+            unique: true,
+          },
+          name: { required: true, type: "string" },
+          transactionAmount: { required: true, type: "number" },
+          updatedAt: { required: true, type: "date" },
+        },
+      },
+      mercadoPagoSubscription: {
+        fields: {
+          autoRecurringFrequency: { type: "number" },
+          autoRecurringFrequencyType: { type: "string" },
+          createdAt: { required: true, type: "date" },
+          currencyId: { type: "string" },
+          externalReference: {
+            required: true,
+            type: "string",
+            unique: true,
+          },
+          id: { required: true, type: "string" },
+          metadata: { type: "string" },
+          mpSubscriptionId: {
+            required: false,
+            type: "string",
+            unique: true,
+          },
+          nextPaymentDate: { type: "date" },
+          payerEmail: { type: "string" },
+          planId: { type: "string" },
+          reason: { type: "string" },
+          status: { required: true, type: "string" },
+          transactionAmount: { type: "number" },
           updatedAt: { required: true, type: "date" },
           userId: {
             references: {

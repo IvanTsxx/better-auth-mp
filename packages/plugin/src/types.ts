@@ -85,6 +85,37 @@ export interface PaginatedPayments {
   offset: number;
 }
 
+export interface SubscriptionOutput {
+  checkoutUrl: string;
+  subscriptionId: string;
+  status: string;
+}
+
+export interface PlanOutput {
+  planId: string;
+  name: string;
+  url: string;
+}
+
+export interface SubscriptionFilters {
+  status?: SubscriptionStatus;
+  planId?: string;
+}
+
+export interface PaginatedSubscriptions {
+  subscriptions: unknown[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export interface PaginatedPlans {
+  plans: unknown[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
 export interface MPWebhookNotification {
   type: "payment" | "subscription" | "plan" | "subscription_preapproval";
   action: string;

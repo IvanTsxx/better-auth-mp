@@ -11,7 +11,8 @@ model User {
 
   @@unique([email])
   @@map("user")
-  mercadoPagoPayments MercadoPagoPayment[]
+  mercadopagopayments      MercadoPagoPayment[]
+  mercadopagosubscriptions MercadoPagoSubscription[]
 }
 
 model Session {
