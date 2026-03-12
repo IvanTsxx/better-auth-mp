@@ -1,0 +1,100 @@
+---
+title: Webhooks
+description: Manejar notificaciones de pagos y suscripciones de MercadoPago de forma segura.
+---
+
+## Cómo funcionan los webhooks
+
+MercadoPago envía requests `POST` a tu URL de webhook cuando ocurren eventos de pago o suscripción. El endpoint de webhook del plugin se registra automáticamente en:
+
+```
+POST /api/auth/mercado-pago/webhook
+```
+
+Este endpoint es **públicamente accesible** (no requiere auth) — MercadoPago necesita acceder sin sesión.
+
+## Configurar en el panel de MercadoPago
+
+Configurá tu URL de webhook en el [panel de desarrolladores de MercadoPago](https://www.mercadopago.com/developers/panel/notifications/webhooks) a:
+
+```
+https://tu-app.com/api/auth/mercado-pago/webhook
+```
+
+Seleccioná los eventos que quieras recibir — típicamente:
+
+- `payment` — actualizaciones de pagos únicos
+- `subscription_preapproval` — cambios de estado de suscripciones
+
+## Verificación de firma
+
+Para prevenir requests de webhook falsificados, configurá un `webhookSecret` en las opciones del plugin:
+
+```ts title="lib/auth.ts"
+mercadoPagoPlugin({
+  accessToken: process.env.MP_ACCESS_TOKEN!,
+  webhookSecret: process.env.MP_WEBHOOK_SECRET,
+  // ...
+})
+```
+
+Cuando `webhookSecret` está configurado, cada request de webhook entrante se valida contra los headers `x-signature` y `x-request-id` usando HMAC-SHA256. Las firmas inválidas son rechazadas con `401 Unauthorized`.
+
+> Dejá `webhookSecret` sin configurar durante el desarrollo local ya que ngrok / tunnels suelen eliminar los headers personalizados.
+
+## Reaccionar a eventos de pago
+
+Usá el callback `onPaymentUpdate` para ejecutar tu lógica de negocio después de un cambio de estado de pago:
+
+```ts title="lib/auth.ts"
+mercadoPagoPlugin({
+  onPaymentUpdate: async ({ payment, status, statusDetail, resultType, mpPayment }) => {
+    // resultType: "success" | "pending" | "error"
+    if (resultType === "success") {
+      await db.order.update({
+        where: { externalReference: payment.externalReference },
+        data: { fulfilled: true },
+      })
+    }
+  },
+})
+```
+
+### Mapeo de `resultType` de pagos
+
+| Estado de MercadoPago | `resultType` |
+|-----------------------|-------------|
+| `approved`, `authorized` | `success` |
+| `pending`, `in_process` | `pending` |
+| `rejected`, `cancelled`, `refunded`, `charged_back`, `in_mediation` | `error` |
+
+## Reaccionar a eventos de suscripción
+
+```ts title="lib/auth.ts"
+mercadoPagoPlugin({
+  onSubscriptionUpdate: async ({ subscription, status, mpSubscription }) => {
+    if (status === "authorized") {
+      // otorgar acceso
+    }
+    if (status === "cancelled" || status === "expired") {
+      // revocar acceso
+    }
+  },
+})
+```
+
+## Parámetros de Back URL
+
+Cuando MercadoPago redirige a los usuarios de vuelta a tu app desde Checkout Pro, agrega parámetros de query:
+
+| URL | Parámetros |
+|-----|-----------|
+| `backUrls.success` | `?payment_id=...&status=approved&preference_id=...` |
+| `backUrls.pending` | `?payment_id=...&status=pending&preference_id=...` |
+| `backUrls.failure` | `?payment_id=...&status=rejected&preference_id=...` |
+
+Leélos en el cliente para mostrar feedback apropiado — pero **siempre** confiá en el webhook para el estado autoritativo.
+
+## Idempotencia en webhooks
+
+El plugin automáticamente deduplica entregas de webhooks usando un store en memoria. El mismo `payment_id` solo se procesará completamente una vez dentro de 24 horas, previniendo doble-fulfillment causado por reintentos de MercadoPago.

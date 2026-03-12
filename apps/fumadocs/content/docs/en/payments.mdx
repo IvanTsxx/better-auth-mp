@@ -1,0 +1,128 @@
+---
+title: One-time Payments
+description: Create and query one-time payments using MercadoPago Checkout Pro.
+---
+
+## How it works
+
+When you call `createPayment`, the plugin:
+
+1. Creates a MercadoPago **Preference** with your items
+2. Saves a **pending** payment record in your database
+3. Returns a `checkoutUrl` — redirect the user there
+
+After checkout, MercadoPago calls your [webhook](/docs//webhooks) to update the payment status.
+
+## Create a payment
+
+```ts
+const result = await authClient.mercadoPago.createPayment({
+  items: [
+    {
+      id: "prod_001",
+      title: "Premium Membership",
+      description: "1-month access to all features",
+      quantity: 1,
+      unitPrice: 1500,
+      currencyId: "ARS",
+    },
+  ],
+  backUrls: {
+    success: `${window.location.origin}/payments/success`,
+    failure: `${window.location.origin}/payments/failure`,
+    pending: `${window.location.origin}/payments/pending`,
+  },
+})
+
+if (result.data) {
+  window.location.href = result.data.checkoutUrl
+}
+```
+
+### Request body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `items` | `PreferenceItem[]` | ✅ | Products to charge |
+| `backUrls.success` | `string` | — | Redirect on payment success |
+| `backUrls.failure` | `string` | — | Redirect on payment failure |
+| `backUrls.pending` | `string` | — | Redirect on pending payment |
+| `idempotencyKey` | `string` | — | Prevent duplicate submissions (max 36 chars, alphanumeric + `-_`) |
+
+#### `PreferenceItem` shape
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | `string` | ✅ | Your product ID |
+| `title` | `string` | ✅ | Product name |
+| `quantity` | `number` | ✅ | How many units |
+| `unitPrice` | `number` | ✅ | Price per unit |
+| `currencyId` | `string` | ✅ | ISO currency code (e.g. `"ARS"`, `"BRL"`) |
+| `description` | `string` | — | Optional product description |
+| `pictureUrl` | `string` | — | Product image URL |
+| `categoryId` | `string` | — | MercadoPago category ID |
+
+### Response
+
+```ts
+{
+  checkoutUrl: string      // Redirect user here → MercadoPago checkout
+  preferenceId: string     // MercadoPago preference ID
+  paymentId: string        // Your internal DB record ID
+}
+```
+
+> If no `backUrls` are provided, the plugin falls back to `{baseUrl}/payments/one-time?status=<status>`.
+
+## Get a payment
+
+Retrieve a specific payment by `externalReference`. The user must own the payment.
+
+```ts
+const result = await authClient.mercadoPago.getPayment({
+  externalReference: "abc123",
+})
+```
+
+## List payments
+
+```ts
+const result = await authClient.mercadoPago.getPayments({
+  limit: 20,
+  offset: 0,
+  filters: {
+    status: "approved",        // optional
+    dateCreatedFrom: "2024-01-01",  // optional
+    dateCreatedTo: "2024-12-31",    // optional
+  },
+})
+
+// result.data → { payments, total, limit, offset }
+```
+
+### Payment status values
+
+| Status | Meaning |
+|--------|---------|
+| `pending` | Awaiting payment |
+| `approved` | Payment approved |
+| `authorized` | Payment authorized (not yet captured) |
+| `in_process` | Being reviewed |
+| `in_mediation` | Dispute in progress |
+| `rejected` | Payment rejected |
+| `cancelled` | Cancelled by user or timeout |
+| `refunded` | Refunded |
+| `charged_back` | Chargeback |
+
+## Idempotency
+
+Pass an `idempotencyKey` to prevent duplicate payments if the user submits the form twice:
+
+```ts
+await authClient.mercadoPago.createPayment({
+  items: [...],
+  idempotencyKey: crypto.randomUUID(),  // store this client-side before submitting
+})
+```
+
+The same key returns the cached result for 24 hours. Keys must be alphanumeric with `-` or `_`, max 36 chars.

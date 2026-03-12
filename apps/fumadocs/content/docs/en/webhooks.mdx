@@ -1,0 +1,100 @@
+---
+title: Webhooks
+description: Handle MercadoPago payment and subscription notifications securely.
+---
+
+## How webhooks work
+
+MercadoPago sends `POST` requests to your webhook URL when payment or subscription events occur. The plugin's webhook endpoint is automatically registered at:
+
+```
+POST /api/auth/mercado-pago/webhook
+```
+
+This endpoint is **publicly accessible** (no auth required) — MercadoPago needs to reach it without a session.
+
+## Configure in MercadoPago dashboard
+
+Set your webhook URL in the [MercadoPago developer panel](https://www.mercadopago.com/developers/panel/notifications/webhooks) to:
+
+```
+https://your-app.com/api/auth/mercado-pago/webhook
+```
+
+Select the events you want to receive — typically:
+
+- `payment` — one-time payment updates
+- `subscription_preapproval` — subscription status changes
+
+## Signature verification
+
+To prevent spoofed webhook requests, configure a `webhookSecret` in the plugin options:
+
+```ts title="lib/auth.ts"
+mercadoPagoPlugin({
+  accessToken: process.env.MP_ACCESS_TOKEN!,
+  webhookSecret: process.env.MP_WEBHOOK_SECRET,
+  // ...
+})
+```
+
+When `webhookSecret` is set, every incoming webhook request is validated against the `x-signature` and `x-request-id` headers using HMAC-SHA256. Invalid signatures are rejected with `401 Unauthorized`.
+
+> Leave `webhookSecret` unset during local development since ngrok / tunnels often strip custom headers.
+
+## React to payment events
+
+Use the `onPaymentUpdate` callback to run your business logic after a payment status change:
+
+```ts title="lib/auth.ts"
+mercadoPagoPlugin({
+  onPaymentUpdate: async ({ payment, status, statusDetail, resultType, mpPayment }) => {
+    // resultType: "success" | "pending" | "error"
+    if (resultType === "success") {
+      await db.order.update({
+        where: { externalReference: payment.externalReference },
+        data: { fulfilled: true },
+      })
+    }
+  },
+})
+```
+
+### Payment `resultType` mapping
+
+| MercadoPago status | `resultType` |
+|--------------------|-------------|
+| `approved`, `authorized` | `success` |
+| `pending`, `in_process` | `pending` |
+| `rejected`, `cancelled`, `refunded`, `charged_back`, `in_mediation` | `error` |
+
+## React to subscription events
+
+```ts title="lib/auth.ts"
+mercadoPagoPlugin({
+  onSubscriptionUpdate: async ({ subscription, status, mpSubscription }) => {
+    if (status === "authorized") {
+      // grant access
+    }
+    if (status === "cancelled" || status === "expired") {
+      // revoke access
+    }
+  },
+})
+```
+
+## Back URL parameters
+
+When MercadoPago redirects users back to your app from Checkout Pro, it appends query parameters:
+
+| URL | Parameters |
+|-----|-----------|
+| `backUrls.success` | `?payment_id=...&status=approved&preference_id=...` |
+| `backUrls.pending` | `?payment_id=...&status=pending&preference_id=...` |
+| `backUrls.failure` | `?payment_id=...&status=rejected&preference_id=...` |
+
+Read them on the client to show appropriate feedback — but **always** trust the webhook for the authoritative status.
+
+## Idempotency in webhooks
+
+The plugin automatically deduplicates webhook deliveries using an in-memory store. The same `payment_id` will only be fully processed once within 24 hours, preventing double-fulfillment caused by MercadoPago retries.

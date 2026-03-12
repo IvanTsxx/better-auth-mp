@@ -1,0 +1,173 @@
+---
+title: Subscriptions
+description: Create and manage recurring billing with MercadoPago PreApproval.
+---
+
+## Overview
+
+The plugin supports two subscription flows:
+
+- **Without plan** — define the billing terms inline per subscription (no card required upfront)
+- **With plan** — create a reusable plan first, then subscribe users to it using a card token
+
+Both produce a `checkoutUrl` to send users to MercadoPago for payment authorization.
+
+---
+
+## Without a plan
+
+Use this when each subscription has different terms (amount, frequency).
+
+```ts
+const result = await authClient.mercadoPago.createSubscription({
+  reason: "Premium Subscription",
+  payerEmail: "user@example.com",
+  autoRecurring: {
+    frequency: 1,
+    frequencyType: "months",    // "days" | "weeks" | "months"
+    transactionAmount: 999,
+    currencyId: "ARS",
+    startDate: "2024-02-01T00:00:00Z",   // optional
+    endDate: "2025-02-01T00:00:00Z",     // optional
+  },
+  backUrl: `${window.location.origin}/subscriptions?status=pending`,  // optional
+  idempotencyKey: crypto.randomUUID(),   // optional
+})
+
+if (result.data) {
+  window.location.href = result.data.checkoutUrl
+}
+```
+
+### Request fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `reason` | `string` | ✅ | Subscription description shown to user |
+| `payerEmail` | `string` | ✅ | Email of the subscriber |
+| `autoRecurring.frequency` | `number` | ✅ | Billing cadence number (e.g. `1`) |
+| `autoRecurring.frequencyType` | `"days" \| "weeks" \| "months"` | ✅ | Unit of billing cadence |
+| `autoRecurring.transactionAmount` | `number` | ✅ | Amount per cycle |
+| `autoRecurring.currencyId` | `string` | ✅ | ISO currency code |
+| `autoRecurring.startDate` | `string` | — | ISO date for billing start |
+| `autoRecurring.endDate` | `string` | — | ISO date for billing end |
+| `backUrl` | `string` | — | Redirect after authorization |
+| `idempotencyKey` | `string` | — | Deduplication key |
+
+---
+
+## With a plan
+
+### 1. Create the plan (server-side, one time)
+
+Plans are shared configurations that multiple users can subscribe to.
+
+```ts
+const plan = await authClient.mercadoPago.createPlan({
+  name: "Pro Plan",
+  description: "Full access to all pro features",
+  autoRecurring: {
+    frequency: 1,
+    frequencyType: "months",
+    transactionAmount: 1999,
+    currencyId: "ARS",
+  },
+})
+
+// plan.data → { planId, name, url }
+```
+
+### 2. Subscribe a user to the plan
+
+This requires a **card token** obtained from the MercadoPago frontend SDK (`@mercadopago/sdk-js`).
+
+```ts
+const result = await authClient.mercadoPago.createSubscriptionWithPlan({
+  planId: plan.data.planId,
+  payerEmail: "user@example.com",
+  cardTokenId: "card_token_from_mp_sdk",
+  identification: {           // optional, required in some countries
+    type: "DNI",
+    number: "12345678",
+  },
+  idempotencyKey: crypto.randomUUID(),
+})
+```
+
+---
+
+## Manage subscriptions
+
+### Get a subscription
+
+```ts
+const result = await authClient.mercadoPago.getSubscription({
+  subscriptionId: "mp_subscription_id",
+})
+```
+
+### List subscriptions
+
+```ts
+const result = await authClient.mercadoPago.getSubscriptions({
+  limit: 20,
+  offset: 0,
+  filters: {
+    status: "authorized",   // optional
+    planId: "plan_id",      // optional
+  },
+})
+// result.data → { subscriptions, total, limit, offset }
+```
+
+### Pause / resume a subscription
+
+```ts
+await authClient.mercadoPago.updateSubscription({
+  subscriptionId: "mp_subscription_id",
+  status: "paused",       // "paused" | "authorized"
+})
+```
+
+### Cancel a subscription
+
+```ts
+await authClient.mercadoPago.cancelSubscription({
+  subscriptionId: "mp_subscription_id",
+})
+```
+
+---
+
+## Plans
+
+### List plans
+
+```ts
+const result = await authClient.mercadoPago.getPlans({
+  limit: 20,
+  offset: 0,
+})
+// result.data → { plans, total, limit, offset }
+```
+
+### Get a plan
+
+```ts
+const result = await authClient.mercadoPago.getPlan({
+  planId: "mp_plan_id",
+})
+```
+
+---
+
+## Subscription status values
+
+| Status | Meaning |
+|--------|---------|
+| `pending` | Created, awaiting user authorization |
+| `authorized` | Active and billing |
+| `paused` | Temporarily suspended |
+| `cancelled` | Permanently cancelled |
+| `expired` | Reached end date |
+| `unpaid` | Payment failed and not retried |

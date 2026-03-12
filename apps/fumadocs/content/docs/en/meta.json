@@ -1,0 +1,13 @@
+{
+  "pages": [
+    "index",
+    "installation",
+    "payments",
+    "subscriptions",
+    "webhooks",
+    "schema",
+    "security",
+    "api-reference"
+  ],
+  "title": "English"
+}

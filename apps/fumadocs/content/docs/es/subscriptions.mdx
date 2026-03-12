@@ -1,0 +1,173 @@
+---
+title: Suscripciones
+description: Crear y gestionar facturación recurrente con MercadoPago PreApproval.
+---
+
+## Resumen
+
+El plugin soporta dos flujos de suscripción:
+
+- **Sin plan** — definís los términos de facturación de forma inline por suscripción (no requiere tarjeta de antemano)
+- **Con plan** — creás un plan reutilizable primero, luego suscribís usuarios a él usando un token de tarjeta
+
+Ambos producen una `checkoutUrl` para enviar a los usuarios a MercadoPago para autorizar el pago.
+
+---
+
+## Sin plan
+
+Usá esto cuando cada suscripción tiene términos diferentes (monto, frecuencia).
+
+```ts
+const result = await authClient.mercadoPago.createSubscription({
+  reason: "Suscripción Premium",
+  payerEmail: "usuario@ejemplo.com",
+  autoRecurring: {
+    frequency: 1,
+    frequencyType: "months",    // "days" | "weeks" | "months"
+    transactionAmount: 999,
+    currencyId: "ARS",
+    startDate: "2024-02-01T00:00:00Z",   // opcional
+    endDate: "2025-02-01T00:00:00Z",     // opcional
+  },
+  backUrl: `${window.location.origin}/subscriptions?status=pending`,  // opcional
+  idempotencyKey: crypto.randomUUID(),   // opcional
+})
+
+if (result.data) {
+  window.location.href = result.data.checkoutUrl
+}
+```
+
+### Campos de la request
+
+| Campo | Tipo | Requerido | Descripción |
+|-------|------|-----------|-------------|
+| `reason` | `string` | ✅ | Descripción de la suscripción mostrada al usuario |
+| `payerEmail` | `string` | ✅ | Email del suscriptor |
+| `autoRecurring.frequency` | `number` | ✅ | Número de cadencia de facturación (ej: `1`) |
+| `autoRecurring.frequencyType` | `"days" \| "weeks" \| "months"` | ✅ | Unidad de cadencia |
+| `autoRecurring.transactionAmount` | `number` | ✅ | Monto por ciclo |
+| `autoRecurring.currencyId` | `string` | ✅ | Código de moneda ISO |
+| `autoRecurring.startDate` | `string` | — | Fecha ISO de inicio de facturación |
+| `autoRecurring.endDate` | `string` | — | Fecha ISO de fin de facturación |
+| `backUrl` | `string` | — | Redirección después de la autorización |
+| `idempotencyKey` | `string` | — | Clave de deduplicación |
+
+---
+
+## Con plan
+
+### 1. Crear el plan (del lado servidor, una vez)
+
+Los planes son configuraciones compartidas a las que múltiples usuarios pueden suscribirse.
+
+```ts
+const plan = await authClient.mercadoPago.createPlan({
+  name: "Plan Pro",
+  description: "Acceso completo a todas las funciones pro",
+  autoRecurring: {
+    frequency: 1,
+    frequencyType: "months",
+    transactionAmount: 1999,
+    currencyId: "ARS",
+  },
+})
+
+// plan.data → { planId, name, url }
+```
+
+### 2. Suscribir un usuario al plan
+
+Esto requiere un **token de tarjeta** obtenido del SDK frontend de MercadoPago (`@mercadopago/sdk-js`).
+
+```ts
+const result = await authClient.mercadoPago.createSubscriptionWithPlan({
+  planId: plan.data.planId,
+  payerEmail: "usuario@ejemplo.com",
+  cardTokenId: "card_token_del_sdk_mp",
+  identification: {           // opcional, requerido en algunos países
+    type: "DNI",
+    number: "12345678",
+  },
+  idempotencyKey: crypto.randomUUID(),
+})
+```
+
+---
+
+## Gestionar suscripciones
+
+### Obtener una suscripción
+
+```ts
+const result = await authClient.mercadoPago.getSubscription({
+  subscriptionId: "mp_subscription_id",
+})
+```
+
+### Listar suscripciones
+
+```ts
+const result = await authClient.mercadoPago.getSubscriptions({
+  limit: 20,
+  offset: 0,
+  filters: {
+    status: "authorized",   // opcional
+    planId: "plan_id",      // opcional
+  },
+})
+// result.data → { subscriptions, total, limit, offset }
+```
+
+### Pausar / reanudar una suscripción
+
+```ts
+await authClient.mercadoPago.updateSubscription({
+  subscriptionId: "mp_subscription_id",
+  status: "paused",       // "paused" | "authorized"
+})
+```
+
+### Cancelar una suscripción
+
+```ts
+await authClient.mercadoPago.cancelSubscription({
+  subscriptionId: "mp_subscription_id",
+})
+```
+
+---
+
+## Planes
+
+### Listar planes
+
+```ts
+const result = await authClient.mercadoPago.getPlans({
+  limit: 20,
+  offset: 0,
+})
+// result.data → { plans, total, limit, offset }
+```
+
+### Obtener un plan
+
+```ts
+const result = await authClient.mercadoPago.getPlan({
+  planId: "mp_plan_id",
+})
+```
+
+---
+
+## Valores de estado de suscripción
+
+| Estado | Significado |
+|--------|-------------|
+| `pending` | Creada, esperando autorización del usuario |
+| `authorized` | Activa y facturando |
+| `paused` | Suspendida temporalmente |
+| `cancelled` | Cancelada permanentemente |
+| `expired` | Llegó a la fecha de fin |
+| `unpaid` | Pago fallido y no reintentado |

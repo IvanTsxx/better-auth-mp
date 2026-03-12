@@ -1,17 +1,32 @@
+import { defineI18nUI } from "fumadocs-ui/i18n";
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
+
+import { i18n } from "./i18n";
 
 // fill this with your actual GitHub info, for example:
 export const gitConfig = {
   branch: "main",
-  repo: "fumadocs",
-  user: "fuma-nama",
+  repo: "better-auth-mercadopago",
+  user: "IvanTsxx",
 };
 
-export function baseOptions(): BaseLayoutProps {
+export const i18nUI = defineI18nUI(i18n, {
+  translations: {
+    en: {
+      displayName: "English",
+    },
+    es: {
+      displayName: "Spanish",
+    },
+  },
+});
+
+export function baseOptions(lang?: string): BaseLayoutProps {
   return {
+    i18n,
     githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
     nav: {
-      title: "My App",
+      title: "Better Auth Mercado Pago Plugin",
     },
   };
 }

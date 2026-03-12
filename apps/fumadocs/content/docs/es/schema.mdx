@@ -1,0 +1,136 @@
+---
+title: Schema de Base de Datos
+description: Tablas que el plugin agrega automáticamente a tu base de datos.
+---
+
+## Resumen
+
+El plugin registra tres modelos adicionales vía el sistema de schema de Better Auth. Tu adaptador de base de datos creará estas tablas automáticamente cuando ejecutes una migración.
+
+---
+
+## `mercadoPagoPayment`
+
+Almacena registros de pagos únicos creados con `createPayment`.
+
+| Columna | Tipo | Notas |
+|---------|------|-------|
+| `id` | `string` | Clave primaria |
+| `userId` | `string` | FK → `user.id` |
+| `externalReference` | `string` | Único, usado para correlacionar con webhooks |
+| `mercadoPagoPaymentId` | `string?` | Completado cuando el webhook confirma el pago |
+| `preferenceId` | `string` | ID de preferencia de MercadoPago |
+| `status` | `string` | Estado del pago (ver [valores de estado](/docs//payments#valores-de-estado-del-pago)) |
+| `statusDetail` | `string?` | Estado detallado de MercadoPago |
+| `amount` | `number` | Monto total cobrado |
+| `currency` | `string` | Código de moneda ISO |
+| `paymentMethodId` | `string?` | Ej: `"visa"`, `"account_money"` |
+| `paymentTypeId` | `string?` | Ej: `"credit_card"`, `"digital_currency"` |
+| `metadata` | `string?` | Datos extra serializados en JSON |
+| `createdAt` | `Date` | Tiempo de creación del registro |
+| `updatedAt` | `Date` | Tiempo de última actualización |
+
+---
+
+## `mercadoPagoSubscription`
+
+Almacena registros de suscripciones recurrentes.
+
+| Columna | Tipo | Notas |
+|---------|------|-------|
+| `id` | `string` | Clave primaria |
+| `userId` | `string` | FK → `user.id` |
+| `externalReference` | `string` | Único |
+| `mpSubscriptionId` | `string?` | ID de PreApproval de MercadoPago |
+| `planId` | `string?` | ID de plan de MercadoPago (si se creó con plan) |
+| `status` | `string` | Estado de la suscripción |
+| `reason` | `string?` | Descripción mostrada al usuario |
+| `payerEmail` | `string?` | Email del suscriptor |
+| `transactionAmount` | `number?` | Monto por ciclo de facturación |
+| `currencyId` | `string?` | Código de moneda ISO |
+| `autoRecurringFrequency` | `number?` | Número de cadencia de facturación |
+| `autoRecurringFrequencyType` | `string?` | `"days"`, `"weeks"`, o `"months"` |
+| `nextPaymentDate` | `Date?` | Próxima fecha de facturación programada |
+| `metadata` | `string?` | Datos extra serializados en JSON |
+| `createdAt` | `Date` | Tiempo de creación del registro |
+| `updatedAt` | `Date` | Tiempo de última actualización |
+
+---
+
+## `mercadoPagoPlan`
+
+Almacena definiciones de planes de suscripción reutilizables.
+
+| Columna | Tipo | Notas |
+|---------|------|-------|
+| `id` | `string` | Clave primaria |
+| `mpPlanId` | `string` | ID de plan de MercadoPago (único) |
+| `name` | `string` | Nombre del plan |
+| `description` | `string?` | Descripción opcional del plan |
+| `transactionAmount` | `number` | Monto por ciclo de facturación |
+| `currencyId` | `string` | Código de moneda ISO |
+| `autoRecurringFrequency` | `number` | Número de cadencia de facturación |
+| `autoRecurringFrequencyType` | `string` | `"days"`, `"weeks"`, o `"months"` |
+| `metadata` | `string?` | Datos extra serializados en JSON |
+| `createdAt` | `Date` | Tiempo de creación del registro |
+| `updatedAt` | `Date` | Tiempo de última actualización |
+
+---
+
+## Ejemplo de schema Prisma
+
+Si usás el adaptador de Prisma, el plugin auto-genera los modelos. Tu `schema.prisma` se verá algo así:
+
+```prisma
+model MercadoPagoPayment {
+  id                    String    @id
+  userId                String
+  externalReference     String    @unique
+  mercadoPagoPaymentId  String?   @unique
+  preferenceId          String
+  status                String
+  statusDetail          String?
+  amount                Float
+  currency              String
+  paymentMethodId       String?
+  paymentTypeId         String?
+  metadata              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+  user                  User      @relation(fields: [userId], references: [id])
+}
+
+model MercadoPagoSubscription {
+  id                          String    @id
+  userId                      String
+  externalReference           String    @unique
+  mpSubscriptionId            String?   @unique
+  planId                      String?
+  status                      String
+  reason                      String?
+  payerEmail                  String?
+  transactionAmount           Float?
+  currencyId                  String?
+  autoRecurringFrequency      Int?
+  autoRecurringFrequencyType  String?
+  nextPaymentDate             DateTime?
+  metadata                    String?
+  createdAt                   DateTime
+  updatedAt                   DateTime
+  user                        User      @relation(fields: [userId], references: [id])
+}
+
+model MercadoPagoPlan {
+  id                          String   @id
+  mpPlanId                    String   @unique
+  name                        String
+  description                 String?
+  transactionAmount           Float
+  currencyId                  String
+  autoRecurringFrequency      Int
+  autoRecurringFrequencyType  String
+  metadata                    String?
+  createdAt                   DateTime
+  updatedAt                   DateTime
+}
+```

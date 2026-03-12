@@ -1,0 +1,259 @@
+---
+title: API Reference
+description: Full list of all plugin endpoints with request and response types.
+---
+
+All endpoints are registered under Better Auth's handler and require an active user session unless noted.
+
+## Payments
+
+### `createPayment`
+
+Creates a MercadoPago Checkout Pro preference and a pending payment record.
+
+**Auth required:** ✅ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.createPayment(body)
+```
+
+**Body:**
+
+```ts
+{
+  items: {
+    id: string
+    title: string
+    quantity: number
+    unitPrice: number
+    currencyId: string
+    description?: string
+    pictureUrl?: string
+    categoryId?: string
+  }[]
+  backUrls?: {
+    success?: string
+    failure?: string
+    pending?: string
+  }
+  idempotencyKey?: string
+}
+```
+
+**Returns:** `{ checkoutUrl, preferenceId, paymentId }`
+
+---
+
+### `getPayment`
+
+Fetches a payment by `externalReference`. Returns 404 if not owned by the session user.
+
+**Auth required:** ✅ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.getPayment({ externalReference: string })
+```
+
+---
+
+### `getPayments`
+
+Returns a paginated list of payments for the current user.
+
+**Auth required:** ✅ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.getPayments({
+  limit: number,    // 1–100, default 20
+  offset: number,   // default 0
+  filters?: {
+    status?: PaymentStatus
+    dateCreatedFrom?: string
+    dateCreatedTo?: string
+  }
+})
+```
+
+**Returns:** `{ payments, total, limit, offset }`
+
+---
+
+## Subscriptions
+
+### `createSubscription`
+
+Creates a pending PreApproval (no plan required).
+
+**Auth required:** ✅ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.createSubscription({
+  reason: string
+  payerEmail: string
+  autoRecurring: {
+    frequency: number
+    frequencyType: "days" | "weeks" | "months"
+    transactionAmount: number
+    currencyId: string
+    startDate?: string
+    endDate?: string
+  }
+  backUrl?: string
+  idempotencyKey?: string
+})
+```
+
+**Returns:** `{ checkoutUrl, subscriptionId, status }`
+
+---
+
+### `createSubscriptionWithPlan`
+
+Creates a PreApproval associated to an existing plan, activated immediately using a card token.
+
+**Auth required:** ✅ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.createSubscriptionWithPlan({
+  planId: string
+  payerEmail: string
+  cardTokenId: string
+  identification?: { type: string; number: string }
+  idempotencyKey?: string
+})
+```
+
+**Returns:** `{ checkoutUrl, subscriptionId, status }`
+
+---
+
+### `getSubscription`
+
+**Auth required:** ✅ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.getSubscription({ subscriptionId: string })
+```
+
+---
+
+### `getSubscriptions`
+
+**Auth required:** ✅ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.getSubscriptions({
+  limit?: number
+  offset?: number
+  filters?: {
+    status?: SubscriptionStatus
+    planId?: string
+  }
+})
+```
+
+**Returns:** `{ subscriptions, total, limit, offset }`
+
+---
+
+### `updateSubscription`
+
+Pauses or resumes an active subscription.
+
+**Auth required:** ✅ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.updateSubscription({
+  subscriptionId: string
+  status: "paused" | "authorized"
+})
+```
+
+---
+
+### `cancelSubscription`
+
+Permanently cancels a subscription.
+
+**Auth required:** ✅ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.cancelSubscription({ subscriptionId: string })
+```
+
+---
+
+## Plans
+
+### `createPlan`
+
+Creates a reusable subscription plan.
+
+**Auth required:** ✅ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.createPlan({
+  name: string
+  description?: string
+  autoRecurring: {
+    frequency: number
+    frequencyType: "days" | "weeks" | "months"
+    transactionAmount: number
+    currencyId: string
+  }
+})
+```
+
+**Returns:** `{ planId, name, url }`
+
+---
+
+### `getPlan`
+
+**Auth required:** ❌ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.getPlan({ planId: string })
+```
+
+---
+
+### `getPlans`
+
+**Auth required:** ❌ | **Method:** `POST`
+
+```ts
+authClient.mercadoPago.getPlans({
+  limit: number   // 1–100, default 20
+  offset: number  // default 0
+})
+```
+
+**Returns:** `{ plans, total, limit, offset }`
+
+---
+
+## Webhook
+
+### `webhook`
+
+Receives payment and subscription notifications from MercadoPago.
+
+**Auth required:** ❌ (public) | **Method:** `POST`
+
+Path: `/api/auth/mercado-pago/webhook`
+
+No client-side call needed — this is invoked directly by MercadoPago.
+
+---
+
+## Type reference
+
+```ts
+type PaymentStatus =
+  | "pending" | "approved" | "authorized" | "in_process"
+  | "in_mediation" | "rejected" | "cancelled" | "refunded" | "charged_back"
+
+type SubscriptionStatus =
+  | "pending" | "authorized" | "paused" | "cancelled" | "expired" | "unpaid"
+```

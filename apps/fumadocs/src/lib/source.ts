@@ -3,9 +3,12 @@ import { loader } from "fumadocs-core/source";
 import type { InferPageType } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 
+import { i18n } from "./i18n";
+
 // See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
   baseUrl: "/docs",
+  i18n,
   plugins: [lucideIconsPlugin()],
   source: docs.toFumadocsSource(),
 });
@@ -15,7 +18,7 @@ export function getPageImage(page: InferPageType<typeof source>) {
 
   return {
     segments,
-    url: `/og/docs/${segments.join("/")}`,
+    url: `/${page.locale}/og/${segments.join("/")}`,
   };
 }
 

@@ -1,0 +1,28 @@
+---
+title: Introducción
+description: Plugin de Better Auth para MercadoPago — pagos únicos, suscripciones y webhooks.
+---
+
+# Better Auth × MercadoPago
+
+`@better-auth-mercadopago/plugin` es un plugin de [Better Auth](https://better-auth.com) que agrega procesamiento de pagos con MercadoPago a tu aplicación con mínima configuración.
+
+## Qué incluye
+
+- **Pagos únicos** — crea preferencias de Checkout Pro y rastrea el estado del pago
+- **Suscripciones** — facturación recurrente vía PreApproval (con o sin planes)
+- **Webhooks** — verificación de firma segura + sincronización automática de estado
+- **Schema de base de datos** — migración automática de las tablas `mercadoPagoPayment`, `mercadoPagoSubscription` y `mercadoPagoPlan`
+- **Seguridad** — rate limiting, idempotencia y sanitización de metadata integrados
+
+## Navegación rápida
+
+| Sección | Descripción |
+|---------|-------------|
+| [Instalación](/docs//installation) | Instalar y configurar el plugin |
+| [Pagos Únicos](/docs//payments) | Crear y consultar pagos |
+| [Suscripciones](/docs//subscriptions) | Facturación recurrente y planes |
+| [Webhooks](/docs//webhooks) | Manejar notificaciones de MercadoPago |
+| [Schema de Base de Datos](/docs//schema) | Tablas que agrega el plugin |
+| [Seguridad](/docs//security) | Rate limits, idempotencia y verificación de firma |
+| [Referencia de API](/docs//api-reference) | Lista completa de endpoints |

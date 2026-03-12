@@ -1,0 +1,77 @@
+---
+title: Security
+description: "Built-in security features: rate limiting, idempotency, webhook verification, and metadata sanitization."
+---
+
+## Rate limiting
+
+All mutating endpoints enforce per-user rate limits using an in-memory sliding window:
+
+| Endpoint | Limit |
+|----------|-------|
+| `createPayment` | 10 requests / 60 seconds per user |
+| `createSubscription` | 10 requests / 60 seconds per user |
+| `createSubscriptionWithPlan` | 10 requests / 60 seconds per user |
+| `webhook` (global) | 1,000 requests / 60 seconds |
+
+Exceeded limits return `429 Too Many Requests`.
+
+> The rate limiter is in-memory. In multi-instance deployments, consider replacing it with a shared Redis-backed limiter.
+
+## Idempotency
+
+Create endpoints accept an optional `idempotencyKey` parameter. When provided:
+
+1. The key is validated (alphanumeric + `-_`, max 36 chars)
+2. If the key has been seen before (within 24 hours), the cached result is returned immediately — no duplicate operation is performed
+3. New results are stored in an in-memory TTL cache
+
+```ts
+await authClient.mercadoPago.createPayment({
+  items: [...],
+  idempotencyKey: "my-unique-order-id-abc123",
+})
+```
+
+This protects against double-submissions from network retries or accidental form re-submits.
+
+**Webhook idempotency** is also built-in — the same `payment_id` or `subscription_id` won't trigger duplicate database updates or callback invocations within 24 hours.
+
+> **Production note**: the idempotency store is in-memory and resets on restart. For durable deduplication, store results in your database or Redis.
+
+## Webhook signature verification
+
+When `webhookSecret` is configured, the plugin verifies every incoming webhook request:
+
+```
+HMAC-SHA256(webhookSecret, "id:{dataId};request-id:{xRequestId};")
+```
+
+The computed signature is compared to the `x-signature` header sent by MercadoPago. Requests with missing or invalid signatures are rejected with `401 Unauthorized`.
+
+See [Webhooks](/docs//webhooks#signature-verification) for setup instructions.
+
+## Metadata sanitization
+
+Any `metadata` object passed to create endpoints is sanitized before storage:
+
+- Keys are stripped of leading/trailing whitespace
+- Values are coerced to safe primitives (strings, numbers, booleans)
+- Nested objects beyond depth 1 are flattened or dropped
+
+This prevents injection of unexpected data types into your database.
+
+## Input validation
+
+All endpoints use [Zod](https://zod.dev) schemas to validate request bodies before any processing occurs:
+
+- Currency codes are validated against a known list
+- Amounts must be positive numbers
+- Emails must be valid RFC-5322 addresses
+- Frequency types are restricted to `"days"`, `"weeks"`, `"months"`
+
+Invalid inputs return `400 Bad Request` with a descriptive message.
+
+## Payment amount verification
+
+When a webhook arrives, the plugin cross-checks the `transaction_amount` reported by MercadoPago against the amount stored in your database at preference creation time. A mismatch causes the webhook handler to reject the update with `400 Bad Request`, preventing potential fraud where an attacker modifies the payment amount.

@@ -1,0 +1,112 @@
+---
+title: Instalación
+description: Instalar y configurar el plugin Better Auth MercadoPago.
+---
+
+## Instalar
+
+```bash
+# npm
+npm install @better-auth-mercadopago/plugin mercadopago
+
+# bun
+bun add @better-auth-mercadopago/plugin mercadopago
+```
+
+## Configuración del servidor
+
+Agregá el plugin a la configuración de tu servidor de Better Auth:
+
+```ts title="lib/auth.ts"
+import { betterAuth } from "better-auth"
+import { prismaAdapter } from "better-auth/adapters/prisma"
+import { mercadoPagoPlugin } from "@better-auth-mercadopago/plugin"
+import { prisma } from "./prisma"
+
+export const auth = betterAuth({
+  database: prismaAdapter(prisma, { provider: "postgresql" }),
+  plugins: [
+    mercadoPagoPlugin({
+      accessToken: process.env.MP_ACCESS_TOKEN!,
+      baseUrl: process.env.BETTER_AUTH_URL!,
+
+      // Opcional: verificación de firma del webhook
+      webhookSecret: process.env.MP_WEBHOOK_SECRET,
+
+      // Opcional: se llama cuando cambia el estado de un pago
+      onPaymentUpdate: async ({ payment, status, resultType }) => {
+        console.log("Pago actualizado:", payment.externalReference, status, resultType)
+        // resultType es "success" | "pending" | "error"
+      },
+
+      // Opcional: se llama cuando cambia el estado de una suscripción
+      onSubscriptionUpdate: async ({ subscription, status }) => {
+        console.log("Suscripción actualizada:", subscription.externalReference, status)
+      },
+    }),
+  ],
+})
+```
+
+### Variables de entorno requeridas
+
+| Variable | Descripción |
+|----------|-------------|
+| `MP_ACCESS_TOKEN` | Tu access token de MercadoPago |
+| `BETTER_AUTH_URL` | URL pública de tu app (usada para construir las back URLs por defecto) |
+| `MP_WEBHOOK_SECRET` | *(Opcional)* Secret para verificación de firma del webhook |
+
+## Configuración del cliente
+
+Registrá el plugin cliente para que el frontend pueda llamar a los endpoints del plugin:
+
+```ts title="lib/auth-client.ts"
+import { createAuthClient } from "better-auth/react"
+import { mercadopagoPluginClient } from "@better-auth-mercadopago/plugin/client"
+
+export const authClient = createAuthClient({
+  baseURL: process.env.BETTER_AUTH_URL,
+  plugins: [mercadopagoPluginClient()],
+})
+```
+
+## Migración de base de datos
+
+El plugin define tres tablas adicionales. Ejecutá la migración de tu adaptador después de agregar el plugin:
+
+```bash
+# Prisma
+npx prisma migrate dev
+
+# Prisma (solo generate)
+npx prisma generate
+```
+
+Mirá la página de [Schema de Base de Datos](/docs//schema) para ver todos los campos.
+
+## Route handler (Next.js App Router)
+
+```ts title="app/api/auth/[...all]/route.ts"
+import { auth } from "@/lib/auth"
+import { toNextJsHandler } from "better-auth/next-js"
+
+export const { GET, POST } = toNextJsHandler(auth.handler)
+```
+
+El plugin registra las siguientes rutas automáticamente bajo el handler de Better Auth:
+
+| Método | Ruta |
+|--------|------|
+| `POST` | `/api/auth/mercado-pago/create-payment` |
+| `POST` | `/api/auth/mercado-pago/get-payment` |
+| `POST` | `/api/auth/mercado-pago/get-payments` |
+| `POST` | `/api/auth/mercado-pago/create-subscription` |
+| `POST` | `/api/auth/mercado-pago/create-subscription-with-plan` |
+| `POST` | `/api/auth/mercado-pago/get-subscription` |
+| `POST` | `/api/auth/mercado-pago/get-subscriptions` |
+| `POST` | `/api/auth/mercado-pago/update-subscription` |
+| `POST` | `/api/auth/mercado-pago/cancel-subscription` |
+| `POST` | `/api/auth/mercado-pago/create-plan` |
+| `POST` | `/api/auth/mercado-pago/get-plan` |
+| `POST` | `/api/auth/mercado-pago/get-plans` |
+| `POST` | `/api/auth/mercado-pago/webhook` |

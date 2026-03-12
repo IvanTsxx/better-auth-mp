@@ -1,0 +1,128 @@
+---
+title: Pagos Únicos
+description: Crear y consultar pagos únicos usando MercadoPago Checkout Pro.
+---
+
+## Cómo funciona
+
+Cuando llamás a `createPayment`, el plugin:
+
+1. Crea una **Preferencia** de MercadoPago con tus items
+2. Guarda un registro de pago **pendiente** en tu base de datos
+3. Devuelve una `checkoutUrl` — redirigí al usuario ahí
+
+Después del checkout, MercadoPago llama a tu [webhook](/docs//webhooks) para actualizar el estado del pago.
+
+## Crear un pago
+
+```ts
+const result = await authClient.mercadoPago.createPayment({
+  items: [
+    {
+      id: "prod_001",
+      title: "Membresía Premium",
+      description: "Acceso a todas las funciones por 1 mes",
+      quantity: 1,
+      unitPrice: 1500,
+      currencyId: "ARS",
+    },
+  ],
+  backUrls: {
+    success: `${window.location.origin}/payments/success`,
+    failure: `${window.location.origin}/payments/failure`,
+    pending: `${window.location.origin}/payments/pending`,
+  },
+})
+
+if (result.data) {
+  window.location.href = result.data.checkoutUrl
+}
+```
+
+### Body de la request
+
+| Campo | Tipo | Requerido | Descripción |
+|-------|------|-----------|-------------|
+| `items` | `PreferenceItem[]` | ✅ | Productos a cobrar |
+| `backUrls.success` | `string` | — | Redirección en pago exitoso |
+| `backUrls.failure` | `string` | — | Redirección en pago fallido |
+| `backUrls.pending` | `string` | — | Redirección en pago pendiente |
+| `idempotencyKey` | `string` | — | Prevenir duplicados (máx 36 chars, alfanumérico + `-_`) |
+
+#### Shape de `PreferenceItem`
+
+| Campo | Tipo | Requerido | Descripción |
+|-------|------|-----------|-------------|
+| `id` | `string` | ✅ | ID de tu producto |
+| `title` | `string` | ✅ | Nombre del producto |
+| `quantity` | `number` | ✅ | Cantidad de unidades |
+| `unitPrice` | `number` | ✅ | Precio por unidad |
+| `currencyId` | `string` | ✅ | Código de moneda ISO (ej: `"ARS"`, `"BRL"`) |
+| `description` | `string` | — | Descripción opcional del producto |
+| `pictureUrl` | `string` | — | URL de imagen del producto |
+| `categoryId` | `string` | — | ID de categoría de MercadoPago |
+
+### Respuesta
+
+```ts
+{
+  checkoutUrl: string      // Redirigir al usuario acá → checkout de MercadoPago
+  preferenceId: string     // ID de preferencia de MercadoPago
+  paymentId: string        // ID del registro interno en tu DB
+}
+```
+
+> Si no se proveen `backUrls`, el plugin usa `{baseUrl}/payments/one-time?status=<status>` como fallback.
+
+## Obtener un pago
+
+Recuperá un pago específico por `externalReference`. El usuario debe ser el dueño del pago.
+
+```ts
+const result = await authClient.mercadoPago.getPayment({
+  externalReference: "abc123",
+})
+```
+
+## Listar pagos
+
+```ts
+const result = await authClient.mercadoPago.getPayments({
+  limit: 20,
+  offset: 0,
+  filters: {
+    status: "approved",              // opcional
+    dateCreatedFrom: "2024-01-01",   // opcional
+    dateCreatedTo: "2024-12-31",     // opcional
+  },
+})
+
+// result.data → { payments, total, limit, offset }
+```
+
+### Valores de estado del pago
+
+| Estado | Significado |
+|--------|-------------|
+| `pending` | Esperando el pago |
+| `approved` | Pago aprobado |
+| `authorized` | Pago autorizado (no capturado aún) |
+| `in_process` | En revisión |
+| `in_mediation` | Disputa en curso |
+| `rejected` | Pago rechazado |
+| `cancelled` | Cancelado por el usuario o por timeout |
+| `refunded` | Reembolsado |
+| `charged_back` | Contracargo |
+
+## Idempotencia
+
+Pasá un `idempotencyKey` para prevenir pagos duplicados si el usuario envía el formulario dos veces:
+
+```ts
+await authClient.mercadoPago.createPayment({
+  items: [...],
+  idempotencyKey: crypto.randomUUID(),  // guardalo del lado cliente antes de enviar
+})
+```
+
+La misma clave devuelve el resultado cacheado por 24 horas. Las claves deben ser alfanuméricas con `-` o `_`, máximo 36 caracteres.

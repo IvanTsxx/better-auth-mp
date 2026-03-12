@@ -1,0 +1,77 @@
+---
+title: Seguridad
+description: "Funcionalidades de seguridad integradas: rate limiting, idempotencia, verificación de webhook y sanitización de metadata."
+---
+
+## Rate limiting
+
+Todos los endpoints mutantes aplican rate limits por usuario usando una ventana deslizante en memoria:
+
+| Endpoint | Límite |
+|----------|--------|
+| `createPayment` | 10 requests / 60 segundos por usuario |
+| `createSubscription` | 10 requests / 60 segundos por usuario |
+| `createSubscriptionWithPlan` | 10 requests / 60 segundos por usuario |
+| `webhook` (global) | 1.000 requests / 60 segundos |
+
+Los límites excedidos devuelven `429 Too Many Requests`.
+
+> El rate limiter es en memoria. En deployments con múltiples instancias, considerá reemplazarlo por un limiter compartido respaldado por Redis.
+
+## Idempotencia
+
+Los endpoints de creación aceptan un parámetro opcional `idempotencyKey`. Cuando se provee:
+
+1. La clave se valida (alfanumérica + `-_`, máx 36 chars)
+2. Si la clave ya fue vista antes (dentro de 24 horas), el resultado cacheado se devuelve inmediatamente — no se realiza ninguna operación duplicada
+3. Los resultados nuevos se almacenan en un caché TTL en memoria
+
+```ts
+await authClient.mercadoPago.createPayment({
+  items: [...],
+  idempotencyKey: "mi-id-de-orden-unico-abc123",
+})
+```
+
+Esto protege contra doble-envío causado por reintentos de red o re-envíos accidentales de formularios.
+
+**La idempotencia de webhooks** también está integrada — el mismo `payment_id` o `subscription_id` no disparará actualizaciones duplicadas de base de datos o invocaciones de callbacks dentro de 24 horas.
+
+> **Nota para producción**: el store de idempotencia es en memoria y se resetea al reiniciar. Para deduplicación duradera, almacená los resultados en tu base de datos o Redis.
+
+## Verificación de firma de webhook
+
+Cuando `webhookSecret` está configurado, el plugin verifica cada request de webhook entrante:
+
+```
+HMAC-SHA256(webhookSecret, "id:{dataId};request-id:{xRequestId};")
+```
+
+La firma computada se compara con el header `x-signature` enviado por MercadoPago. Los requests con firmas faltantes o inválidas son rechazados con `401 Unauthorized`.
+
+Ver [Webhooks](/docs//webhooks#verificación-de-firma) para instrucciones de configuración.
+
+## Sanitización de metadata
+
+Cualquier objeto `metadata` pasado a los endpoints de creación se sanitiza antes de almacenarse:
+
+- Las claves se limpian de espacios al inicio/final
+- Los valores se convierten a primitivos seguros (strings, números, booleanos)
+- Los objetos anidados más allá de profundidad 1 se aplanan o eliminan
+
+Esto previene la inyección de tipos de datos inesperados en tu base de datos.
+
+## Validación de inputs
+
+Todos los endpoints usan schemas de [Zod](https://zod.dev) para validar los cuerpos de las requests antes de cualquier procesamiento:
+
+- Los códigos de moneda se validan contra una lista conocida
+- Los montos deben ser números positivos
+- Los emails deben ser válidos según RFC-5322
+- Los tipos de frecuencia están restringidos a `"days"`, `"weeks"`, `"months"`
+
+Los inputs inválidos devuelven `400 Bad Request` con un mensaje descriptivo.
+
+## Verificación de monto de pago
+
+Cuando llega un webhook, el plugin cruza el `transaction_amount` reportado por MercadoPago con el monto almacenado en tu base de datos al momento de la creación de la preferencia. Una discrepancia hace que el handler del webhook rechace la actualización con `400 Bad Request`, previniendo fraude potencial donde un atacante modifica el monto del pago.
