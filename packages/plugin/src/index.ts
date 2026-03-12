@@ -23,6 +23,8 @@ import type {
   MercadoPagoPaymentNotification,
   MercadoPagoPaymentRecord,
   MercadoPagoPluginOptions,
+  PaymentOutput,
+  PaginatedPayments,
   PreferenceOutput,
 } from "./types";
 
@@ -67,15 +69,15 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
           // Use provided URLs or fallback to defaults
           const finalBackUrls = {
-            success:
-              successUrl ||
-              `${options.baseUrl}/payments/one-time?status=success`,
             failure:
               failureUrl ||
               `${options.baseUrl}/payments/one-time?status=failure`,
             pending:
               pendingUrl ||
               `${options.baseUrl}/payments/one-time?status=pending`,
+            success:
+              successUrl ||
+              `${options.baseUrl}/payments/one-time?status=success`,
           };
 
           // Validate that at least success URL exists
@@ -122,7 +124,8 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
           const externalReference = generateId();
 
           const preferenceBody: PreferenceCreateData["body"] = {
-            auto_return: "approved", // Activar esto solo si el .env tiene un https sino no andara
+            // Activar esto solo si el .env tiene un https sino no andara
+            auto_return: "approved",
             back_urls: finalBackUrls,
             expires: true,
             external_reference: externalReference,
@@ -185,6 +188,109 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
           }
 
           return ctx.json(result);
+        }
+      ),
+
+      getPayment: createAuthEndpoint(
+        "/mercadopago/get-payment",
+        {
+          body: z.object({
+            externalReference: z.string(),
+          }),
+          method: "POST",
+        },
+        async (ctx): Promise<PaymentOutput> => {
+          const session = await getSessionFromCtx(ctx);
+          if (!session) {
+            throw new APIError("UNAUTHORIZED");
+          }
+
+          const { externalReference } = ctx.body;
+
+          const payment = await ctx.context.adapter.findOne({
+            model: "mercadoPagoPayment",
+            where: [
+              { field: "externalReference", value: externalReference },
+              { field: "userId", value: session.user.id },
+            ],
+          });
+
+          if (!payment) {
+            throw new APIError("NOT_FOUND", {
+              message: "Payment not found",
+            });
+          }
+
+          return ctx.json(payment as PaymentOutput);
+        }
+      ),
+
+      getPayments: createAuthEndpoint(
+        "/mercadopago/get-payments",
+        {
+          body: z.object({
+            filters: z
+              .object({
+                dateCreatedFrom: z.string().optional(),
+                dateCreatedTo: z.string().optional(),
+                status: z
+                  .enum([
+                    "pending",
+                    "approved",
+                    "authorized",
+                    "in_process",
+                    "in_mediation",
+                    "rejected",
+                    "cancelled",
+                    "refunded",
+                    "charged_back",
+                  ])
+                  .optional(),
+              })
+              .optional(),
+            limit: z.number().min(1).max(100).default(20),
+            offset: z.number().min(0).default(0),
+          }),
+          method: "POST",
+        },
+        async (ctx): Promise<PaginatedPayments> => {
+          const session = await getSessionFromCtx(ctx);
+          if (!session) {
+            throw new APIError("UNAUTHORIZED");
+          }
+
+          const { filters, limit, offset } = ctx.body;
+
+          // Build where conditions
+          const whereConditions: { field: string; value: string }[] = [
+            { field: "userId", value: session.user.id },
+          ];
+
+          if (filters?.status) {
+            whereConditions.push({ field: "status", value: filters.status });
+          }
+
+          // Get total count
+          const total = await ctx.context.adapter.count({
+            model: "mercadoPagoPayment",
+            where: whereConditions,
+          });
+
+          // Get paginated results
+          const payments = await ctx.context.adapter.findMany({
+            limit,
+            model: "mercadoPagoPayment",
+            offset,
+            sortBy: { direction: "desc", field: "createdAt" },
+            where: whereConditions,
+          });
+
+          return ctx.json({
+            limit,
+            offset,
+            payments: payments as PaymentOutput[],
+            total,
+          } as PaginatedPayments);
         }
       ),
 
@@ -351,12 +457,12 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
           statusDetail: { type: "string" },
           updatedAt: { required: true, type: "date" },
           userId: {
-            required: true,
-            type: "string",
             references: {
               field: "id",
               model: "user",
             },
+            required: true,
+            type: "string",
           },
         },
       },

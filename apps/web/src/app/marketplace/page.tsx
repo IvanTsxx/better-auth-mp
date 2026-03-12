@@ -92,54 +92,6 @@ export default function MarketplacePage() {
   const commissionAmount = Math.round((totalAmount * TASA_COMISION) / 100);
   const netAmount = totalAmount - commissionAmount;
 
-  const handleBuy = async () => {
-    if (!selectedProduct || !email) {
-      setError("Selecciona un producto e ingresa tu email");
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const items: MercadopagoItem[] = [
-        {
-          currencyId: "ARS",
-          description: selectedProduct.description,
-          id: selectedProduct.id,
-          quantity,
-          title: selectedProduct.name,
-          unitPrice: selectedProduct.price,
-        },
-      ];
-
-      const result = await authClient.mercadoPago.createPayment({
-        email,
-        externalReference: `demo_mp_${Date.now()}`,
-        items,
-        sellerEmail: selectedProduct.seller.email,
-        splitEnabled: true,
-      });
-
-      console.log("Pago de marketplace:", {
-        paymentLink: result.paymentLink,
-        split: {
-          commission: commissionAmount,
-          net: netAmount,
-          sellerEmail: selectedProduct.seller.email,
-          total: totalAmount,
-        },
-      });
-
-      toast.success(`Pago creado! Link: ${result.paymentLink}`);
-    } catch (err) {
-      console.error("Error en pago de marketplace:", err);
-      setError("Error al crear el pago. Intenta de nuevo.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
       <div className="mb-8">
@@ -280,7 +232,7 @@ export default function MarketplacePage() {
                 className="w-full"
                 size="lg"
                 disabled={!selectedProduct || !email || isLoading}
-                onClick={handleBuy}
+                /* onClick={handleBuy} */
               >
                 {isLoading ? (
                   <>

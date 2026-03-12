@@ -8,6 +8,8 @@ import {
   ArrowRight,
   Loader2,
 } from "lucide-react";
+import type { Route } from "next";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -121,7 +123,7 @@ export default function PaymentsPage() {
     toast.promise(
       async () => {
         setIsLoading(true);
-        const result = await authClient.mercadopago.createPayment({
+        const result = await authClient.mercadoPago.createPayment({
           backUrls: {
             failure: `${window.location.origin}/payments/failure`,
             pending: `${window.location.origin}/payments/pending`,
@@ -140,9 +142,9 @@ export default function PaymentsPage() {
       },
       {
         error: (err) => `Error al crear el pago: ${err.message || err}`,
-        loading: "Creando pago...",
-        success: (data) => `Pago creado! Redirigiendo a MercadoPago`,
         finally: () => setIsLoading(false),
+        loading: "Creando pago...",
+        success: () => "Pago creado! Redirigiendo a MercadoPago",
       }
     );
   };
@@ -150,10 +152,18 @@ export default function PaymentsPage() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold flex items-center gap-3">
-          <CreditCard className="h-8 w-8" />
-          Pagos Únicos - Demo
-        </h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold flex items-center gap-3">
+            <CreditCard className="h-8 w-8" />
+            Pagos Únicos - Demo
+          </h1>
+          <Link
+            href={"/payments/history" as Route}
+            className="text-sm text-muted-foreground hover:text-foreground underline"
+          >
+            Ver historial de pagos
+          </Link>
+        </div>
         <p className="text-muted-foreground mt-2">
           Ejemplo de cómo crear pagos únicos con items usando el plugin de
           MercadoPago
@@ -305,7 +315,7 @@ export default function PaymentsPage() {
             <CardContent>
               <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-xs">
                 <code>{`
-await authClient.mercadopago.createPayment({
+await authClient.mercadoPago.createPayment({
   backUrls: {
     failure: "${window.location.origin}/payments/failure",
     pending: "${window.location.origin}/payments/pending",
