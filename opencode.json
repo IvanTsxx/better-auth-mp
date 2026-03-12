@@ -2,26 +2,40 @@
   "mcp": {
     "context7": {
       "type": "local",
-      "command": ["npx", "-y", "@upstash/context7-mcp"],
-      "enabled": true,
-      "environment": {}
+      "command": [
+        "npx",
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "environment": {},
+      "enabled": true
     },
     "shadcn": {
       "type": "local",
-      "command": ["npx", "-y", "shadcn@latest", "mcp"],
-      "enabled": true,
-      "environment": {}
+      "command": [
+        "npx",
+        "-y",
+        "shadcn@latest",
+        "mcp"
+      ],
+      "environment": {},
+      "enabled": true
     },
     "next-devtools": {
       "type": "local",
-      "command": ["npx", "-y", "next-devtools-mcp@latest"],
-      "enabled": true,
-      "environment": {}
+      "command": [
+        "npx",
+        "-y",
+        "next-devtools-mcp@latest"
+      ],
+      "environment": {},
+      "enabled": true
     },
     "better-auth": {
       "type": "remote",
       "url": "https://mcp.inkeep.com/better-auth/mcp",
       "enabled": true
     }
-  }
+  },
+  "$schema": "https://opencode.ai/config.json"
 }

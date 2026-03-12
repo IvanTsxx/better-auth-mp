@@ -6,6 +6,11 @@
       "sourceType": "github",
       "computedHash": "a4c830509e85557b59339d8d93a4e243e9e59c686e7678854d39230e12c2a6dc"
     },
+    "mercadopago-integration": {
+      "source": "martinacostadev/mercadopago-integration",
+      "sourceType": "github",
+      "computedHash": "c6a9a839597dedf84967e127cd2f911cda0362282a28666c8b55f064c2de62cb"
+    },
     "next-best-practices": {
       "source": "vercel-labs/next-skills",
       "sourceType": "github",
