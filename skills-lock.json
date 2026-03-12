@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "architect-nextjs": {
+      "source": "ivantsxx/my-next-skills",
+      "sourceType": "github",
+      "computedHash": "3382ed293f33c1d0a29ae8b14e951f6c08ec875003c94d1b0b3e8f91da0a7d3f"
+    },
     "better-auth-best-practices": {
       "source": "better-auth/skills",
       "sourceType": "github",
