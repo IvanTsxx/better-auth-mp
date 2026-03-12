@@ -18,6 +18,14 @@
   "experimentalSortImports": {
     "ignoreCase": true,
     "newlinesBetween": true,
-    "order": "asc"
-  }
+    "order": "asc",
+  },
+  "ignorePatterns": [
+    ".next/**",
+    "node_modules/**",
+    "app/generated/**",
+    "skills/**",
+    "**/*.md",
+    "**/*.mdx",
+  ],
 }

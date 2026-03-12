@@ -17,6 +17,31 @@ import type {
 } from "../types";
 
 /**
+ * Calculate total amount from items
+ */
+function calculateTotal(items: MercadopagoItem[]): number {
+  return items.reduce(
+    (total, item) => total + item.unitPrice * item.quantity,
+    0
+  );
+}
+
+/**
+ * Convert items to MercadoPago preference items format
+ */
+function toMPItems(items: MercadopagoItem[]) {
+  return items.map((item) => ({
+    category_id: item.categoryId,
+    description: item.description,
+    id: item.id,
+    picture_url: item.pictureUrl,
+    quantity: item.quantity,
+    title: item.title,
+    unit_price: item.unitPrice / 100,
+  }));
+}
+
+/**
  * MercadoPago client configuration
  */
 export interface MPClientConfig {
@@ -39,27 +64,8 @@ export interface MPClientConfig {
  */
 export function createMPClient(config: MPClientConfig) {
   // Initialize MercadoPago SDK
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mp = new (require("mercadopago"))(config.accessToken);
-
-  /**
-   * Calculate total amount from items
-   */
-  const calculateTotal = (items: MercadopagoItem[]): number =>
-    items.reduce((total, item) => total + item.unitPrice * item.quantity, 0);
-
-  /**
-   * Convert items to MercadoPago preference items format
-   */
-  const toMPItems = (items: MercadopagoItem[]) =>
-    items.map((item) => ({
-      id: item.id,
-      title: item.title,
-      description: item.description,
-      quantity: item.quantity,
-      unit_price: item.unitPrice / 100, // Convert cents to currency unit
-      picture_url: item.pictureUrl,
-      category_id: item.categoryId,
-    }));
 
   /**
    * Create a payment preference
@@ -72,15 +78,15 @@ export function createMPClient(config: MPClientConfig) {
 
     // Build payment data
     const paymentData: Record<string, unknown> = {
-      transaction_amount: total / 100, // Convert cents to currency unit
-      description: input.items.map((i) => i.title).join(", "),
-      payment_method_id: input.paymentMethod?.[0],
+      description: input.items.map((i: MercadopagoItem) => i.title).join(", "),
+      external_reference: input.externalReference,
+      items: toMPItems(input.items),
+      notification_url: input.notificationUrl,
       payer: {
         email: input.email,
       },
-      external_reference: input.externalReference,
-      notification_url: input.notificationUrl,
-      items: toMPItems(input.items),
+      payment_method_id: input.paymentMethod?.[0],
+      transaction_amount: total / 100,
     };
 
     // Add split payments if enabled
@@ -100,7 +106,6 @@ export function createMPClient(config: MPClientConfig) {
       // Add collector for split
       paymentData.metadata = {
         ...input.metadata,
-        commission_amount: commissionAmount.toString(),
         net_amount: netAmount.toString(),
         seller_email: input.sellerEmail,
         split_enabled: "true",
@@ -113,8 +118,8 @@ export function createMPClient(config: MPClientConfig) {
       amount: total,
       mpPaymentId: payment.body.id?.toString() || "",
       paymentLink:
-        payment.body.transaction_details?.external_resource_url ||
         payment.body.point_of_interaction?.transaction_data?.ticket_url ||
+        payment.body.transaction_details?.external_resource_url ||
         "",
       status: mapPaymentStatus(payment.body.status),
     };
@@ -287,7 +292,6 @@ export function createMPClient(config: MPClientConfig) {
   };
 
   return {
-    calculateTotal,
     cancelSubscription,
     createPayment,
     createPlan,
@@ -332,5 +336,4 @@ function mapSubscriptionStatus(status: string | undefined): SubscriptionStatus {
   return statusMap[status || ""] || "pending";
 }
 
-// Export type for client
 export type MPClient = ReturnType<typeof createMPClient>;
