@@ -445,6 +445,8 @@ export interface MercadoPagoPluginOptions {
       payment_type_id?: string;
       external_reference?: string;
     };
+    /** Simplified result type for the 3 main Checkout Pro states */
+    resultType: "success" | "pending" | "error";
   }) => void | Promise<void>;
   /** Callback when subscription status updates */
   onSubscriptionUpdate?: (params: {

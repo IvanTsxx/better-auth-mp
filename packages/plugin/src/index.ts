@@ -28,6 +28,33 @@ import type {
   PreferenceOutput,
 } from "./types";
 
+/**
+ * Maps MercadoPago payment status to a simplified result type
+ * for easier handling of the 3 main Checkout Pro states
+ */
+function getPaymentResultType(mpStatus: string): "success" | "pending" | "error" {
+  switch (mpStatus) {
+    case "approved":
+    case "authorized": {
+      return "success";
+    }
+    case "pending":
+    case "in_process": {
+      return "pending";
+    }
+    case "rejected":
+    case "cancelled":
+    case "refunded":
+    case "charged_back":
+    case "in_mediation": {
+      return "error";
+    }
+    default: {
+      return "pending";
+    }
+  }
+}
+
 export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
   const client = new MercadoPagoConfig({
     accessToken: options.accessToken,
@@ -418,9 +445,13 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
             });
 
             if (options.onPaymentUpdate && mpPayment.status) {
+              // Map MP status to payment result type for easier handling
+              const paymentResultType = getPaymentResultType(mpPayment.status);
+
               await options.onPaymentUpdate({
                 mpPayment,
                 payment: existingPayment,
+                resultType: paymentResultType,
                 status: mpPayment.status,
                 statusDetail: mpPayment.status_detail || "",
               });
