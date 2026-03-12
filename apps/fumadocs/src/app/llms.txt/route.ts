@@ -1,9 +1,14 @@
-import { llms } from "fumadocs-core/source";
-
 import { source } from "@/lib/source";
 
-export const revalidate = false;
-
 export function GET() {
-  return new Response(llms(source).index());
+  const lines: string[] = [
+    "# Documentation",
+    "",
+    ...source
+      .getPages()
+      .map(
+        (page) => `-[${page.data.title}](${page.url}): ${page.data.description}`
+      ),
+  ];
+  return new Response(lines.join("\n"));
 }

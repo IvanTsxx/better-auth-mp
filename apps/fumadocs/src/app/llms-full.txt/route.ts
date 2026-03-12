@@ -1,6 +1,5 @@
-import { getLLMText, source } from "@/lib/source";
-
-export const revalidate = false;
+import { getLLMText } from "@/lib/get-llm-text";
+import { source } from "@/lib/source";
 
 export async function GET() {
   const scan = source.getPages().map(getLLMText);

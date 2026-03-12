@@ -8,8 +8,8 @@ const config = {
   rewrites() {
     return [
       {
-        destination: "/llms.mdx/docs/:path*",
-        source: "/docs/:path*.mdx",
+        destination: "/:lang/llms.mdx/:path*",
+        source: "/:lang/:path*.mdx",
       },
     ];
   },
