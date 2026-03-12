@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "skills": {
+    "better-auth-best-practices": {
+      "source": "better-auth/skills",
+      "sourceType": "github",
+      "computedHash": "a4c830509e85557b59339d8d93a4e243e9e59c686e7678854d39230e12c2a6dc"
+    },
+    "next-best-practices": {
+      "source": "vercel-labs/next-skills",
+      "sourceType": "github",
+      "computedHash": "515ba75178bd44875812d9a560bdf14651f86709f89cf1d4f209638e879807f3"
+    },
+    "next-cache-components": {
+      "source": "vercel-labs/next-skills",
+      "sourceType": "github",
+      "computedHash": "a94b83ddcd2ff1c30722577f693b1bfe32f2e1a83abdd6c08c2d6cc6753b53c8"
+    },
+    "prisma-cli": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "computedHash": "500f80cfb0bebbaf7ef60645b43eb126e6489d6a1a2a592983c37a3ef8a789b5"
+    },
+    "prisma-client-api": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "computedHash": "ea94a5efcd3240e45c389bcdadd4613643245d226ffe1318c396e3b3edeb72ee"
+    },
+    "prisma-database-setup": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "computedHash": "b05e88d284c4a754d3624697c2f749e21f7da3fc1f4319b6658df318e84b0dd9"
+    },
+    "ultracite": {
+      "source": "haydenbleasel/ultracite",
+      "sourceType": "github",
+      "computedHash": "c1a70e8164cc1463b52567a0c356e4fbda86f55bc64630fe6448d093f703eee2"
+    },
+    "vercel-composition-patterns": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "f98931159fa9c7fed043bcd18a891a46dcf89ababa38df13a4c5b7b30dc0ce07"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "3462ec83f862abb2d532953df33a4dbf87f4616849da5d4b5cc7c13601aaf997"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "a6a44d5498f7e8f68289902f3dedfc6f38ae0cee1e96527c80724cf27f727c2a"
+    }
+  }
+}

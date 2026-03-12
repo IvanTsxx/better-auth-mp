@@ -1,0 +1,15 @@
+# Project: better-auth-mercadopago
+# Ecosystem: Typescript
+
+You are working on a TypeScript project.
+Package manager: bun
+Frontend: next
+Backend: self
+Database: postgres with prisma
+Auth: better-auth
+Testing: vitest-playwright
+Validation: zod
+
+Follow existing code patterns and conventions.
+Use the established project structure.
+Keep this file updated when the project structure changes.

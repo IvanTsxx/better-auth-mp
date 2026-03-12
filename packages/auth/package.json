@@ -1,0 +1,25 @@
+{
+  "name": "@better-auth-mercadopago/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@better-auth-mercadopago/db": "workspace:*",
+    "@better-auth-mercadopago/env": "workspace:*",
+    "@better-auth/prisma-adapter": "^1.5.1",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@better-auth-mercadopago/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
