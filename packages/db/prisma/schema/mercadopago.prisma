@@ -1,0 +1,21 @@
+model MercadoPagoPayment {
+  id                   String   @id
+  amount               Int
+  createdAt            DateTime
+  currency             String
+  externalReference    String
+  mercadoPagoPaymentId String?
+  metadata             String?
+  paymentMethodId      String?
+  paymentTypeId        String?
+  preferenceId         String
+  status               String
+  statusDetail         String?
+  updatedAt            DateTime
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([externalReference])
+  @@unique([mercadoPagoPaymentId])
+  @@map("mercadoPagoPayment")
+}

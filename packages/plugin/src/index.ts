@@ -41,7 +41,6 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
             idempotencyKey: z.string().optional(),
           }),
           method: "POST",
-          requireAuth: true,
         },
         async (ctx): Promise<PreferenceOutput> => {
           const session = await getSessionFromCtx(ctx);
@@ -327,6 +326,10 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
           userId: {
             required: true,
             type: "string",
+            references: {
+              field: "id",
+              model: "user",
+            },
           },
         },
       },
