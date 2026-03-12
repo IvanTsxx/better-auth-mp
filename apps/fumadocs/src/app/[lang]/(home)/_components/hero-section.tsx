@@ -2,6 +2,7 @@ import { ShieldAlert } from "lucide-react";
 import Link from "next/link";
 
 import { BetterauthIcon, MercadopagoIcon } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 
 export function HeroSection({ lang }: { lang: string }) {
   return (
@@ -47,21 +48,29 @@ export function HeroSection({ lang }: { lang: string }) {
       </div>
 
       {/* Buttons */}
-      <div className="z-10 flex items-center gap-px bg-zinc-800 p-px rounded-[6px] w-fit shadow-2xl shadow-black">
-        <Link
-          href={`/${lang}/docs`}
-          className="px-8 py-2.5 bg-white text-black text-sm font-semibold rounded-l-[5px] hover:bg-zinc-200 transition-colors"
+      <div className="z-10 flex items-center gap-2  border border-zinc-800 px-2 py-1.5 rounded-[6px] w-fit shadow-2xl shadow-black">
+        <Button
+          render={<Link href={`/${lang}/docs`} className="" />}
+          variant="default"
+          nativeButton={false}
         >
           {lang === "en" ? "Get Started" : "Empezar"}
-        </Link>
-        <Link
-          href="https://www.npmjs.com/package/better-auth-mercadopago"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-8 py-2.5 bg-[#09090b] text-zinc-300 text-sm font-medium rounded-r-[5px] hover:text-white hover:bg-zinc-900 transition-colors"
+        </Button>
+
+        <Button
+          render={
+            <Link
+              href="https://www.npmjs.com/package/better-auth-mercadopago"
+              target="_blank"
+              rel="noopener noreferrer"
+              className=""
+            />
+          }
+          variant="outline"
+          nativeButton={false}
         >
           NPM
-        </Link>
+        </Button>
       </div>
     </>
   );
