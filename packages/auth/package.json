@@ -9,7 +9,9 @@
       "default": "./src/*.ts"
     }
   },
-  "scripts": {},
+  "scripts": {
+    "generate": "bun x @better-auth/cli generate --config ./src/index.cli.ts"
+  },
   "dependencies": {
     "@better-auth-mercadopago/db": "workspace:*",
     "@better-auth-mercadopago/env": "workspace:*",

@@ -62,8 +62,8 @@ const STATUS_CONFIG: Record<
 };
 
 export default function SubscriptionsPage() {
-  const [email, setEmail] = useState("");
-  const [price, setPrice] = useState("999");
+  const [email, setEmail] = useState("test_user_683487747@testuser.com");
+  const [price, setPrice] = useState("10");
   const [frequency, setFrequency] = useState<"1" | "3" | "6" | "12">("1");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

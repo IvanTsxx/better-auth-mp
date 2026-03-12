@@ -1,16 +1,15 @@
 import { createEnv } from "@t3-oss/env-core";
+import { config } from "dotenv";
 import { z } from "zod";
-/* import path from "node:path";
-import dotenv from "dotenv";
 
-const isCli = process.env.BETTER_AUTH_CLI === "true";
-
-if (isCli) {
-  dotenv.config({ path: path.resolve(process.cwd(), "../../apps/web/.env") });
-} else {
-  dotenv.config();
+// Next.js auto-carga .env y setea NEXT_RUNTIME. Fuera de ese contexto (CLI, jiti),
+// las vars no están disponibles thus cargamos el .env manualmente.
+// Con override:false, si Next.js ya las cargó, esta llamada es un no-op total.
+if (!process.env.NEXT_RUNTIME) {
+  config({ override: false, path: "../../apps/web/.env" });
 }
- */
+
+
 export const env = createEnv({
   emptyStringAsUndefined: true,
   runtimeEnv: process.env,
