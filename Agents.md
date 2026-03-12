@@ -1,72 +1,3 @@
-# better-auth-mercadopago
-
-This file provides context about the project for AI assistants.
-
-## Project Overview
-
-- **Ecosystem**: Typescript
-
-## Tech Stack
-
-- **Runtime**: none
-- **Package Manager**: bun
-
-### Frontend
-
-- Framework: next
-- CSS: tailwind
-- UI Library: shadcn-ui
-
-### Backend
-
-- Framework: self
-- Validation: zod
-
-### Database
-
-- Database: postgres
-- ORM: prisma
-
-### Authentication
-
-- Provider: better-auth
-
-### Additional Features
-
-- Testing: vitest-playwright
-- AI: vercel-ai
-
-## Project Structure
-
-```
-better-auth-mercadopago/
-├── apps/
-│   ├── web/         # Frontend application
-├── packages/
-│   ├── auth/        # Authentication
-│   └── db/          # Database schema
-```
-
-## Common Commands
-
-- `bun install` - Install dependencies
-- `bun dev` - Start development server
-- `bun build` - Build for production
-- `bun test` - Run tests
-- `bun db:push` - Push database schema
-- `bun db:studio` - Open database UI
-
-## Maintenance
-
-Keep Agents.md updated when:
-
-- Adding/removing dependencies
-- Changing project structure
-- Adding new features or services
-- Modifying build/dev workflows
-
-AI assistants should suggest updates to this file when they notice relevant changes.
-
 # Ultracite Code Standards
 
 This project uses **Ultracite**, a zero-config preset that enforces strict code quality standards through automated formatting and linting.
@@ -157,17 +88,14 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 ### Framework-Specific Guidance
 
 **Next.js:**
-
 - Use Next.js `<Image>` component for images
 - Use `next/head` or App Router metadata API for head elements
 - Use Server Components for async data fetching instead of async Client Components
 
 **React 19+:**
-
 - Use ref as a prop instead of `React.forwardRef`
 
 **Solid/Svelte/Vue/Qwik:**
-
 - Use `class` and `for` attributes (not `className` or `htmlFor`)
 
 ---

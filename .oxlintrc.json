@@ -3,22 +3,5 @@
   "extends": [
     "./node_modules/ultracite/config/oxlint/core/.oxlintrc.json",
     "./node_modules/ultracite/config/oxlint/next/.oxlintrc.json"
-  ],
-  "rules": {
-    "func-style": "off",
-    "max-statements": "off",
-    "no-use-before-define": "off",
-    "no-nested-ternary": "off",
-    "unicorn/no-nested-ternary": "off",
-    "no-negated-condition": "off",
-    "complexity": "off",
-    "unicorn/catch-error-name": "off"
-  },
-  "ignorePatterns": [
-    ".next/**",
-    "node_modules/**",
-    "app/generated/**",
-    "skills/**",
-    ".*/**"
   ]
 }

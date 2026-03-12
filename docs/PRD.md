@@ -1,4 +1,5 @@
 # PRD: better-auth-mercadopago
+
 ## Plugin oficial de MercadoPago para better-auth
 
 ---
@@ -6,6 +7,7 @@
 ## 1. Visión del Producto
 
 **Plugin de npm** que integra MercadoPago en better-auth, permitiendo a desarrolladores agregar:
+
 - 💰 Pagos únicos (one-time payments)
 - 🔄 Suscripciones recurrentes (mensuales, anuales)
 - 🏪 Split de pagos (marketplace/comisiones)
@@ -16,12 +18,12 @@
 
 ## 2. Objetivos
 
-| Objetivo | Métrica |
-|----------|---------|
+| Objetivo                     | Métrica                                              |
+| ---------------------------- | ---------------------------------------------------- |
 | Plugin agnóstico a framework | Funciona con cualquier framework que use better-auth |
-| Experiencia developer minima | ≤5 líneas de código para integrar pagos |
-| Abstracción completa | Dev no ve SDK de MercadoPago |
-| Documentación bilingüe | Español + Inglés con ejemplos |
+| Experiencia developer minima | ≤5 líneas de código para integrar pagos              |
+| Abstracción completa         | Dev no ve SDK de MercadoPago                         |
+| Documentación bilingüe       | Español + Inglés con ejemplos                        |
 
 ---
 
@@ -40,14 +42,15 @@ await authClient.mercadopago.createPayment({
       quantity: 1,
       unitPrice: 1500, // en centavos
       pictureUrl: "https://...",
-    }
+    },
   ],
   email: "user@example.com",
   paymentMethod: "card", // card, pix, ticket
-})
+});
 ```
 
 **Internamente el plugin**:
+
 - Crea preferencia en MercadoPago con los items
 - Genera URL de checkout
 - Maneja webhook `payment.updated`
@@ -58,6 +61,7 @@ await authClient.mercadopago.createPayment({
 Dos modalidades:
 
 #### A) Suscripción sin plan (directa)
+
 ```typescript
 await authClient.mercadopago.createSubscription({
   items: [
@@ -67,15 +71,16 @@ await authClient.mercadopago.createSubscription({
       description: "Acceso mensual completo",
       quantity: 1,
       unitPrice: 1500,
-    }
+    },
   ],
   currency: "ARS",
   frequency: 1,
   frequencyType: "months",
-})
+});
 ```
 
 #### B) Suscripción con plan creado
+
 ```typescript
 // El admin crea el plan primero
 await auth.api.mercadopago.createPlan({
@@ -86,17 +91,17 @@ await auth.api.mercadopago.createPlan({
       description: "Acceso mensual completo",
       quantity: 1,
       unitPrice: 1500,
-    }
+    },
   ],
   currency: "ARS",
   frequency: 1,
   frequencyType: "months",
-})
+});
 
 // El usuario se suscribe
 await authClient.mercadopago.subscribeToPlan({
-  planId: "plan_id_de_mercadopago"
-})
+  planId: "plan_id_de_mercadopago",
+});
 ```
 
 ### 3.3 Split de Pagos (Marketplace)
@@ -108,8 +113,8 @@ mercadopagoPlugin({
     receiverEmail: "mi-cuenta@mercadopago.com",
     commissionType: "percentage", // "fixed" | "percentage"
     commissionValue: 10, // 10% o $1000
-  }
-})
+  },
+});
 
 // El payment se crea con split automático usando items
 await authClient.mercadopago.createPayment({
@@ -119,11 +124,11 @@ await authClient.mercadopago.createPayment({
       title: "Producto del vendedor",
       quantity: 2,
       unitPrice: 5000,
-    }
+    },
   ],
   splitEnabled: true,
   sellerEmail: "vendedor@email.com", // Email del vendedor
-})
+});
 ```
 
 ### 3.4 Callbacks/Eventos
@@ -136,25 +141,25 @@ mercadopagoPlugin({
     onPaymentApproved: async ({ payment, user, items }) => {
       // Otorgar acceso al producto
       // items contiene lo que el dev pasó al crear el pago
-      await grantAccess(user.id, items)
+      await grantAccess(user.id, items);
     },
     onPaymentRejected: async ({ payment, user, items }) => {
       // Revocar acceso o notificar
-      await notifyUser(user.id, "Pago rechazado")
+      await notifyUser(user.id, "Pago rechazado");
     },
     onSubscriptionActivated: async ({ subscription, user, items }) => {
       // Activar membresía
-      await activateMembership(user.id, items)
+      await activateMembership(user.id, items);
     },
     onSubscriptionCancelled: async ({ subscription, user, items }) => {
       // Desactivar al final del período
-      await scheduleDeactivation(user.id)
+      await scheduleDeactivation(user.id);
     },
     onPaymentPending: async ({ payment, user, items }) => {
       // Notificar que espera confirmación
-    }
-  }
-})
+    },
+  },
+});
 ```
 
 ---
@@ -163,93 +168,93 @@ mercadopagoPlugin({
 
 ### 4.1 Server-side (`auth.api.mercadopago.*`)
 
-| Método | Descripción |
-|--------|-------------|
-| `getPayments(filters)` | Historial de pagos con filtros |
-| `getPayment(id)` | Detalle de un pago |
-| `getSubscriptions(filters)` | Listar suscripciones |
-| `getSubscription(id)` | Detalle de suscripción |
-| `cancelSubscription(id)` | Cancelar suscripción |
-| `pauseSubscription(id)` | Pausar suscripción |
-| `resumeSubscription(id)` | Reanudar suscripción |
-| `createPlan(data)` | Crear plan en MP |
-| `getPlans()` | Listar planes |
-| `updatePlan(id, data)` | Actualizar plan |
-| `deletePlan(id)` | Eliminar plan |
-| `getSplitConfig()` | Ver config de split |
-| `getCommissions()` | Historial de comisiones |
+| Método                      | Descripción                    |
+| --------------------------- | ------------------------------ |
+| `getPayments(filters)`      | Historial de pagos con filtros |
+| `getPayment(id)`            | Detalle de un pago             |
+| `getSubscriptions(filters)` | Listar suscripciones           |
+| `getSubscription(id)`       | Detalle de suscripción         |
+| `cancelSubscription(id)`    | Cancelar suscripción           |
+| `pauseSubscription(id)`     | Pausar suscripción             |
+| `resumeSubscription(id)`    | Reanudar suscripción           |
+| `createPlan(data)`          | Crear plan en MP               |
+| `getPlans()`                | Listar planes                  |
+| `updatePlan(id, data)`      | Actualizar plan                |
+| `deletePlan(id)`            | Eliminar plan                  |
+| `getSplitConfig()`          | Ver config de split            |
+| `getCommissions()`          | Historial de comisiones        |
 
 ### 4.2 Client-side (`authClient.mercadopago.*`)
 
-| Método | Descripción |
-|--------|-------------|
-| `createPayment(data)` | Crear pago y obtener URL |
-| `createSubscription(data)` | Crear suscripción y obtener URL |
-| `subscribeToPlan(planId)` | Suscribirse a plan existente |
-| `getPaymentLink(paymentId)` | Obtener link de pago |
-| `getSubscriptionLink(subId)` | Obtener link de gestión |
+| Método                       | Descripción                     |
+| ---------------------------- | ------------------------------- |
+| `createPayment(data)`        | Crear pago y obtener URL        |
+| `createSubscription(data)`   | Crear suscripción y obtener URL |
+| `subscribeToPlan(planId)`    | Suscribirse a plan existente    |
+| `getPaymentLink(paymentId)`  | Obtener link de pago            |
+| `getSubscriptionLink(subId)` | Obtener link de gestión         |
 
 ### 4.3 Tipos TypeScript
 
 ```typescript
 // Item para pagos y suscripciones
 interface MercadopagoItem {
-  id: string
-  title: string
-  description?: string
-  quantity: number
-  unitPrice: number
-  pictureUrl?: string
-  categoryId?: string
+  id: string;
+  title: string;
+  description?: string;
+  quantity: number;
+  unitPrice: number;
+  pictureUrl?: string;
+  categoryId?: string;
 }
 
 // Filters
 interface PaymentFilters {
-  status?: "pending" | "approved" | "rejected" | "cancelled" | "refunded"
-  startDate?: Date
-  endDate?: Date
-  minAmount?: number
-  maxAmount?: number
-  sortBy?: "date" | "amount"
-  sortOrder?: "asc" | "desc"
+  status?: "pending" | "approved" | "rejected" | "cancelled" | "refunded";
+  startDate?: Date;
+  endDate?: Date;
+  minAmount?: number;
+  maxAmount?: number;
+  sortBy?: "date" | "amount";
+  sortOrder?: "asc" | "desc";
 }
 
 interface SubscriptionFilters {
-  status?: "pending" | "authorized" | "paused" | "cancelled" | "expired"
-  planId?: string
+  status?: "pending" | "authorized" | "paused" | "cancelled" | "expired";
+  planId?: string;
 }
 
 // Payment/Create - USA items
 interface CreatePaymentInput {
-  items: MercadopagoItem[]  // ✅ Array de items - REQUERIDO
-  email: string
-  payerId?: string
-  paymentMethod?: "card" | "pix" | "ticket" | "bank_transfer"
-  externalReference?: string
-  splitEnabled?: boolean
-  sellerEmail?: string // Para split
-  metadata?: Record<string, string>
+  items: MercadopagoItem[]; // ✅ Array de items - REQUERIDO
+  email: string;
+  payerId?: string;
+  paymentMethod?: "card" | "pix" | "ticket" | "bank_transfer";
+  externalReference?: string;
+  splitEnabled?: boolean;
+  sellerEmail?: string; // Para split
+  metadata?: Record<string, string>;
 }
 
 // Subscription/Create - USA items
 interface CreateSubscriptionInput {
-  items: MercadopagoItem[]  // ✅ Array de items - REQUERIDO
-  currency: string
-  frequency: number
-  frequencyType: "days" | "weeks" | "months" | "years"
-  startDate?: Date
-  endDate?: Date
+  items: MercadopagoItem[]; // ✅ Array de items - REQUERIDO
+  currency: string;
+  frequency: number;
+  frequencyType: "days" | "weeks" | "months" | "years";
+  startDate?: Date;
+  endDate?: Date;
   // Para suscripciones con plan
-  planId?: string
+  planId?: string;
 }
 
 // Plan/Create - USA items
 interface CreatePlanInput {
-  items: MercadopagoItem[]  // ✅ Array de items - REQUERIDO
-  currency: string
-  frequency: number
-  frequencyType: "days" | "weeks" | "months" | "years"
-  billingDay?: number
+  items: MercadopagoItem[]; // ✅ Array de items - REQUERIDO
+  currency: string;
+  frequency: number;
+  frequencyType: "days" | "weeks" | "months" | "years";
+  billingDay?: number;
 }
 ```
 
@@ -299,13 +304,13 @@ model MercadoPagoPayment {
   metadata        Json?
   transactionId   String?  // ID de la transacción
   paymentLink     String?  // URL de pago
-  
+
   // Split fields
   splitEnabled    Boolean  @default(false)
   sellerEmail     String?
   commissionAmount Int?
   netAmount       Int?
-  
+
   approvedAt      DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -326,17 +331,17 @@ model MercadoPagoSubscription {
   frequency         Int
   frequencyType     String   // days, weeks, months, years
   status            String   // pending, authorized, paused, cancelled, expired
-  
+
   // Split para suscripciones recurrentes
   splitEnabled      Boolean  @default(false)
   sellerEmail       String?
   commissionAmount  Int?
-  
+
   startDate         DateTime?
   endDate           DateTime?
   nextBillingDate   DateTime?
   autoRecurring     Json?    // Datos de auto_recurring de MP
-  
+
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
@@ -367,15 +372,15 @@ model MarketplaceSplit {
   subscriptionId  String?  // Null para pagos únicos
   sellerEmail     String
   items           Json     // Items originales
-  
+
   // Montos
   totalAmount     Int      // Total del pago
   commissionAmount Int     // Tu comisión
   netAmount       Int      // Monto para el vendedor
-  
+
   // Estado
   status          String   // pending, paid, failed
-  
+
   paidAt          DateTime?
   createdAt       DateTime @default(now())
 
@@ -387,19 +392,19 @@ model MarketplaceSplit {
 
 ## 7. Webhooks a Manejar
 
-| Evento MP | Handler del Plugin | Callback del Dev |
-|-----------|---------------------|-------------------|
-| `payment.created` | Actualiza estado en DB | `onPaymentCreated` |
-| `payment.updated` | Actualiza estado | `onPaymentUpdated` |
-| `payment.approved` | Marca como aprobado + ejecuta con items | `onPaymentApproved` ✓ |
-| `payment.rejected` | Marca como rechazado + ejecuta con items | `onPaymentRejected` ✓ |
-| `payment.pending` | Marca como pendiente + ejecuta con items | `onPaymentPending` ✓ |
-| `payment.refunded` | Marca como reembolsado | `onPaymentRefunded` |
-| `subscription_preapproval.created` | Crea registro + guarda items | `onSubscriptionCreated` |
-| `subscription_preapproval.updated` | Actualiza estado | `onSubscriptionUpdated` |
-| `subscription_preapproval.authorized` | Activa suscripción + ejecuta con items | `onSubscriptionActivated` ✓ |
-| `subscription_preapproval.paused` | Pausa suscripción | `onSubscriptionPaused` ✓ |
-| `subscription_preapproval.cancelled` | Cancela suscripción | `onSubscriptionCancelled` ✓ |
+| Evento MP                             | Handler del Plugin                       | Callback del Dev            |
+| ------------------------------------- | ---------------------------------------- | --------------------------- |
+| `payment.created`                     | Actualiza estado en DB                   | `onPaymentCreated`          |
+| `payment.updated`                     | Actualiza estado                         | `onPaymentUpdated`          |
+| `payment.approved`                    | Marca como aprobado + ejecuta con items  | `onPaymentApproved` ✓       |
+| `payment.rejected`                    | Marca como rechazado + ejecuta con items | `onPaymentRejected` ✓       |
+| `payment.pending`                     | Marca como pendiente + ejecuta con items | `onPaymentPending` ✓        |
+| `payment.refunded`                    | Marca como reembolsado                   | `onPaymentRefunded`         |
+| `subscription_preapproval.created`    | Crea registro + guarda items             | `onSubscriptionCreated`     |
+| `subscription_preapproval.updated`    | Actualiza estado                         | `onSubscriptionUpdated`     |
+| `subscription_preapproval.authorized` | Activa suscripción + ejecuta con items   | `onSubscriptionActivated` ✓ |
+| `subscription_preapproval.paused`     | Pausa suscripción                        | `onSubscriptionPaused` ✓    |
+| `subscription_preapproval.cancelled`  | Cancela suscripción                      | `onSubscriptionCancelled` ✓ |
 
 **Importante**: Todos los callbacks reciben `items` para que el developer pueda tomar decisiones basadas en qué productos se pagaron.
 
@@ -462,16 +467,16 @@ export const auth = betterAuth({
 
 ## 9. Medio de Pagos Soportados
 
-| Medio | Código MP | Soportado |
-|-------|-----------|-----------|
-| Tarjeta de crédito | `card` | ✅ |
-| Tarjeta de débito | `debit_card` | ✅ |
-| PIX (Brasil) | `pix` | ✅ (BR) |
-| Efectivo | `ticket` | ✅ |
-| Rapipago | `rapipago` | ✅ (AR) |
-| Pago Fácil | `pagofacil` | ✅ (AR) |
-| Cobro Express | `cobro_express` | ✅ (AR) |
-| Transferencia | `bank_transfer` | ✅ |
+| Medio              | Código MP       | Soportado |
+| ------------------ | --------------- | --------- |
+| Tarjeta de crédito | `card`          | ✅        |
+| Tarjeta de débito  | `debit_card`    | ✅        |
+| PIX (Brasil)       | `pix`           | ✅ (BR)   |
+| Efectivo           | `ticket`        | ✅        |
+| Rapipago           | `rapipago`      | ✅ (AR)   |
+| Pago Fácil         | `pagofacil`     | ✅ (AR)   |
+| Cobro Express      | `cobro_express` | ✅ (AR)   |
+| Transferencia      | `bank_transfer` | ✅        |
 
 ---
 
@@ -516,9 +521,10 @@ better-auth-mercadopago/
 ## 11. Flujos de Usuario
 
 ### 11.1 Flujo de Pago Único (con items)
+
 ```
 1. User hace click en "Pagar"
-2. authClient.mercadopago.createPayment({ 
+2. authClient.mercadopago.createPayment({
      items: [
        { id: "prod_1", title: "Producto", quantity: 2, unitPrice: 1500 }
      ],
@@ -536,9 +542,10 @@ better-auth-mercadopago/
 ```
 
 ### 11.2 Flujo de Suscripción (con items)
+
 ```
 1. User hace click en "Suscribirse"
-2. authClient.mercadopago.createSubscription({ 
+2. authClient.mercadopago.createSubscription({
      items: [{ id: "plan_premium", title: "Premium", quantity: 1, unitPrice: 1500 }],
      frequency: 1,
      frequencyType: "months"
@@ -554,6 +561,7 @@ better-auth-mercadopago/
 ```
 
 ### 11.3 Flujo de Marketplace (con items)
+
 ```
 1. Vendedor registra producto
 2. Comprador paga con items:
@@ -577,6 +585,7 @@ better-auth-mercadopago/
 ## 12. Documentación (Fumadocs)
 
 ### Secciones
+
 - Getting Started (ES + EN)
 - Pagos con items
 - Suscripciones con items
@@ -588,23 +597,24 @@ better-auth-mercadopago/
 
 ## 13. Diferenciación vs Alternativas
 
-| Característica | better-auth-mercadopago | goncy/next-mercadopago |
-|----------------|-------------------------|--------------------------|
-| Framework-agnostic | ✅ better-auth | ❌ Solo Next.js |
-| **Items en pagos** | ✅ Array completo | ⚠️ Básico |
-| **Items en suscripciones** | ✅ | ❌ |
-| **Items en split** | ✅ | ❌ |
-| Callbacks automáticos | ✅ + items | ❌ Manual |
-| Suscripciones con planes | ✅ + items | ⚠️ Parcial |
-| Split/Marketplace | ✅ + tracking | ✅ |
-| Documentación | ES + EN | ES |
-| Tipos TypeScript | ✅ Completos | ⚠️ Básicos |
+| Característica             | better-auth-mercadopago | goncy/next-mercadopago |
+| -------------------------- | ----------------------- | ---------------------- |
+| Framework-agnostic         | ✅ better-auth          | ❌ Solo Next.js        |
+| **Items en pagos**         | ✅ Array completo       | ⚠️ Básico              |
+| **Items en suscripciones** | ✅                      | ❌                     |
+| **Items en split**         | ✅                      | ❌                     |
+| Callbacks automáticos      | ✅ + items              | ❌ Manual              |
+| Suscripciones con planes   | ✅ + items              | ⚠️ Parcial             |
+| Split/Marketplace          | ✅ + tracking           | ✅                     |
+| Documentación              | ES + EN                 | ES                     |
+| Tipos TypeScript           | ✅ Completos            | ⚠️ Básicos             |
 
 ---
 
 ## 14. Roadmap
 
 ### Phase 1 (MVP - 2 semanas)
+
 - [ ] Plugin base con pagos únicos + items
 - [ ] Webhook handler
 - [ ] Callbacks básicos con items (approved, rejected)
@@ -612,16 +622,19 @@ better-auth-mercadopago/
 - [ ] Docs básicas
 
 ### Phase 2 (1 semana)
+
 - [ ] Suscripciones sin plan + items
 - [ ] Callbacks de suscripciones con items
 - [ ] Docs de suscripciones
 
 ### Phase 3 (1 semana)
+
 - [ ] Suscripciones con planes + items
 - [ ] CRUD de planes con items
 - [ ] Docs marketplace
 
 ### Phase 4 (1 semana)
+
 - [ ] Split/Marketplace + items
 - [ ] Comisión tracking por items
 - [ ] Docs completas

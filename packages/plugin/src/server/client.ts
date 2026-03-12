@@ -44,14 +44,14 @@ export function createMPClient(config: MPClientConfig) {
   /**
    * Calculate total amount from items
    */
-  const calculateTotal = (items: MercadopagoItem[]): number => items.reduce((total, item) => {
-      return total + item.unitPrice * item.quantity;
-    }, 0);
+  const calculateTotal = (items: MercadopagoItem[]): number =>
+    items.reduce((total, item) => total + item.unitPrice * item.quantity, 0);
 
   /**
    * Convert items to MercadoPago preference items format
    */
-  const toMPItems = (items: MercadopagoItem[]) => items.map((item) => ({
+  const toMPItems = (items: MercadopagoItem[]) =>
+    items.map((item) => ({
       id: item.id,
       title: item.title,
       description: item.description,
@@ -128,12 +128,12 @@ export function createMPClient(config: MPClientConfig) {
 
     const subscriptionData = {
       auto_recurring: {
+        currency_id: input.currency,
+        end_date: input.endDate?.toISOString(),
         frequency: input.frequency,
         frequency_type: input.frequencyType,
-        transaction_amount: total / 100,
-        currency_id: input.currency,
         start_date: input.startDate?.toISOString(),
-        end_date: input.endDate?.toISOString(),
+        transaction_amount: total / 100,
       },
       back_url: process.env.MP_BACK_URL || "https://yourapp.com",
       external_reference: input.externalReference,
@@ -184,11 +184,11 @@ export function createMPClient(config: MPClientConfig) {
 
     const planData = {
       auto_recurring: {
+        billing_day: input.billingDay,
+        currency_id: input.currency,
         frequency: input.frequency,
         frequency_type: input.frequencyType,
         transaction_amount: total / 100,
-        currency_id: input.currency,
-        billing_day: input.billingDay,
       },
       description:
         input.description || input.items.map((i) => i.title).join(", "),

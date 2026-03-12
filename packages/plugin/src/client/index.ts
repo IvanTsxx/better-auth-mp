@@ -99,18 +99,33 @@ export function createMercadopagoClient(authClient: {
   ): Promise<GetPaymentsResult> => {
     const params = new URLSearchParams();
     if (filters) {
-      if (filters.status) {params.set("status", filters.status);}
-      if (filters.startDate)
-        {params.set("startDate", filters.startDate.toISOString());}
-      if (filters.endDate) {params.set("endDate", filters.endDate.toISOString());}
-      if (filters.minAmount)
-        {params.set("minAmount", filters.minAmount.toString());}
-      if (filters.maxAmount)
-        {params.set("maxAmount", filters.maxAmount.toString());}
-      if (filters.sortBy) {params.set("sortBy", filters.sortBy);}
-      if (filters.sortOrder) {params.set("sortOrder", filters.sortOrder);}
-      if (filters.limit) {params.set("limit", filters.limit.toString());}
-      if (filters.cursor) {params.set("cursor", filters.cursor);}
+      if (filters.status) {
+        params.set("status", filters.status);
+      }
+      if (filters.startDate) {
+        params.set("startDate", filters.startDate.toISOString());
+      }
+      if (filters.endDate) {
+        params.set("endDate", filters.endDate.toISOString());
+      }
+      if (filters.minAmount) {
+        params.set("minAmount", filters.minAmount.toString());
+      }
+      if (filters.maxAmount) {
+        params.set("maxAmount", filters.maxAmount.toString());
+      }
+      if (filters.sortBy) {
+        params.set("sortBy", filters.sortBy);
+      }
+      if (filters.sortOrder) {
+        params.set("sortOrder", filters.sortOrder);
+      }
+      if (filters.limit) {
+        params.set("limit", filters.limit.toString());
+      }
+      if (filters.cursor) {
+        params.set("cursor", filters.cursor);
+      }
     }
 
     const url = `${baseUrl}/api/mercadopago/payments${params.toString() ? `?${params}` : ""}`;
@@ -169,10 +184,18 @@ export function createMercadopagoClient(authClient: {
   ): Promise<GetSubscriptionsResult> => {
     const params = new URLSearchParams();
     if (filters) {
-      if (filters.status) {params.set("status", filters.status);}
-      if (filters.planId) {params.set("planId", filters.planId);}
-      if (filters.limit) {params.set("limit", filters.limit.toString());}
-      if (filters.cursor) {params.set("cursor", filters.cursor);}
+      if (filters.status) {
+        params.set("status", filters.status);
+      }
+      if (filters.planId) {
+        params.set("planId", filters.planId);
+      }
+      if (filters.limit) {
+        params.set("limit", filters.limit.toString());
+      }
+      if (filters.cursor) {
+        params.set("cursor", filters.cursor);
+      }
     }
 
     const url = `${baseUrl}/api/mercadopago/subscriptions${params.toString() ? `?${params}` : ""}`;
