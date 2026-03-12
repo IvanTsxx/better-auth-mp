@@ -19,12 +19,12 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           <Navbar lang={lang} />
 
           {/* Right Content */}
-          <div className="p-8 lg:p-12 xl:px-16 pb-32 max-w-5xl">
-            <h2 className="text-[11px] font-mono tracking-widest uppercase mb-8 text-zinc-100">
+          <div className="px-4 py-10 space-y-6">
+            <h2 className="text-md font-mono tracking-widest uppercase  text-zinc-100 border-b border-zinc-800/50 pb-2">
               README
             </h2>
 
-            <p className="text-zinc-400 mb-12 text-[15px] leading-[1.8]">
+            <p className="text-zinc-400 text-[15px] leading-[1.8]">
               {lang === "en"
                 ? "MercadoPago Plugin for better-auth is an npm package. It provides a comprehensive set of features out of the box, simplifies the addition of advanced functionalities and infrastructure to help own your payments at scale in any framework supported by better-auth."
                 : "El plugin de mercadopago para better-auth es un paquete de npm. Proporciona un conjunto completo de características listas para usar, simplifica la adición de funcionalidades avanzadas e infraestructura para ayudar a controlar tus pagos a escala en cualquier framework soportado por better-auth."}
@@ -32,9 +32,12 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
             <TerminalDemo />
 
-            <h2 className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest mb-6 border-b border-zinc-800/50 pb-2 mt-12">
-              {lang === "en" ? "FEATURES" : "CARACTERÍSTICAS"}
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">
+                {lang === "en" ? "FEATURES" : "CARACTERÍSTICAS"}
+              </h2>
+              <div className="h-px bg-zinc-800/50 flex-1" />
+            </div>
             <FeatureGrid lang={lang} />
           </div>
         </div>

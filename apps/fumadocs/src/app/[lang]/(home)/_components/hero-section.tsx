@@ -1,18 +1,20 @@
 import { ShieldAlert } from "lucide-react";
 import Link from "next/link";
 
+import { BetterauthIcon, MercadopagoIcon } from "@/components/icons";
+
 export function HeroSection({ lang }: { lang: string }) {
   return (
     <>
       {/* Top Logo */}
       <div className="flex items-center gap-3 z-10 w-fit">
-        <div className="w-5 h-5 bg-white flex items-center justify-center">
-          <span className="text-[10px] font-black text-black leading-none">
-            MP
-          </span>
+        <div className="flex items-center gap-2">
+          <MercadopagoIcon className="text-4xl leading-none" />
+          <BetterauthIcon className="text-4xl leading-none" />
         </div>
-        <span className="font-mono font-bold tracking-[0.2em] text-[13px] text-zinc-100">
-          MERCADOPAGO-PLUGIN.
+
+        <span className="font-mono font-bold uppercase tracking-[0.2em] text-[13px] text-zinc-100">
+          Better-Auth-Mercadopago
         </span>
       </div>
 
@@ -20,9 +22,8 @@ export function HeroSection({ lang }: { lang: string }) {
       {/* Nota: El logo de fondo de MP lo configuras en este div reemplazando el texto. */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-40 select-none overflow-hidden mix-blend-screen">
         <div className="w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px] absolute" />
-        <div className="absolute text-[300px] font-black tracking-tighter text-zinc-800/40 font-sans rotate-[-8deg] drop-shadow-2xl">
-          MP
-        </div>
+
+        <MercadopagoIcon className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[250px] font-black tracking-tighter text-zinc-800/40 font-sans rotate-[-8deg] drop-shadow-2xl" />
       </div>
 
       {/* Main Content */}
@@ -51,7 +52,7 @@ export function HeroSection({ lang }: { lang: string }) {
           href={`/${lang}/docs`}
           className="px-8 py-2.5 bg-white text-black text-sm font-semibold rounded-l-[5px] hover:bg-zinc-200 transition-colors"
         >
-          Get Started
+          {lang === "en" ? "Get Started" : "Empezar"}
         </Link>
         <Link
           href="https://www.npmjs.com/package/better-auth-mercadopago"
