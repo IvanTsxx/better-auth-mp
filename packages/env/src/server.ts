@@ -1,7 +1,6 @@
-
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
-import path from "node:path";
+/* import path from "node:path";
 import dotenv from "dotenv";
 
 const isCli = process.env.BETTER_AUTH_CLI === "true";
@@ -11,7 +10,7 @@ if (isCli) {
 } else {
   dotenv.config();
 }
-
+ */
 export const env = createEnv({
   emptyStringAsUndefined: true,
   runtimeEnv: process.env,

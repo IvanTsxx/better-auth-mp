@@ -57,7 +57,33 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
           }
 
           const { backUrls, items, metadata, idempotencyKey } = ctx.body;
-          const { success, failure, pending } = backUrls || {};
+
+          // Destructure with fallback to empty object if undefined
+          const {
+            success: successUrl,
+            failure: failureUrl,
+            pending: pendingUrl,
+          } = backUrls || {};
+
+          // Use provided URLs or fallback to defaults
+          const finalBackUrls = {
+            success:
+              successUrl ||
+              `${options.baseUrl}/payments/one-time?status=success`,
+            failure:
+              failureUrl ||
+              `${options.baseUrl}/payments/one-time?status=failure`,
+            pending:
+              pendingUrl ||
+              `${options.baseUrl}/payments/one-time?status=pending`,
+          };
+
+          // Validate that at least success URL exists
+          if (!finalBackUrls.success) {
+            throw new APIError("BAD_REQUEST", {
+              message: "Missing required backUrl.success",
+            });
+          }
 
           if (idempotencyKey) {
             if (!validateIdempotencyKey(idempotencyKey)) {
@@ -82,8 +108,6 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
           const sanitizedMetadata = metadata ? sanitizeMetadata(metadata) : {};
 
-          const baseUrl = options.baseUrl || ctx.context.baseURL;
-
           const totalAmount = items.reduce(
             (sum, item) => sum + item.unitPrice * item.quantity,
             0
@@ -98,12 +122,8 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
           const externalReference = generateId();
 
           const preferenceBody: PreferenceCreateData["body"] = {
-            auto_return: "approved",
-            back_urls: {
-              failure: failure || `${baseUrl}/payments/one-time?status=failure`,
-              pending: pending || `${baseUrl}/payments/one-time?status=pending`,
-              success: success || `${baseUrl}/payments/one-time?status=success`,
-            },
+            auto_return: "approved", // Activar esto solo si el .env tiene un https sino no andara
+            back_urls: finalBackUrls,
             expires: true,
             external_reference: externalReference,
             items: items.map((item) => ({
@@ -119,9 +139,16 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
             },
           };
 
-          const preference = await new Preference(client).create({
-            body: preferenceBody,
-          });
+          const preference = await new Preference(client)
+            .create({
+              body: preferenceBody,
+            })
+            .catch((error) => {
+              console.error(">>> MP PREFERENCE ERROR:", error);
+              throw new APIError("INTERNAL_SERVER_ERROR", {
+                message: `MP PREFERENCE ERROR: ${error.message}`,
+              });
+            });
 
           const payment = await ctx.context.adapter.create({
             data: {
