@@ -1,6 +1,6 @@
 {
   "name": "better-auth-mercadopago",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "MercadoPago plugin for Better Auth — subscriptions, payments & webhooks out of the box",
   "keywords": [
     "auth",

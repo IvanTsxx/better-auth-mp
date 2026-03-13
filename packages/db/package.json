@@ -1,5 +1,6 @@
 {
   "name": "@repo/db",
+  "private": true,
   "type": "module",
   "exports": {
     ".": {
