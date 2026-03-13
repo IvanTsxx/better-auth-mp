@@ -68,8 +68,6 @@ jobs:
 
       - name: Publish to npm
         run: |
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > packages/plugin/.npmrc
+          echo '//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}' > ~/.npmrc
           cd packages/plugin
           npm publish --access public --tag beta
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
