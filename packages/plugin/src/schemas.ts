@@ -5,16 +5,16 @@ export const PreferenceItemSchema = z.object({
   currencyId: z.string().length(3),
   description: z.string().max(500).optional(),
   id: z.string().min(1).max(100),
-  pictureUrl: z.url().optional(),
+  pictureUrl: z.string().url().optional(),
   quantity: z.number().int().positive().max(10_000),
   title: z.string().min(1).max(250),
   unitPrice: z.number().positive().max(100_000_000),
 });
 
 export const BackUrlsSchema = z.object({
-  failure: z.url().optional(),
-  pending: z.url().optional(),
-  success: z.url().optional(),
+  failure: z.string().url().optional(),
+  pending: z.string().url().optional(),
+  success: z.string().url().optional(),
 });
 
 const RESERVED_METADATA_KEYS = new Set([
@@ -72,10 +72,10 @@ export const SubscriptionAutoRecurringSchema = z.object({
 
 export const CreateSubscriptionSchema = z.object({
   autoRecurring: SubscriptionAutoRecurringSchema,
-  backUrl: z.url().optional(),
+  backUrl: z.string().url().optional(),
   idempotencyKey: z.string().max(36).optional(),
   metadata: MetadataSchema.optional(),
-  payerEmail: z.email(),
+  payerEmail: z.string().email(),
   reason: z.string().min(1).max(250),
 });
 
@@ -89,7 +89,7 @@ export const CreateSubscriptionWithPlanSchema = z.object({
   idempotencyKey: z.string().max(36).optional(),
   identification: IdentificationSchema.optional(),
   metadata: MetadataSchema.optional(),
-  payerEmail: z.email(),
+  payerEmail: z.string().email(),
   planId: z.string().min(1),
 });
 
