@@ -10,7 +10,7 @@
     }
   },
   "scripts": {
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate || echo 'Prisma generate skipped'",
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
