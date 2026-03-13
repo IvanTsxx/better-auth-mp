@@ -53,19 +53,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          bun-version: latest
+          node-version: '20'
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: npm ci
 
       - name: Build plugin
-        run: bun turbo run build --filter=better-auth-mercadopago
+        run: npm turbo run build --filter=better-auth-mercadopago
 
       - name: Publish to npm
         run: |
