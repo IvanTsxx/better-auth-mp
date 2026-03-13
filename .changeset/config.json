@@ -8,10 +8,10 @@
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": [
-    "auth",
-    "config",
-    "db",
-    "env",
+    "@repo/auth",
+    "@repo/config",
+    "@repo/db",
+    "@repo/env",
     "web",
     "fumadocs"
   ],
