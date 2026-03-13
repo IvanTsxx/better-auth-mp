@@ -62,8 +62,7 @@
   },
   "dependencies": {
     "@mercadopago/sdk-js": "^0.0.3",
-    "mercadopago": "^2.3.0",
-    "zod": "^3.23.0"
+    "mercadopago": "^2.3.0"
   },
   "devDependencies": {
     "tsup": "^8.4.0",
@@ -72,7 +71,8 @@
   "peerDependencies": {
     "@better-fetch/fetch": "^1.1.0",
     "@prisma/client": "^5.0.0",
-    "better-auth": "^1.5.0"
+    "better-auth": "^1.5.0",
+    "zod": "^4.1.0"
   },
   "peerDependenciesMeta": {
     "@better-fetch/fetch": {
@@ -83,9 +83,9 @@
     },
     "better-auth": {
       "optional": false
+    },
+    "zod": {
+      "optional": false
     }
-  },
-  "engines": {
-    "node": ">=18.0.0"
   }
 }
