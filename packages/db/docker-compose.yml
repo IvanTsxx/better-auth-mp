@@ -1,17 +1,17 @@
-name: better-auth-mercadopago
+name: better-auth-mp
 
 services:
   postgres:
     image: postgres
-    container_name: better-auth-mercadopago-postgres
+    container_name: better-auth-mp-postgres
     environment:
-      POSTGRES_DB: better-auth-mercadopago
+      POSTGRES_DB: better-auth-mp
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
     volumes:
-      - better-auth-mercadopago_postgres_data:/var/lib/postgresql
+      - better-auth-mp_postgres_data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -20,4 +20,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  better-auth-mercadopago_postgres_data:
+  better-auth-mp_postgres_data:

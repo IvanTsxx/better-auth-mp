@@ -7,10 +7,10 @@ description: Instalar y configurar el plugin Better Auth MercadoPago.
 
 ```bash
 # npm
-npm install @better-auth-mercadopago/plugin mercadopago
+npm install better-auth-mp/plugin mercadopago
 
 # bun
-bun add @better-auth-mercadopago/plugin mercadopago
+bun add better-auth-mp/plugin mercadopago
 ```
 
 ## Configuración del servidor
@@ -20,7 +20,7 @@ Agregá el plugin a la configuración de tu servidor de Better Auth:
 ```ts title="lib/auth.ts"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
-import { mercadoPagoPlugin } from "@better-auth-mercadopago/plugin"
+import { mercadoPagoPlugin } from "better-auth-mp/plugin"
 import { prisma } from "./prisma"
 
 export const auth = betterAuth({
@@ -62,7 +62,7 @@ Registrá el plugin cliente para que el frontend pueda llamar a los endpoints de
 
 ```ts title="lib/auth-client.ts"
 import { createAuthClient } from "better-auth/react"
-import { mercadopagoPluginClient } from "@better-auth-mercadopago/plugin/client"
+import { mercadopagoPluginClient } from "better-auth-mp/plugin/client"
 
 export const authClient = createAuthClient({
   baseURL: process.env.BETTER_AUTH_URL,

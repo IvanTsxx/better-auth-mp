@@ -20,7 +20,7 @@
     "ai": "^6.0.3",
     "babel-plugin-react-compiler": "^1.0.0",
     "better-auth": "catalog:",
-    "better-auth-mercadopago": "workspace:*",
+    "better-auth-mp": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "catalog:",

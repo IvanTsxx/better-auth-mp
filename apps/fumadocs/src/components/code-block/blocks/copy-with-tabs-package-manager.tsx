@@ -31,25 +31,25 @@ const Commands: Command[] = [
   {
     dlx: "npx",
     icon: NPM,
-    install: "npm i",
+    install: "npm i better-auth-mp",
     name: "npm",
   },
   {
     dlx: "pnpm dlx",
     icon: PNPM,
-    install: "pnpm i",
+    install: "pnpm i better-auth-mp",
     name: "pnpm",
   },
   {
     dlx: "yarn dlx",
     icon: Yarn,
-    install: "yarn add",
+    install: "yarn add better-auth-mp",
     name: "yarn",
   },
   {
     dlx: "bunx --bun",
     icon: Bun,
-    install: "bun add",
+    install: "bun add better-auth-mp",
     name: "bun",
   },
   {

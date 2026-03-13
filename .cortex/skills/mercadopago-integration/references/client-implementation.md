@@ -5,7 +5,7 @@ Build UI against your own API endpoints that use the mock provider.
 ## Hook Skeleton
 
 ```ts
-import { useState } from "react";
+import { useState } from 'react';
 
 export function useCheckout() {
   const [loading, setLoading] = useState(false);
@@ -13,9 +13,9 @@ export function useCheckout() {
   async function startCheckout(orderId: string) {
     setLoading(true);
     try {
-      const res = await fetch("/api/checkout/mock", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/checkout/mock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ orderId }),
       });
       const data = await res.json();
@@ -32,7 +32,6 @@ export function useCheckout() {
 ## UI States
 
 Render deterministic views for:
-
 - pending
 - approved
 - rejected

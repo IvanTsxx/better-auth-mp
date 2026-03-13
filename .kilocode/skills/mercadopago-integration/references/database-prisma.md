@@ -68,29 +68,29 @@ npx prisma migrate dev --name add_purchases
 
 ```typescript
 // src/lib/prisma.ts
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 export const prisma = globalForPrisma.prisma || new PrismaClient();
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 ```
 
 ## Implementation
 
 ```typescript
 // src/lib/db/purchases.ts
-import { prisma } from "@/lib/prisma";
+import { prisma } from '@/lib/prisma';
 
 interface PurchaseInsert {
   user_email: string;
-  status: "pending";
+  status: 'pending';
   total_amount: number;
 }
 
 interface PurchaseUpdate {
-  status?: "pending" | "approved" | "rejected";
+  status?: 'pending' | 'approved' | 'rejected';
   provider_payment_id?: string;
   provider_preference_id?: string;
   user_email?: string;
@@ -155,3 +155,4 @@ export async function createPurchaseItems(
   });
 }
 ```
+

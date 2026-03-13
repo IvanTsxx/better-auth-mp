@@ -2,7 +2,7 @@
 
 ## English
 
-**`better-auth-mercadopago` is an independent, community-maintained plugin and is NOT officially affiliated with, endorsed by, or supported by MercadoPago, Mercado Libre, Better Auth, or any of their respective companies, employees, or subsidiaries.**
+**`better-auth-mp` is an independent, community-maintained plugin and is NOT officially affiliated with, endorsed by, or supported by MercadoPago, Mercado Libre, Better Auth, or any of their respective companies, employees, or subsidiaries.**
 
 ### No Warranty
 
@@ -28,7 +28,7 @@ To the fullest extent permitted by applicable law, in no event shall the authors
 
 ## Español
 
-**`better-auth-mercadopago` es un plugin independiente mantenido por la comunidad y NO está oficialmente afiliado, respaldado ni soportado por MercadoPago, Mercado Libre, Better Auth, ni ninguna de sus respectivas empresas, empleados o subsidiarias.**
+**`better-auth-mp` es un plugin independiente mantenido por la comunidad y NO está oficialmente afiliado, respaldado ni soportado por MercadoPago, Mercado Libre, Better Auth, ni ninguna de sus respectivas empresas, empleados o subsidiarias.**
 
 ### Sin Garantía
 

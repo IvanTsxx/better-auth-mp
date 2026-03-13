@@ -95,7 +95,7 @@ Package tasks enable Turborepo to:
 
 ```json
 {
-  "$schema": "https://v2-8-17-canary-4.turborepo.dev/schema.json",
+  "$schema": "https://v2-8-17-canary-16.turborepo.dev/schema.json",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -255,7 +255,7 @@ packages/
 ```js
 // apps/web/.eslintrc.js
 module.exports = {
-  extends: ["@repo/eslint-config/next"],
+  extends: ["@repo/eslint-config/next"]
 };
 ```
 

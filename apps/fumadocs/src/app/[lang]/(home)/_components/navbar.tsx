@@ -22,7 +22,7 @@ export const Navbar = ({ lang }: { lang: string }) => (
           DOCS
         </Link>
         <Link
-          href="https://better-auth-mercadopago.vercel.app"
+          href="https://better-auth-mp.vercel.app"
           target="_blank"
           rel="noopener noreferrer"
           className="shrink-0 px-8 py-5 border-b-2 border-transparent hover:text-zinc-300 transition-colors"
@@ -36,7 +36,7 @@ export const Navbar = ({ lang }: { lang: string }) => (
           variant="ghost"
           render={
             <Link
-              href="https://github.com/better-auth/better-auth-mercadopago"
+              href="https://github.com/better-auth/better-auth-mp"
               target="_blank"
               rel="noopener noreferrer"
             />

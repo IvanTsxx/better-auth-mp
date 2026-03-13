@@ -11,9 +11,9 @@ const user = await prisma.user.findUnique({
   where: { id: 1 },
   include: {
     posts: true,
-    profile: true,
-  },
-});
+    profile: true
+  }
+})
 ```
 
 ### Filtered include
@@ -24,12 +24,12 @@ const user = await prisma.user.findUnique({
   include: {
     posts: {
       where: { published: true },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       take: 5,
-      select: { id: true, title: true },
-    },
-  },
-});
+      select: { id: true, title: true }
+    }
+  }
+})
 ```
 
 ### Nested include
@@ -41,12 +41,12 @@ const user = await prisma.user.findUnique({
     posts: {
       include: {
         comments: {
-          include: { author: true },
-        },
-      },
-    },
-  },
-});
+          include: { author: true }
+        }
+      }
+    }
+  }
+})
 ```
 
 ## Select Relations
@@ -57,10 +57,10 @@ const user = await prisma.user.findUnique({
   select: {
     name: true,
     posts: {
-      select: { title: true },
-    },
-  },
-});
+      select: { title: true }
+    }
+  }
+})
 ```
 
 ## Nested Writes
@@ -70,15 +70,18 @@ const user = await prisma.user.findUnique({
 ```typescript
 const user = await prisma.user.create({
   data: {
-    email: "alice@prisma.io",
+    email: 'alice@prisma.io',
     posts: {
-      create: [{ title: "Post 1" }, { title: "Post 2" }],
+      create: [
+        { title: 'Post 1' },
+        { title: 'Post 2' }
+      ]
     },
     profile: {
-      create: { bio: "Hello!" },
-    },
-  },
-});
+      create: { bio: 'Hello!' }
+    }
+  }
+})
 ```
 
 ### Create or connect
@@ -86,15 +89,15 @@ const user = await prisma.user.create({
 ```typescript
 const post = await prisma.post.create({
   data: {
-    title: "New Post",
+    title: 'New Post',
     author: {
       connectOrCreate: {
-        where: { email: "alice@prisma.io" },
-        create: { email: "alice@prisma.io", name: "Alice" },
-      },
-    },
-  },
-});
+        where: { email: 'alice@prisma.io' },
+        create: { email: 'alice@prisma.io', name: 'Alice' }
+      }
+    }
+  }
+})
 ```
 
 ### Connect existing
@@ -102,20 +105,20 @@ const post = await prisma.post.create({
 ```typescript
 const post = await prisma.post.create({
   data: {
-    title: "New Post",
+    title: 'New Post',
     author: {
-      connect: { id: 1 },
-    },
-  },
-});
+      connect: { id: 1 }
+    }
+  }
+})
 
 // Shorthand for foreign key
 const post = await prisma.post.create({
   data: {
-    title: "New Post",
-    authorId: 1,
-  },
-});
+    title: 'New Post',
+    authorId: 1
+  }
+})
 ```
 
 ## Update Relations
@@ -129,11 +132,11 @@ const user = await prisma.user.update({
     posts: {
       update: {
         where: { id: 1 },
-        data: { title: "Updated Title" },
-      },
-    },
-  },
-});
+        data: { title: 'Updated Title' }
+      }
+    }
+  }
+})
 ```
 
 ### Update many related
@@ -145,11 +148,11 @@ const user = await prisma.user.update({
     posts: {
       updateMany: {
         where: { published: false },
-        data: { published: true },
-      },
-    },
-  },
-});
+        data: { published: true }
+      }
+    }
+  }
+})
 ```
 
 ### Upsert related
@@ -160,12 +163,12 @@ const user = await prisma.user.update({
   data: {
     profile: {
       upsert: {
-        create: { bio: "New bio" },
-        update: { bio: "Updated bio" },
-      },
-    },
-  },
-});
+        create: { bio: 'New bio' },
+        update: { bio: 'Updated bio' }
+      }
+    }
+  }
+})
 ```
 
 ### Disconnect
@@ -175,19 +178,19 @@ const user = await prisma.user.update({
 const user = await prisma.user.update({
   where: { id: 1 },
   data: {
-    profile: { disconnect: true },
-  },
-});
+    profile: { disconnect: true }
+  }
+})
 
 // Many-to-many
 const post = await prisma.post.update({
   where: { id: 1 },
   data: {
     tags: {
-      disconnect: [{ id: 1 }, { id: 2 }],
-    },
-  },
-});
+      disconnect: [{ id: 1 }, { id: 2 }]
+    }
+  }
+})
 ```
 
 ### Delete related
@@ -197,20 +200,20 @@ const user = await prisma.user.update({
   where: { id: 1 },
   data: {
     posts: {
-      delete: { id: 1 },
-    },
-  },
-});
+      delete: { id: 1 }
+    }
+  }
+})
 
 // Delete many
 const user = await prisma.user.update({
   where: { id: 1 },
   data: {
     posts: {
-      deleteMany: { published: false },
-    },
-  },
-});
+      deleteMany: { published: false }
+    }
+  }
+})
 ```
 
 ### Set (replace all)
@@ -221,10 +224,10 @@ const post = await prisma.post.update({
   where: { id: 1 },
   data: {
     tags: {
-      set: [{ id: 1 }, { id: 2 }],
-    },
-  },
-});
+      set: [{ id: 1 }, { id: 2 }]
+    }
+  }
+})
 ```
 
 ## Relation Filters
@@ -236,9 +239,9 @@ At least one matches:
 ```typescript
 const users = await prisma.user.findMany({
   where: {
-    posts: { some: { published: true } },
-  },
-});
+    posts: { some: { published: true } }
+  }
+})
 ```
 
 ### every
@@ -248,9 +251,9 @@ All match:
 ```typescript
 const users = await prisma.user.findMany({
   where: {
-    posts: { every: { published: true } },
-  },
-});
+    posts: { every: { published: true } }
+  }
+})
 ```
 
 ### none
@@ -260,9 +263,9 @@ None match:
 ```typescript
 const users = await prisma.user.findMany({
   where: {
-    posts: { none: { published: true } },
-  },
-});
+    posts: { none: { published: true } }
+  }
+})
 ```
 
 ### is / isNot (1-to-1)
@@ -270,9 +273,9 @@ const users = await prisma.user.findMany({
 ```typescript
 const users = await prisma.user.findMany({
   where: {
-    profile: { is: { country: "USA" } },
-  },
-});
+    profile: { is: { country: 'USA' } }
+  }
+})
 ```
 
 ## Count Relations
@@ -282,10 +285,10 @@ const users = await prisma.user.findMany({
   select: {
     name: true,
     _count: {
-      select: { posts: true, followers: true },
-    },
-  },
-});
+      select: { posts: true, followers: true }
+    }
+  }
+})
 // { name: 'Alice', _count: { posts: 5, followers: 100 } }
 ```
 
@@ -297,9 +300,9 @@ const users = await prisma.user.findMany({
     name: true,
     _count: {
       select: {
-        posts: { where: { published: true } },
-      },
-    },
-  },
-});
+        posts: { where: { published: true } }
+      }
+    }
+  }
+})
 ```

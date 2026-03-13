@@ -1,8 +1,8 @@
-# PRD: better-auth-mercadopago Plugin
+# PRD: better-auth-mp Plugin
 
 ## 1. Overview del Proyecto
 
-**Nombre del Plugin:** `@better-auth-mercadopago/plugin`
+**Nombre del Plugin:** `better-auth-mp/plugin`
 
 **Descripción:** Plugin para Better Auth que provee integración completa con las APIs de MercadoPago para pagos únicos (Checkout Pro), suscripciones recurrentes, y marketplace con split de pagos. Permite a desarrolladores implementar pagos de manera simple, type-safe y agnóstica al framework/DB.
 
@@ -49,7 +49,7 @@
 
 ```typescript
 import { betterAuth } from "better-auth";
-import { mercadopagoPlugin } from "@better-auth-mercadopago/plugin";
+import { mercadopagoPlugin } from "better-auth-mp/plugin";
 
 export const auth = betterAuth({
   plugins: [
@@ -890,4 +890,4 @@ packages/plugin/
 - [Documentación de MercadoPago](https://www.mercadopago.com.ar/developers/es/docs)
 - [Better Auth Plugins 1](https://better-auth.com/docs/concepts/plugins)
 - [Better Auth Plugins 2](https://better-auth.com/docs/guides/your-first-plugin)
-- [Ejemplo](https://github.com/IvanTsxx/better-auth-mercadopago/tree/main/src)
+- [Ejemplo](https://github.com/IvanTsxx/better-auth-mp/tree/main/src)

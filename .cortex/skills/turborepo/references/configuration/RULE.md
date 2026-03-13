@@ -73,7 +73,7 @@ When you run `turbo run lint`, Turborepo finds all packages with a `lint` script
 
 ```json
 {
-  "$schema": "https://v2-8-17-canary-4.turborepo.dev/schema.json",
+  "$schema": "https://v2-8-17-canary-16.turborepo.dev/schema.json",
   "globalEnv": ["CI"],
   "globalDependencies": ["tsconfig.json"],
   "tasks": {
@@ -204,8 +204,8 @@ Use `turbo.jsonc` extension to add comments with IDE support:
   "tasks": {
     "build": {
       // Next.js outputs
-      "outputs": [".next/**", "!.next/cache/**"],
-    },
-  },
+      "outputs": [".next/**", "!.next/cache/**"]
+    }
+  }
 }
 ```

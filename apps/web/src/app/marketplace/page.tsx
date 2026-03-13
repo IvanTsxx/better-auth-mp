@@ -1,6 +1,6 @@
 "use client";
 
-import type { MercadopagoItem } from "better-auth-mercadopago/types";
+import type { MercadopagoItem } from "better-auth-mp/types";
 import {
   Store,
   Users,

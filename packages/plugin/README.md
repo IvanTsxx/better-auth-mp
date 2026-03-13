@@ -1,24 +1,24 @@
 <div align="center">
-  <img src="https://better-auth-mercadopago.vercel.app/logo.png" alt="better-auth-mercadopago logo" width="120" />
+  <img src="https://better-auth-mp.vercel.app/logo.png" alt="better-auth-mp logo" width="120" />
 
-  <h1>better-auth-mercadopago</h1>
+  <h1>better-auth-mp</h1>
 
   <p>
     MercadoPago plugin for <a href="https://better-auth.com">Better Auth</a> — subscriptions, payments & webhooks out of the box.
   </p>
 
   <p>
-    <a href="https://www.npmjs.com/package/better-auth-mercadopago">
-      <img src="https://img.shields.io/npm/v/better-auth-mercadopago?style=flat-square&colorA=18181b&colorB=00BCFF" alt="npm version" />
+    <a href="https://www.npmjs.com/package/better-auth-mp">
+      <img src="https://img.shields.io/npm/v/better-auth-mp?style=flat-square&colorA=18181b&colorB=00BCFF" alt="npm version" />
     </a>
-    <a href="https://www.npmjs.com/package/better-auth-mercadopago">
-      <img src="https://img.shields.io/npm/dm/better-auth-mercadopago?style=flat-square&colorA=18181b&colorB=00BCFF" alt="npm downloads" />
+    <a href="https://www.npmjs.com/package/better-auth-mp">
+      <img src="https://img.shields.io/npm/dm/better-auth-mp?style=flat-square&colorA=18181b&colorB=00BCFF" alt="npm downloads" />
     </a>
-    <a href="https://github.com/IvanTsxx/better-auth-mercadopago/blob/main/packages/plugin/LICENSE">
-      <img src="https://img.shields.io/npm/l/better-auth-mercadopago?style=flat-square&colorA=18181b&colorB=00BCFF" alt="license" />
+    <a href="https://github.com/IvanTsxx/better-auth-mp/blob/main/packages/plugin/LICENSE">
+      <img src="https://img.shields.io/npm/l/better-auth-mp?style=flat-square&colorA=18181b&colorB=00BCFF" alt="license" />
     </a>
-    <a href="https://github.com/IvanTsxx/better-auth-mercadopago/actions/workflows/release.yml">
-      <img src="https://img.shields.io/github/actions/workflow/status/IvanTsxx/better-auth-mercadopago/release.yml?style=flat-square&colorA=18181b&colorB=00BCFF&label=release" alt="release status" />
+    <a href="https://github.com/IvanTsxx/better-auth-mp/actions/workflows/release.yml">
+      <img src="https://img.shields.io/github/actions/workflow/status/IvanTsxx/better-auth-mp/release.yml?style=flat-square&colorA=18181b&colorB=00BCFF&label=release" alt="release status" />
     </a>
   </p>
 
@@ -57,16 +57,16 @@
 
 ```bash
 # npm
-npm install better-auth-mercadopago
+npm install better-auth-mp
 
 # yarn
-yarn add better-auth-mercadopago
+yarn add better-auth-mp
 
 # pnpm
-pnpm add better-auth-mercadopago
+pnpm add better-auth-mp
 
 # bun
-bun add better-auth-mercadopago
+bun add better-auth-mp
 ```
 
 ### Peer Dependencies
@@ -87,7 +87,7 @@ Add the plugin to your Better Auth configuration:
 // auth.ts (server)
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { mercadopago } from "better-auth-mercadopago";
+import { mercadopago } from "better-auth-mp";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -112,7 +112,7 @@ Add the client plugin to your Better Auth client:
 ```typescript
 // auth-client.ts (client)
 import { createAuthClient } from "better-auth/react";
-import { mercadopagoClient } from "better-auth-mercadopago/client";
+import { mercadopagoClient } from "better-auth-mp/client";
 
 export const authClient = createAuthClient({
   plugins: [mercadopagoClient()],
@@ -228,6 +228,6 @@ We welcome contributions! Please read our [CONTRIBUTING.md](./CONTRIBUTING.md) g
 
 ## License
 
-[MIT](./LICENSE) — Copyright © 2025 better-auth-mercadopago contributors.
+[MIT](./LICENSE) — Copyright © 2025 better-auth-mp contributors.
 
 See [DISCLAIMER.md](./DISCLAIMER.md) for important legal information.

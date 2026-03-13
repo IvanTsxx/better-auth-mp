@@ -19,7 +19,7 @@
     "@repo/db": "workspace:*",
     "@repo/env": "workspace:*",
     "better-auth": "catalog:",
-    "better-auth-mercadopago": "workspace:*",
+    "better-auth-mp": "workspace:*",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },

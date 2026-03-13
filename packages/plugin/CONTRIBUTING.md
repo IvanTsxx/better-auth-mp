@@ -1,4 +1,4 @@
-# Contributing to better-auth-mercadopago
+# Contributing to better-auth-mp
 
 > 🇦🇷 **¿Preferís leer esto en español?** → [CONTRIBUTING.es.md](./CONTRIBUTING.es.md)
 
@@ -40,7 +40,7 @@ bun add better-auth
 The plugin is **ORM-agnostic** — it supports Prisma, Drizzle, or any other ORM/database compatible with Better Auth. The required schema is generated via the Better Auth CLI (`bunx @better-auth/cli generate`).
 
 ```
-better-auth-mercadopago/
+better-auth-mp/
 ├── .changeset/          # Changesets configuration
 ├── .github/workflows/   # CI/CD (ci.yml, release.yml)
 ├── apps/
@@ -51,7 +51,7 @@ better-auth-mercadopago/
 │   ├── config/          # Shared TypeScript/lint config
 │   ├── db/              # Prisma database schema & migrations
 │   ├── env/             # Shared environment variable validation (Zod)
-│   └── plugin/          # ← THE PUBLISHABLE PACKAGE (better-auth-mercadopago)
+│   └── plugin/          # ← THE PUBLISHABLE PACKAGE (better-auth-mp)
 ├── turbo.json           # Turborepo pipeline
 └── package.json         # Root (private, tooling only)
 ```
@@ -60,10 +60,10 @@ better-auth-mercadopago/
 
 The plugin follows **Better Auth's plugin pattern**:
 
-- **`src/index.ts`** — Server plugin (exported as `better-auth-mercadopago`)
-- **`src/client-plugin.ts`** — Client plugin (exported as `better-auth-mercadopago/client`)
-- **`src/types.ts`** — Shared TypeScript types (exported as `better-auth-mercadopago/types`)
-- **`src/schemas.ts`** — Zod validation schemas (exported as `better-auth-mercadopago/schemas`)
+- **`src/index.ts`** — Server plugin (exported as `better-auth-mp`)
+- **`src/client-plugin.ts`** — Client plugin (exported as `better-auth-mp/client`)
+- **`src/types.ts`** — Shared TypeScript types (exported as `better-auth-mp/types`)
+- **`src/schemas.ts`** — Zod validation schemas (exported as `better-auth-mp/schemas`)
 - **`src/endpoints/`** — Better Auth endpoint handlers
 - **`src/security/`** — Webhook signature verification and security utilities
 
@@ -84,8 +84,8 @@ The plugin follows **Better Auth's plugin pattern**:
 
 ```bash
 # 1. Fork and clone the repository
-git clone https://github.com/YOUR_USERNAME/better-auth-mercadopago.git
-cd better-auth-mercadopago
+git clone https://github.com/YOUR_USERNAME/better-auth-mp.git
+cd better-auth-mp
 
 # 2. Install all dependencies
 bun install
@@ -114,7 +114,7 @@ MP_ACCESS_TOKEN=TEST-xxxxxxxxxxxxxxxxxxxx  # Use a TEST token, never production
 MP_WEBHOOK_SECRET=any-local-secret
 BETTER_AUTH_SECRET=any-local-secret
 BETTER_AUTH_URL=http://localhost:3000
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/better-auth-mercadopago
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/better-auth-mp
 ```
 
 > ⚠️ **NEVER commit real credentials.** Always use MercadoPago's TEST tokens for development.
@@ -170,7 +170,7 @@ export const mercadopago = (options: MercadoPagoOptions): BetterAuthPlugin => ({
 
 ### For Bug Fixes or Small Changes
 
-1. Check [existing issues](https://github.com/IvanTsxx/better-auth-mercadopago/issues) to avoid duplicates
+1. Check [existing issues](https://github.com/IvanTsxx/better-auth-mp/issues) to avoid duplicates
 2. Create a new issue describing the bug/change
 3. Fork, create a branch: `git checkout -b fix/descriptive-name`
 4. Make your changes, following the [coding standards](#coding-standards)
@@ -265,7 +265,7 @@ bun changeset
 ```
 
 The CLI will ask:
-1. **Which packages to include** — always select `better-auth-mercadopago`
+1. **Which packages to include** — always select `better-auth-mp`
 2. **Type of change** — `major`, `minor`, or `patch`
 3. **Summary** — Write a clear, user-facing description of the change
 
@@ -274,7 +274,7 @@ This creates a `.md` file in `.changeset/`. **Commit this file alongside your co
 Example changeset file (`.changeset/purple-dogs-laugh.md`):
 ```markdown
 ---
-"better-auth-mercadopago": patch
+"better-auth-mp": patch
 ---
 
 Fix webhook signature verification to correctly handle MercadoPago's HMAC-SHA256 format.
@@ -309,6 +309,6 @@ To trigger a release manually, merge the automated "Version Packages" PR on GitH
 
 ## Getting Help
 
-- **Questions?** Open a [Discussion](https://github.com/IvanTsxx/better-auth-mercadopago/discussions)
-- **Found a bug?** Open an [Issue](https://github.com/IvanTsxx/better-auth-mercadopago/issues)
+- **Questions?** Open a [Discussion](https://github.com/IvanTsxx/better-auth-mp/discussions)
+- **Found a bug?** Open an [Issue](https://github.com/IvanTsxx/better-auth-mp/issues)
 - **Security vulnerability?** DO NOT open a public issue. Email directly. (see SECURITY.md when available)

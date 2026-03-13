@@ -1,6 +1,6 @@
 {
-  "name": "better-auth-mercadopago",
-  "version": "3.0.0",
+  "name": "better-auth-mp",
+  "version": "1.0.0",
   "description": "MercadoPago plugin for Better Auth — subscriptions, payments & webhooks out of the box",
   "keywords": [
     "auth",
@@ -13,14 +13,14 @@
     "subscriptions",
     "webhooks"
   ],
-  "homepage": "https://better-auth-mercadopago.vercel.app",
+  "homepage": "https://better-auth-mp.vercel.app",
   "bugs": {
-    "url": "https://github.com/IvanTsxx/better-auth-mercadopago/issues"
+    "url": "https://github.com/IvanTsxx/better-auth-mp/issues"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/IvanTsxx/better-auth-mercadopago.git",
+    "url": "https://github.com/IvanTsxx/better-auth-mp.git",
     "directory": "packages/plugin"
   },
   "files": [
@@ -66,26 +66,12 @@
   },
   "devDependencies": {
     "tsup": "^8.4.0",
-    "typescript": "^5.0.0"
+    "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@better-fetch/fetch": "^1.1.0",
-    "@prisma/client": "^5.0.0",
-    "better-auth": "^1.5.0",
-    "zod": "^4.1.0"
-  },
-  "peerDependenciesMeta": {
-    "@better-fetch/fetch": {
-      "optional": false
-    },
-    "@prisma/client": {
-      "optional": false
-    },
-    "better-auth": {
-      "optional": false
-    },
-    "zod": {
-      "optional": false
-    }
+    "@better-fetch/fetch": "catalog:",
+    "@prisma/client": "catalog:",
+    "better-auth": "catalog:",
+    "zod": "catalog:"
   }
 }

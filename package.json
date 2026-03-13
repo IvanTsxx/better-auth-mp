@@ -1,5 +1,5 @@
 {
-  "name": "better-auth-mercadopago",
+  "name": "better-auth-mp",
   "private": true,
   "workspaces": {
     "packages": [
@@ -35,7 +35,7 @@
     "prepare": "husky",
     "changeset": "changeset",
     "changeset:version": "changeset version",
-    "changeset:publish": "turbo run build --filter=better-auth-mercadopago && changeset publish"
+    "changeset:publish": "turbo run build --filter=better-auth-mp && changeset publish"
   },
   "dependencies": {
     "@repo/env": "workspace:*",
@@ -46,7 +46,7 @@
     "@changesets/cli": "^2.30.0",
     "@repo/config": "workspace:*",
     "@types/node": "^22.13.14",
-    "better-auth-mercadopago": "workspace:*",
+    "better-auth-mp": "workspace:*",
     "husky": "^9.1.7",
     "lint-staged": "^16.3.3",
     "oxfmt": "^0.38.0",

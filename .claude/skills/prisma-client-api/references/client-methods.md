@@ -7,16 +7,15 @@ Prisma Client instance methods.
 Explicitly connect to the database:
 
 ```typescript
-const prisma = new PrismaClient({ adapter });
+const prisma = new PrismaClient({ adapter })
 
 // Explicit connection
-await prisma.$connect();
+await prisma.$connect()
 ```
 
 ### When to use
 
 Usually not needed - Prisma connects automatically on first query. Use for:
-
 - Fail fast on startup
 - Health checks
 - Pre-warming connections
@@ -24,11 +23,11 @@ Usually not needed - Prisma connects automatically on first query. Use for:
 ```typescript
 async function main() {
   try {
-    await prisma.$connect();
-    console.log("Database connected");
+    await prisma.$connect()
+    console.log('Database connected')
   } catch (e) {
-    console.error("Failed to connect:", e);
-    process.exit(1);
+    console.error('Failed to connect:', e)
+    process.exit(1)
   }
 }
 ```
@@ -38,29 +37,29 @@ async function main() {
 Close database connection:
 
 ```typescript
-await prisma.$disconnect();
+await prisma.$disconnect()
 ```
 
 ### Graceful shutdown
 
 ```typescript
-process.on("beforeExit", async () => {
-  await prisma.$disconnect();
-});
+process.on('beforeExit', async () => {
+  await prisma.$disconnect()
+})
 
 // Or with SIGTERM
-process.on("SIGTERM", async () => {
-  await prisma.$disconnect();
-  process.exit(0);
-});
+process.on('SIGTERM', async () => {
+  await prisma.$disconnect()
+  process.exit(0)
+})
 ```
 
 ### In tests
 
 ```typescript
 afterAll(async () => {
-  await prisma.$disconnect();
-});
+  await prisma.$disconnect()
+})
 ```
 
 ## $on()
@@ -72,14 +71,14 @@ Subscribe to events:
 ```typescript
 const prisma = new PrismaClient({
   adapter,
-  log: [{ level: "query", emit: "event" }],
-});
+  log: [{ level: 'query', emit: 'event' }]
+})
 
-prisma.$on("query", (e) => {
-  console.log("Query:", e.query);
-  console.log("Params:", e.params);
-  console.log("Duration:", e.duration, "ms");
-});
+prisma.$on('query', (e) => {
+  console.log('Query:', e.query)
+  console.log('Params:', e.params)
+  console.log('Duration:', e.duration, 'ms')
+})
 ```
 
 ### Log events
@@ -88,15 +87,15 @@ prisma.$on("query", (e) => {
 const prisma = new PrismaClient({
   adapter,
   log: [
-    { level: "info", emit: "event" },
-    { level: "warn", emit: "event" },
-    { level: "error", emit: "event" },
-  ],
-});
+    { level: 'info', emit: 'event' },
+    { level: 'warn', emit: 'event' },
+    { level: 'error', emit: 'event' }
+  ]
+})
 
-prisma.$on("info", (e) => console.log(e.message));
-prisma.$on("warn", (e) => console.warn(e.message));
-prisma.$on("error", (e) => console.error(e.message));
+prisma.$on('info', (e) => console.log(e.message))
+prisma.$on('warn', (e) => console.warn(e.message))
+prisma.$on('error', (e) => console.error(e.message))
 ```
 
 ## $extends()
@@ -108,11 +107,11 @@ Add extensions for custom behavior:
 ```typescript
 const prisma = new PrismaClient({ adapter }).$extends({
   client: {
-    $log: (message: string) => console.log(message),
-  },
-});
+    $log: (message: string) => console.log(message)
+  }
+})
 
-prisma.$log("Hello!");
+prisma.$log('Hello!')
 ```
 
 ### Add model methods
@@ -122,13 +121,13 @@ const prisma = new PrismaClient({ adapter }).$extends({
   model: {
     user: {
       async findByEmail(email: string) {
-        return prisma.user.findUnique({ where: { email } });
-      },
-    },
-  },
-});
+        return prisma.user.findUnique({ where: { email } })
+      }
+    }
+  }
+})
 
-const user = await prisma.user.findByEmail("alice@prisma.io");
+const user = await prisma.user.findByEmail('alice@prisma.io')
 ```
 
 ### Query extensions
@@ -139,12 +138,12 @@ const prisma = new PrismaClient({ adapter }).$extends({
     user: {
       async findMany({ args, query }) {
         // Add default filter
-        args.where = { ...args.where, deletedAt: null };
-        return query(args);
-      },
-    },
-  },
-});
+        args.where = { ...args.where, deletedAt: null }
+        return query(args)
+      }
+    }
+  }
+})
 ```
 
 ### Result extensions
@@ -156,15 +155,15 @@ const prisma = new PrismaClient({ adapter }).$extends({
       fullName: {
         needs: { firstName: true, lastName: true },
         compute(user) {
-          return `${user.firstName} ${user.lastName}`;
-        },
-      },
-    },
-  },
-});
+          return `${user.firstName} ${user.lastName}`
+        }
+      }
+    }
+  }
+})
 
-const user = await prisma.user.findFirst();
-console.log(user.fullName); // Computed field
+const user = await prisma.user.findFirst()
+console.log(user.fullName) // Computed field
 ```
 
 ### Chain extensions
@@ -173,7 +172,7 @@ console.log(user.fullName); // Computed field
 const prisma = new PrismaClient({ adapter })
   .$extends(loggingExtension)
   .$extends(softDeleteExtension)
-  .$extends(computedFieldsExtension);
+  .$extends(computedFieldsExtension)
 ```
 
 ## $transaction()
@@ -189,17 +188,17 @@ See `raw-queries.md` for details.
 ### Prisma namespace
 
 ```typescript
-import { Prisma } from "../generated/client";
+import { Prisma } from '../generated/client'
 
 // Input types
-type UserCreateInput = Prisma.UserCreateInput;
-type UserWhereInput = Prisma.UserWhereInput;
+type UserCreateInput = Prisma.UserCreateInput
+type UserWhereInput = Prisma.UserWhereInput
 
 // Output types
-type User = Prisma.UserGetPayload<{}>;
+type User = Prisma.UserGetPayload<{}>
 type UserWithPosts = Prisma.UserGetPayload<{
-  include: { posts: true };
-}>;
+  include: { posts: true }
+}>
 ```
 
 ### Prisma.validator
@@ -207,16 +206,16 @@ type UserWithPosts = Prisma.UserGetPayload<{
 Type-safe query fragments:
 
 ```typescript
-import { Prisma } from "../generated/client";
+import { Prisma } from '../generated/client'
 
 const userSelect = Prisma.validator<Prisma.UserSelect>()({
   id: true,
   email: true,
-  name: true,
-});
+  name: true
+})
 
 const user = await prisma.user.findUnique({
   where: { id: 1 },
-  select: userSelect,
-});
+  select: userSelect
+})
 ```

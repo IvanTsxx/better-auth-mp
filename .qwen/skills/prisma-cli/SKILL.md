@@ -14,7 +14,6 @@ Complete reference for all Prisma CLI commands. This skill provides guidance on 
 ## When to Apply
 
 Reference this skill when:
-
 - Setting up a new Prisma project (`prisma init`)
 - Generating Prisma Client (`prisma generate`)
 - Running database migrations (`prisma migrate`)
@@ -24,26 +23,26 @@ Reference this skill when:
 
 ## Rule Categories by Priority
 
-| Priority | Category    | Impact   | Prefix                                  |
-| -------- | ----------- | -------- | --------------------------------------- |
-| 1        | Setup       | HIGH     | `init`                                  |
-| 2        | Generation  | HIGH     | `generate`                              |
-| 3        | Development | HIGH     | `dev`                                   |
-| 4        | Database    | HIGH     | `db-`                                   |
-| 5        | Migrations  | CRITICAL | `migrate-`                              |
-| 6        | Utility     | MEDIUM   | `studio`, `validate`, `format`, `debug` |
+| Priority | Category | Impact | Prefix |
+|----------|----------|--------|--------|
+| 1 | Setup | HIGH | `init` |
+| 2 | Generation | HIGH | `generate` |
+| 3 | Development | HIGH | `dev` |
+| 4 | Database | HIGH | `db-` |
+| 5 | Migrations | CRITICAL | `migrate-` |
+| 6 | Utility | MEDIUM | `studio`, `validate`, `format`, `debug` |
 
 ## Command Categories
 
-| Category    | Commands                                                                                              | Purpose                               |
-| ----------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| Setup       | `init`                                                                                                | Bootstrap new Prisma project          |
-| Generation  | `generate`                                                                                            | Generate Prisma Client                |
-| Validation  | `validate`, `format`                                                                                  | Schema validation and formatting      |
-| Development | `dev`                                                                                                 | Local Prisma Postgres for development |
-| Database    | `db pull`, `db push`, `db seed`, `db execute`                                                         | Direct database operations            |
-| Migrations  | `migrate dev`, `migrate deploy`, `migrate reset`, `migrate status`, `migrate diff`, `migrate resolve` | Schema migrations                     |
-| Utility     | `studio`, `version`, `debug`                                                                          | Development tools                     |
+| Category | Commands | Purpose |
+|----------|----------|---------|
+| Setup | `init` | Bootstrap new Prisma project |
+| Generation | `generate` | Generate Prisma Client |
+| Validation | `validate`, `format` | Schema validation and formatting |
+| Development | `dev` | Local Prisma Postgres for development |
+| Database | `db pull`, `db push`, `db seed`, `db execute` | Direct database operations |
+| Migrations | `migrate dev`, `migrate deploy`, `migrate reset`, `migrate status`, `migrate diff`, `migrate resolve` | Schema migrations |
+| Utility | `studio`, `version`, `debug` | Development tools |
 
 ## Quick Reference
 
@@ -184,19 +183,19 @@ prisma format
 Prisma 7 uses `prisma.config.ts` for CLI configuration:
 
 ```typescript
-import "dotenv/config";
-import { defineConfig, env } from "prisma/config";
+import 'dotenv/config'
+import { defineConfig, env } from 'prisma/config'
 
 export default defineConfig({
-  schema: "prisma/schema.prisma",
+  schema: 'prisma/schema.prisma',
   migrations: {
-    path: "prisma/migrations",
-    seed: "tsx prisma/seed.ts",
+    path: 'prisma/migrations',
+    seed: 'tsx prisma/seed.ts',
   },
   datasource: {
-    url: env("DATABASE_URL"),
+    url: env('DATABASE_URL'),
   },
-});
+})
 ```
 
 ### Removed Flags
@@ -212,7 +211,7 @@ Environment variables are no longer auto-loaded. Use `dotenv`:
 
 ```typescript
 // prisma.config.ts
-import "dotenv/config";
+import 'dotenv/config'
 ```
 
 ## Rule Files

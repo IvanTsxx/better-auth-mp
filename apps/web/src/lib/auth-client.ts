@@ -1,4 +1,4 @@
-import { mercadopagoPluginClient } from "better-auth-mercadopago/client";
+import { mercadopagoPluginClient } from "better-auth-mp/client";
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({

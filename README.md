@@ -1,4 +1,4 @@
-# better-auth-mercadopago
+# better-auth-mp
 
 This project was created with [Better Fullstack](https://github.com/Marve10s/Better-Fullstack), a modern TypeScript stack that combines Next.js, Self, and more.
 
@@ -45,7 +45,7 @@ Open [http://localhost:3001](http://localhost:3001) in your browser to see the f
 ## Project Structure
 
 ```
-better-auth-mercadopago/
+better-auth-mp/
 ├── apps/
 │   └── web/         # Fullstack application (Next.js)
 ├── packages/

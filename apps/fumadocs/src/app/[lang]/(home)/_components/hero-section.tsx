@@ -15,7 +15,7 @@ export function HeroSection({ lang }: { lang: string }) {
         </div>
 
         <span className="font-mono font-bold uppercase tracking-[0.2em] text-[13px] text-zinc-100">
-          Better-Auth-Mercadopago
+          better-auth-mp
         </span>
       </div>
 
@@ -64,7 +64,7 @@ export function HeroSection({ lang }: { lang: string }) {
         <Button
           render={
             <Link
-              href="https://www.npmjs.com/package/better-auth-mercadopago"
+              href="https://www.npmjs.com/package/better-auth-mp"
               target="_blank"
               rel="noopener noreferrer"
               className=""

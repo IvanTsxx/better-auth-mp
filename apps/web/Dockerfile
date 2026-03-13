@@ -1,4 +1,4 @@
-# Dockerfile for better-auth-mercadopago Next.js app
+# Dockerfile for better-auth-mp Next.js app
 # Optimized multi-stage build for Docker deployment
 
 FROM node:20-alpine AS base

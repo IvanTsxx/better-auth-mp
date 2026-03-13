@@ -6,7 +6,7 @@ import { i18n } from "./i18n";
 // fill this with your actual GitHub info, for example:
 export const gitConfig = {
   branch: "main",
-  repo: "better-auth-mercadopago",
+  repo: "better-auth-mp",
   user: "IvanTsxx",
 };
 

@@ -1,33 +1,33 @@
-# Docker Compose for better-auth-mercadopago
+# Docker Compose for better-auth-mp
 # Full-stack container orchestration
 
-name: better-auth-mercadopago
+name: better-auth-mp
 
 services:
   web:
     build:
       context: ./apps/web
       dockerfile: Dockerfile
-    container_name: better-auth-mercadopago-web
+    container_name: better-auth-mp-web
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
     restart: unless-stopped
     networks:
-      - better-auth-mercadopago-network
+      - better-auth-mp-network
 
   db:
     image: postgres:16-alpine
-    container_name: better-auth-mercadopago-postgres
+    container_name: better-auth-mp-postgres
     environment:
-      POSTGRES_DB: better-auth-mercadopago
+      POSTGRES_DB: better-auth-mp
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
     volumes:
-      - better-auth-mercadopago_postgres_data:/var/lib/postgresql/data
+      - better-auth-mp_postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -35,11 +35,11 @@ services:
       retries: 5
     restart: unless-stopped
     networks:
-      - better-auth-mercadopago-network
+      - better-auth-mp-network
 
 networks:
-  better-auth-mercadopago-network:
+  better-auth-mp-network:
     driver: bridge
 
 volumes:
-  better-auth-mercadopago_postgres_data:
+  better-auth-mp_postgres_data:

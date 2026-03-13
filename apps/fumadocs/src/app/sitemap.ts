@@ -4,8 +4,7 @@ import { source } from "@/lib/source";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const url =
-    process.env.NEXT_PUBLIC_APP_URL ||
-    "https://better-auth-mercadopago.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://better-auth-mp.vercel.app";
 
   return [
     {

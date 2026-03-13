@@ -19,11 +19,11 @@ prisma migrate reset [options]
 
 ## Options
 
-| Option           | Description                            |
-| ---------------- | -------------------------------------- |
-| `--force` / `-f` | Skip confirmation prompt               |
-| `--schema`       | Path to schema file                    |
-| `--config`       | Custom path to your Prisma config file |
+| Option | Description |
+|--------|-------------|
+| `--force` / `-f` | Skip confirmation prompt |
+| `--schema` | Path to schema file |
+| `--config` | Custom path to your Prisma config file |
 
 ## Examples
 
@@ -66,7 +66,7 @@ Configure seed script in `prisma.config.ts` to run it automatically after reset:
 ```typescript
 export default defineConfig({
   migrations: {
-    seed: "tsx prisma/seed.ts",
+    seed: 'tsx prisma/seed.ts',
   },
-});
+})
 ```

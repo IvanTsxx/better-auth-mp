@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Initial release of `better-auth-mercadopago` plugin
+- Initial release of `better-auth-mp` plugin
 - MercadoPago integration for Better Auth
 - Subscription management support
 - Webhook handling with signature verification
@@ -47,7 +47,7 @@ This is the initial release. No migration needed.
 
 ## Upcoming Features
 
-See our [public roadmap](https://github.com/IvanTsxx/better-auth-mercadopago/issues) for planned features:
+See our [public roadmap](https://github.com/IvanTsxx/better-auth-mp/issues) for planned features:
 
 - One-click checkout via Brick
 - Subscription plan management UI
@@ -60,6 +60,6 @@ See our [public roadmap](https://github.com/IvanTsxx/better-auth-mercadopago/iss
 
 ## Support
 
-- 📖 [Documentation](https://better-auth-mercadopago.vercel.app)
-- 🐛 [Issue Tracker](https://github.com/IvanTsxx/better-auth-mercadopago/issues)
-- 💬 [Discussions](https://github.com/IvanTsxx/better-auth-mercadopago/discussions)
+- 📖 [Documentation](https://better-auth-mp.vercel.app)
+- 🐛 [Issue Tracker](https://github.com/IvanTsxx/better-auth-mp/issues)
+- 💬 [Discussions](https://github.com/IvanTsxx/better-auth-mp/discussions)

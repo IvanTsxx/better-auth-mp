@@ -6,23 +6,13 @@ Filter operators for the `where` clause.
 
 ```typescript
 // Exact match (implicit)
-where: {
-  email: "alice@prisma.io";
-}
+where: { email: 'alice@prisma.io' }
 
 // Explicit equals
-where: {
-  email: {
-    equals: "alice@prisma.io";
-  }
-}
+where: { email: { equals: 'alice@prisma.io' } }
 
 // Not equal
-where: {
-  email: {
-    not: "alice@prisma.io";
-  }
-}
+where: { email: { not: 'alice@prisma.io' } }
 ```
 
 ## Comparison
@@ -67,11 +57,11 @@ where: { email: { startsWith: 'alice' } }
 where: { email: { endsWith: '@prisma.io' } }
 
 // Case-insensitive (default for some databases)
-where: {
-  email: {
+where: { 
+  email: { 
     contains: 'PRISMA',
-    mode: 'insensitive'
-  }
+    mode: 'insensitive' 
+  } 
 }
 ```
 
@@ -79,23 +69,13 @@ where: {
 
 ```typescript
 // Is null
-where: {
-  deletedAt: null;
-}
+where: { deletedAt: null }
 
 // Is not null
-where: {
-  deletedAt: {
-    not: null;
-  }
-}
+where: { deletedAt: { not: null } }
 
 // Using isSet (for optional fields)
-where: {
-  middleName: {
-    isSet: true;
-  }
-}
+where: { middleName: { isSet: true } }
 ```
 
 ## Logical Operators
@@ -114,7 +94,10 @@ where: {
 
 ```typescript
 where: {
-  AND: [{ email: { contains: "@prisma.io" } }, { role: "ADMIN" }];
+  AND: [
+    { email: { contains: '@prisma.io' } },
+    { role: 'ADMIN' }
+  ]
 }
 ```
 
@@ -123,9 +106,9 @@ where: {
 ```typescript
 where: {
   OR: [
-    { email: { contains: "@gmail.com" } },
-    { email: { contains: "@prisma.io" } },
-  ];
+    { email: { contains: '@gmail.com' } },
+    { email: { contains: '@prisma.io' } }
+  ]
 }
 ```
 
@@ -134,13 +117,16 @@ where: {
 ```typescript
 where: {
   NOT: {
-    role: "GUEST";
+    role: 'GUEST'
   }
 }
 
 // Multiple NOT conditions
 where: {
-  NOT: [{ role: "GUEST" }, { verified: false }];
+  NOT: [
+    { role: 'GUEST' },
+    { verified: false }
+  ]
 }
 ```
 
@@ -171,9 +157,7 @@ At least one related record matches:
 // Users with at least one published post
 where: {
   posts: {
-    some: {
-      published: true;
-    }
+    some: { published: true }
   }
 }
 ```
@@ -186,9 +170,7 @@ All related records match:
 // Users where all posts are published
 where: {
   posts: {
-    every: {
-      published: true;
-    }
+    every: { published: true }
   }
 }
 ```
@@ -201,9 +183,7 @@ No related records match:
 // Users with no published posts
 where: {
   posts: {
-    none: {
-      published: true;
-    }
+    none: { published: true }
   }
 }
 ```
@@ -214,16 +194,14 @@ where: {
 // Users with profile in specific country
 where: {
   profile: {
-    is: {
-      country: "USA";
-    }
+    is: { country: 'USA' }
   }
 }
 
 // Users without profile
 where: {
   profile: {
-    isNot: null;
+    isNot: null
   }
 }
 ```
@@ -234,32 +212,16 @@ For fields like `String[]`:
 
 ```typescript
 // Has element
-where: {
-  tags: {
-    has: "typescript";
-  }
-}
+where: { tags: { has: 'typescript' } }
 
 // Has some elements
-where: {
-  tags: {
-    hasSome: ["typescript", "javascript"];
-  }
-}
+where: { tags: { hasSome: ['typescript', 'javascript'] } }
 
 // Has every element
-where: {
-  tags: {
-    hasEvery: ["typescript", "prisma"];
-  }
-}
+where: { tags: { hasEvery: ['typescript', 'prisma'] } }
 
 // Is empty
-where: {
-  tags: {
-    isEmpty: true;
-  }
-}
+where: { tags: { isEmpty: true } }
 ```
 
 ## JSON Filters
@@ -288,7 +250,7 @@ where: {
 // Requires @@fulltext index
 where: {
   content: {
-    search: "prisma database";
+    search: 'prisma database'
   }
 }
 ```

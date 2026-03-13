@@ -32,4 +32,4 @@ jobs:
         run: bun run check-types
 
       - name: Build plugin
-        run: bun turbo run build --filter=better-auth-mercadopago
+        run: bun turbo run build --filter=better-auth-mp

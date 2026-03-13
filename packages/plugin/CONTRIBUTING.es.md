@@ -1,4 +1,4 @@
-# Cómo contribuir a better-auth-mercadopago
+# Cómo contribuir a better-auth-mp
 
 > 🇺🇸 **Prefer to read this in English?** → [CONTRIBUTING.md](./CONTRIBUTING.md)
 
@@ -30,7 +30,7 @@ Al participar en este proyecto, acordás mantener un entorno respetuoso e inclus
 Este proyecto es un **monorepo con Turborepo** y Bun como gestor de paquetes. El paquete publicable vive en `packages/plugin`. El resto del monorepo (`apps/`, otros `packages/`) es infraestructura para desarrollo y documentación.
 
 ```
-better-auth-mercadopago/
+better-auth-mp/
 ├── .changeset/          # Configuración de Changesets
 ├── .github/workflows/   # CI/CD (ci.yml, release.yml)
 ├── apps/
@@ -41,7 +41,7 @@ better-auth-mercadopago/
 │   ├── config/          # Configuración compartida de TypeScript/lint
 │   ├── db/              # Schema Prisma y migraciones
 │   ├── env/             # Validación de variables de entorno (Zod)
-│   └── plugin/          # ← EL PAQUETE PUBLICABLE (better-auth-mercadopago)
+│   └── plugin/          # ← EL PAQUETE PUBLICABLE (better-auth-mp)
 ├── turbo.json           # Pipeline de Turborepo
 └── package.json         # Root (privado, solo tooling)
 ```
@@ -50,10 +50,10 @@ better-auth-mercadopago/
 
 El plugin sigue el **patrón de plugins de Better Auth**:
 
-- **`src/index.ts`** — Plugin del servidor (exportado como `better-auth-mercadopago`)
-- **`src/client-plugin.ts`** — Plugin del cliente (exportado como `better-auth-mercadopago/client`)
-- **`src/types.ts`** — Tipos TypeScript compartidos (exportado como `better-auth-mercadopago/types`)
-- **`src/schemas.ts`** — Schemas de validación Zod (exportado como `better-auth-mercadopago/schemas`)
+- **`src/index.ts`** — Plugin del servidor (exportado como `better-auth-mp`)
+- **`src/client-plugin.ts`** — Plugin del cliente (exportado como `better-auth-mp/client`)
+- **`src/types.ts`** — Tipos TypeScript compartidos (exportado como `better-auth-mp/types`)
+- **`src/schemas.ts`** — Schemas de validación Zod (exportado como `better-auth-mp/schemas`)
 - **`src/endpoints/`** — Handlers de endpoints de Better Auth
 - **`src/security/`** — Verificación de firma de webhooks y utilidades de seguridad
 
@@ -74,8 +74,8 @@ El plugin sigue el **patrón de plugins de Better Auth**:
 
 ```bash
 # 1. Forkeá y cloná el repositorio
-git clone https://github.com/TU_USUARIO/better-auth-mercadopago.git
-cd better-auth-mercadopago
+git clone https://github.com/TU_USUARIO/better-auth-mp.git
+cd better-auth-mp
 
 # 2. Instalá todas las dependencias
 bun install
@@ -104,7 +104,7 @@ MP_ACCESS_TOKEN=TEST-xxxxxxxxxxxxxxxxxxxx  # Usá un token de TEST, nunca produc
 MP_WEBHOOK_SECRET=cualquier-secreto-local
 BETTER_AUTH_SECRET=cualquier-secreto-local
 BETTER_AUTH_URL=http://localhost:3000
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/better-auth-mercadopago
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/better-auth-mp
 ```
 
 > ⚠️ **NUNCA hagas commit de credenciales reales.** Siempre usá los tokens TEST de MercadoPago para desarrollo.
@@ -160,7 +160,7 @@ export const mercadopago = (options: MercadoPagoOptions): BetterAuthPlugin => ({
 
 ### Para bugs o cambios pequeños
 
-1. Revisá los [issues existentes](https://github.com/IvanTsxx/better-auth-mercadopago/issues) para evitar duplicados
+1. Revisá los [issues existentes](https://github.com/IvanTsxx/better-auth-mp/issues) para evitar duplicados
 2. Creá un nuevo issue describiendo el bug/cambio
 3. Forkea, creá una rama: `git checkout -b fix/nombre-descriptivo`
 4. Hacé tus cambios siguiendo los [estándares de código](#estándares-de-código)
@@ -255,7 +255,7 @@ bun changeset
 ```
 
 El CLI te va a preguntar:
-1. **Qué paquetes incluir** — siempre seleccioná `better-auth-mercadopago`
+1. **Qué paquetes incluir** — siempre seleccioná `better-auth-mp`
 2. **Tipo de cambio** — `major`, `minor` o `patch`
 3. **Resumen** — Escribí una descripción clara y orientada al usuario del cambio
 
@@ -264,7 +264,7 @@ Esto crea un archivo `.md` en `.changeset/`. **Comiteá este archivo junto con t
 Ejemplo de archivo changeset (`.changeset/perros-purpura-rien.md`):
 ```markdown
 ---
-"better-auth-mercadopago": patch
+"better-auth-mp": patch
 ---
 
 Corrige la verificación de firma de webhook para manejar correctamente el formato HMAC-SHA256 de MercadoPago.
@@ -299,6 +299,6 @@ Para disparar un release manualmente, mergeá el PR automático "Version Package
 
 ## ¿Necesitás ayuda?
 
-- **¿Preguntas?** Abrí una [Discusión](https://github.com/IvanTsxx/better-auth-mercadopago/discussions)
-- **¿Encontraste un bug?** Abrí un [Issue](https://github.com/IvanTsxx/better-auth-mercadopago/issues)
+- **¿Preguntas?** Abrí una [Discusión](https://github.com/IvanTsxx/better-auth-mp/discussions)
+- **¿Encontraste un bug?** Abrí un [Issue](https://github.com/IvanTsxx/better-auth-mp/issues)
 - **¿Vulnerabilidad de seguridad?** NO abras un issue público. Contacto directo (ver SECURITY.md cuando esté disponible)

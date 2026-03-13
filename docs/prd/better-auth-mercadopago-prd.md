@@ -1,8 +1,8 @@
-# PRD: better-auth-mercadopago Plugin
+# PRD: better-auth-mp Plugin
 
 ## 1. Overview del Proyecto
 
-**Nombre del Plugin:** `better-auth-mercadopago`
+**Nombre del Plugin:** `better-auth-mp`
 
 **Descripción:** Plugin para Better Auth que provee integración completa con todas las APIs de MercadoPago (Checkout Pro, Checkout Bricks, Checkout API, Suscripciones, Marketplace/Split de pagos). Permite a desarrolladores implementar pagos y suscripciones en sus aplicaciones de manera simple y type-safe.
 
@@ -52,7 +52,7 @@
 
 ```typescript
 import { betterAuth } from "better-auth";
-import { mercadopagoPlugin } from "@better-auth-mercadopago/plugin";
+import { mercadopagoPlugin } from "better-auth-mp/plugin";
 
 export const auth = betterAuth({
   plugins: [
@@ -725,7 +725,7 @@ import {
   // Marketplace
   ConnectSellerButton,
   SellerInfoCard
-} from "@better-auth-mercadopago/plugin/react";
+} from "better-auth-mp/plugin/react";
 ```
 
 ### Ejemplo de uso
@@ -736,7 +736,7 @@ import {
 import { 
   initMercadoPago, 
   CardPaymentBrick 
-} from "@better-auth-mercadopago/plugin/react";
+} from "better-auth-mp/plugin/react";
 import { useEffect, useRef } from "react";
 
 export function CheckoutForm({ amount }: { amount: number }) {

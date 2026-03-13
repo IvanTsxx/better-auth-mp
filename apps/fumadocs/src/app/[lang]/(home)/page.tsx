@@ -104,10 +104,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 ? "MercadoPago Plugin for better-auth is an npm package. It provides a comprehensive set of features out of the box, simplifies the addition of advanced functionalities and infrastructure to help own your payments at scale in any framework supported by better-auth."
                 : "El plugin de mercadopago para better-auth es un paquete de npm. Proporciona un conjunto completo de características listas para usar, simplifica la adición de funcionalidades avanzadas e infraestructura para ayudar a controlar tus pagos a escala en cualquier framework soportado por better-auth."}
             </p>
-            <CodeBlockTabsPkg
-              type="install"
-              command="better-auth-mercadopago"
-            />
+            <CodeBlockTabsPkg type="install" command="better-auth-mp" />
 
             <SectionContainer
               title={lang === "en" ? "FEATURES" : "CARACTERÍSTICAS"}
