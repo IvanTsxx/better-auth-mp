@@ -1,7 +1,6 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 import { CodeBlockTabsPkg } from "@/components/code-block/blocks/copy-with-tabs-package-manager";
-import { getPageImage } from "@/lib/source";
 
 import { CodeExamples } from "./_components/code-examples";
 import {
@@ -18,22 +17,63 @@ import { SectionContainer } from "./_components/section-container";
 export async function generateMetadata(
   props: PageProps<"/[lang]/docs/[[...slug]]">
 ): Promise<Metadata> {
-  const { slug, lang } = await props.params;
+  const { lang } = await props.params;
 
   const description =
     lang === "en"
-      ? "MercadoPago Plugin for better-auth is an npm package. It provides a comprehensive set of features out of the box, simplifies the addition of advanced functionalities and infrastructure to help own your payments at scale in any framework supported by better-auth."
-      : "El plugin de mercadopago para better-auth es un paquete de npm. Proporciona un conjunto completo de características listas para usar, simplifica la adición de funcionalidades avanzadas e infraestructura para ayudar a controlar tus pagos a escala en cualquier framework soportado por better-auth.";
+      ? "Mercado Pago plugin for Better Auth. Simplify Next.js and React integrations for Checkout Pro, subscriptions, and Marketplace. Own your payments in Argentina and LATAM with this better-auth plugin."
+      : "Plugin de Mercado Pago para Better Auth. Simplificá la integración en Next.js y React para Checkout Pro, suscripciones y Marketplace. Controlá tus pagos en Argentina y LATAM con este plugin para better-auth.";
 
   const title =
     lang === "en"
-      ? "MercadoPago Plugin for better-auth"
-      : "Plugin de MercadoPago para better-auth";
+      ? "Mercado Pago Plugin for Better Auth | Next.js Integration"
+      : "Plugin de Mercado Pago para Better Auth | Integración Next.js";
+
+  const keywords =
+    lang === "en"
+      ? [
+          "mercadopago better auth",
+          "better auth mercadopago",
+          "mercado pago better auth",
+          "mercado pago react",
+          "nextjs mercadopago",
+          "mercado pago nextjs",
+          "nextjs mercadopago integration",
+          "nextjs mercado pago subscriptions",
+          "checkout pro",
+          "better auth plugin",
+          "argentina mercadopago",
+          "better auth nextjs mercadopago",
+        ]
+      : [
+          "mercadopago better auth",
+          "better auth mercadopago",
+          "mercado pago better auth",
+          "mercado pago react",
+          "nextjs mercadopago",
+          "mercado pago nextjs",
+          "integracion nextjs mercadopago",
+          "nextjs integracion mercadopago",
+          "nextjs mercado pago suscripciones",
+          "checkout pro",
+          "better auth plugin",
+          "argentina mercadopago",
+          "better auth nextjs mercadopago",
+        ];
 
   return {
+    alternates: {
+      languages: {
+        en: "/en",
+        es: "/es",
+      },
+    },
     description,
+    keywords,
     openGraph: {
+      description,
       images: "/og-image.webp",
+      title,
     },
     title,
   };
@@ -70,14 +110,12 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             />
 
             <SectionContainer
-              lang={lang}
               title={lang === "en" ? "FEATURES" : "CARACTERÍSTICAS"}
             >
               <FeatureGrid lang={lang} />
             </SectionContainer>
 
             <SectionContainer
-              lang={lang}
               title={
                 lang === "en"
                   ? "Declarative Config"
@@ -87,18 +125,17 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               <CodeExamples code={initCode} />
             </SectionContainer>
 
-            <SectionContainer lang={lang} title="Checkout Pro">
+            <SectionContainer title="Checkout Pro">
               <CodeExamples code={checkoutProCode} />
             </SectionContainer>
 
             <SectionContainer
-              lang={lang}
               title={lang === "es" ? "Suscripciones" : "Subscriptions"}
             >
               <CodeExamples code={subscriptionsCode} />
             </SectionContainer>
 
-            <SectionContainer lang={lang} title="Marketplace">
+            <SectionContainer title="Marketplace">
               <CodeExamples code={marketplaceCode} />
             </SectionContainer>
           </div>

@@ -1,4 +1,4 @@
-import { auth } from "@better-auth-mercadopago/auth";
+import { auth } from "@repo/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 

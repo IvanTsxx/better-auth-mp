@@ -1,5 +1,5 @@
 {
-  "name": "@better-auth-mercadopago/env",
+  "name": "@repo/env",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -14,7 +14,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@better-auth-mercadopago/config": "workspace:*",
+    "@repo/config": "workspace:*",
     "@types/node": "^22.13.14",
     "typescript": "catalog:"
   }

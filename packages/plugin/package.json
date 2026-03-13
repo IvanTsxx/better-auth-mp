@@ -1,45 +1,91 @@
 {
-  "name": "@better-auth-mercadopago/plugin",
+  "name": "better-auth-mercadopago",
   "version": "0.1.0",
+  "description": "MercadoPago plugin for Better Auth — subscriptions, payments & webhooks out of the box",
+  "keywords": [
+    "auth",
+    "better-auth",
+    "mercadopago",
+    "nextjs",
+    "payments",
+    "plugin",
+    "react",
+    "subscriptions",
+    "webhooks"
+  ],
+  "homepage": "https://better-auth-mercadopago.vercel.app",
+  "bugs": {
+    "url": "https://github.com/IvanTsxx/better-auth-mercadopago/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IvanTsxx/better-auth-mercadopago.git",
+    "directory": "packages/plugin"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README.es.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "DISCLAIMER.md"
+  ],
   "type": "module",
   "exports": {
     ".": {
-      "default": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./client": {
-      "default": "./src/client-plugin.ts"
+      "types": "./dist/client-plugin.d.ts",
+      "import": "./dist/client-plugin.js",
+      "require": "./dist/client-plugin.cjs"
     },
     "./types": {
-      "default": "./src/types.ts"
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js",
+      "require": "./dist/types.cjs"
     },
     "./schemas": {
-      "default": "./src/schemas.ts"
+      "types": "./dist/schemas.d.ts",
+      "import": "./dist/schemas.js",
+      "require": "./dist/schemas.cjs"
     }
   },
   "scripts": {
-    "check-types": "tsc --noEmit"
+    "build": "tsup",
+    "check-types": "tsc --noEmit",
+    "dev": "tsup --watch"
   },
   "dependencies": {
     "@mercadopago/sdk-js": "^0.0.3",
     "mercadopago": "^2.3.0",
-    "zod": "catalog:"
+    "zod": "^3.23.0"
   },
   "devDependencies": {
-    "@better-auth-mercadopago/config": "workspace:*",
-    "typescript": "catalog:"
+    "@repo/config": "workspace:*",
+    "tsup": "^8.4.0",
+    "typescript": "^5.0.0"
   },
   "peerDependencies": {
-    "@prisma/client": "catalog:",
-    "better-auth": "catalog:"
+    "@better-fetch/fetch": "^1.1.0",
+    "@prisma/client": "^5.0.0",
+    "better-auth": "^1.5.0"
   },
   "peerDependenciesMeta": {
-    "better-auth": {
+    "@better-fetch/fetch": {
       "optional": false
     },
     "@prisma/client": {
       "optional": false
     },
-    "@better-fetch/fetch": {
+    "better-auth": {
       "optional": false
     }
   }

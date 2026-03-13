@@ -1,5 +1,5 @@
 {
-  "name": "@better-auth-mercadopago/auth",
+  "name": "@repo/auth",
   "type": "module",
   "exports": {
     ".": {
@@ -13,17 +13,17 @@
     "generate": "bun x @better-auth/cli generate --config ./src/index.cli.ts"
   },
   "dependencies": {
-    "@better-auth-mercadopago/db": "workspace:*",
-    "@better-auth-mercadopago/env": "workspace:*",
-    "@better-auth-mercadopago/plugin": "workspace:*",
     "@better-auth/prisma-adapter": "^1.5.1",
     "@better-fetch/fetch": "catalog:",
+    "@repo/db": "workspace:*",
+    "@repo/env": "workspace:*",
     "better-auth": "catalog:",
+    "better-auth-mercadopago": "workspace:*",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@better-auth-mercadopago/config": "workspace:*",
+    "@repo/config": "workspace:*",
     "typescript": "catalog:"
   }
 }

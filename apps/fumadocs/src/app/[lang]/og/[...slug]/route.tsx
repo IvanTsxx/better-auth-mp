@@ -2,7 +2,6 @@
 import { readFile } from "node:fs/promises";
 
 import { ImageResponse } from "@takumi-rs/image-response";
-import { cacheLife } from "next/cache";
 import { notFound } from "next/navigation";
 
 import { getPageImage, source } from "@/lib/source";

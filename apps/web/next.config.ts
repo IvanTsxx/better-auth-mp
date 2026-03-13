@@ -1,4 +1,4 @@
-import "@better-auth-mercadopago/env/web";
+import "@repo/env/web";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {

@@ -1,5 +1,5 @@
 {
-  "name": "@better-auth-mercadopago/db",
+  "name": "@repo/db",
   "type": "module",
   "exports": {
     ".": {
@@ -21,15 +21,15 @@
     "db:down": "docker compose down"
   },
   "dependencies": {
-    "@better-auth-mercadopago/env": "workspace:*",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "catalog:",
+    "@repo/env": "workspace:*",
     "dotenv": "catalog:",
     "pg": "^8.16.3",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@better-auth-mercadopago/config": "workspace:*",
+    "@repo/config": "workspace:*",
     "@types/pg": "^8.18.0",
     "prisma": "^7.4.1",
     "typescript": "catalog:"

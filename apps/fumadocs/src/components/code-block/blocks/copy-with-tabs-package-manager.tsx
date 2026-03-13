@@ -12,10 +12,8 @@ import {
 } from "@/components/code-block/code-block";
 import { CopyButton } from "@/components/code-block/copy-button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  usePackageManager,
-  type PackageManager,
-} from "@/stores/packageManager";
+import { usePackageManager } from "@/stores/package-manager";
+import type { PackageManager } from "@/stores/package-manager";
 
 interface Command {
   name: PackageManager | "skills";
@@ -31,35 +29,35 @@ interface CodeBlockTabsPkgProps {
 
 const Commands: Command[] = [
   {
-    name: "npm",
-    install: "npm i",
-    icon: NPM,
     dlx: "npx",
+    icon: NPM,
+    install: "npm i",
+    name: "npm",
   },
   {
-    name: "pnpm",
-    install: "pnpm i",
-    icon: PNPM,
     dlx: "pnpm dlx",
+    icon: PNPM,
+    install: "pnpm i",
+    name: "pnpm",
   },
   {
-    name: "yarn",
-    install: "yarn add",
-    icon: Yarn,
     dlx: "yarn dlx",
+    icon: Yarn,
+    install: "yarn add",
+    name: "yarn",
   },
   {
-    name: "bun",
-    install: "bun add",
-    icon: Bun,
     dlx: "bunx --bun",
+    icon: Bun,
+    install: "bun add",
+    name: "bun",
   },
   {
-    name: "skills",
+    dlx: "bunx --bun",
+    icon: Vercel,
     install:
       "npx skills add https://github.com/ivantsxx/my-next-skills --skill architect-nextjs",
-    icon: Vercel,
-    dlx: "bunx --bun",
+    name: "skills",
   },
 ];
 

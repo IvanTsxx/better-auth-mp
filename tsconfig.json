@@ -1,5 +1,5 @@
 {
-  "extends": "@better-auth-mercadopago/config/tsconfig.base.json",
+  "extends": "@repo/config/tsconfig.base.json",
   "compilerOptions": {
     "strictNullChecks": true
   }

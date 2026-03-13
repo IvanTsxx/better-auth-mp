@@ -63,10 +63,51 @@ export async function generateMetadata(
     notFound();
   }
 
+  const keywords =
+    lang === "en"
+      ? [
+          "mercadopago better auth",
+          "better auth mercadopago",
+          "mercado pago better auth",
+          "mercado pago react",
+          "nextjs mercadopago",
+          "mercado pago nextjs",
+          "nextjs mercadopago integration",
+          "nextjs mercado pago subscriptions",
+          "checkout pro",
+          "better auth plugin",
+          "argentina mercadopago",
+          "better auth nextjs mercadopago",
+        ]
+      : [
+          "mercadopago better auth",
+          "better auth mercadopago",
+          "mercado pago better auth",
+          "mercado pago react",
+          "nextjs mercadopago",
+          "mercado pago nextjs",
+          "integracion nextjs mercadopago",
+          "nextjs integracion mercadopago",
+          "nextjs mercado pago suscripciones",
+          "checkout pro",
+          "better auth plugin",
+          "argentina mercadopago",
+          "better auth nextjs mercadopago",
+        ];
+
   return {
+    alternates: {
+      languages: {
+        en: "/en/docs",
+        es: "/es/docs",
+      },
+    },
     description: page.data.description,
+    keywords,
     openGraph: {
+      description: page.data.description,
       images: getPageImage(page).url,
+      title: page.data.title,
     },
     title: page.data.title,
   };

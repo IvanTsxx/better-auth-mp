@@ -17,8 +17,8 @@ const usePackageManager = create<PackageManagerState>()(
     }),
     {
       name: "package-manager-store",
-    },
-  ),
+    }
+  )
 );
 
 export { type PackageManager, usePackageManager };

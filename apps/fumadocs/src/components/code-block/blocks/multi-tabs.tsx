@@ -1,5 +1,4 @@
-import type { Languages } from "@/utils/shiki/highlight";
-
+import { CodeblockShiki } from "@/components/code-block/client/shiki";
 import {
   CodeBlock,
   CodeBlockContent,
@@ -7,14 +6,11 @@ import {
   CodeBlockIcon,
 } from "@/components/code-block/code-block";
 import { CopyButton } from "@/components/code-block/copy-button";
-import { CodeblockShiki } from "@/components/code-block/client/shiki";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { Languages } from "@/utils/shiki/highlight";
 
 const Code = [
   {
-    title: "layout.tsx",
-    lang: "tsx",
     code: `import "./globals.css";
 
 export default function RootLayout({
@@ -28,10 +24,10 @@ export default function RootLayout({
     </html>
   );
 }`,
+    lang: "tsx",
+    title: "layout.tsx",
   },
   {
-    title: "page.tsx",
-    lang: "tsx",
     code: `export default function Home() {
   return (
     <div>
@@ -39,10 +35,10 @@ export default function RootLayout({
     </div>
   );
 }`,
+    lang: "tsx",
+    title: "page.tsx",
   },
   {
-    title: "globals.css",
-    lang: "css",
     code: `@import "tailwindcss";
 
 :root {
@@ -69,50 +65,48 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }`,
+    lang: "css",
+    title: "globals.css",
   },
 ];
 
-const CopyWithTabsCode = () => {
-  return (
-    <Tabs className="w-full gap-1">
-      <CodeBlock>
-        <CodeBlockHeader>
-          <div className="flex items-center space-x-1">
-            <TabsList className="gap-1 border-0 bg-transparent dark:bg-transparent">
-              {Code.map((c) => {
-                return (
-                  <TabsTrigger
-                    value={c.title}
-                    key={c.title}
-                    className="data-[state=active]:bg-transparent"
-                  >
-                    <CodeBlockIcon language={c.lang} />
-                    <span>{c.title}</span>
-                  </TabsTrigger>
-                );
-              })}
-            </TabsList>
-          </div>
-        </CodeBlockHeader>
-        <CodeBlockContent className="relative">
-          {Code.map((cmd) => (
-            <TabsContent key={cmd.title} value={cmd.title}>
-              <div className="relative">
-                <CopyButton
-                  content={cmd.code}
-                  className="sticky top-2.5 right-2.5 z-10 float-right -mb-10 p-1"
-                />
-                <CodeblockShiki
-                  code={cmd.code}
-                  language={cmd.lang as Languages}
-                />
-              </div>
-            </TabsContent>
-          ))}
-        </CodeBlockContent>
-      </CodeBlock>
-    </Tabs>
-  );
-};
+const CopyWithTabsCode = () => (
+  <Tabs className="w-full gap-1">
+    <CodeBlock>
+      <CodeBlockHeader>
+        <div className="flex items-center space-x-1">
+          <TabsList className="gap-1 border-0 bg-transparent dark:bg-transparent">
+            {Code.map((c) => (
+                <TabsTrigger
+                  value={c.title}
+                  key={c.title}
+                  className="data-[state=active]:bg-transparent"
+                >
+                  <CodeBlockIcon language={c.lang} />
+                  <span>{c.title}</span>
+                </TabsTrigger>
+              ))}
+          </TabsList>
+        </div>
+      </CodeBlockHeader>
+      <CodeBlockContent className="relative">
+        {Code.map((cmd) => (
+          <TabsContent key={cmd.title} value={cmd.title}>
+            <div className="relative">
+              <CopyButton
+                content={cmd.code}
+                className="sticky top-2.5 right-2.5 z-10 float-right -mb-10 p-1"
+              />
+              <CodeblockShiki
+                code={cmd.code}
+                language={cmd.lang as Languages}
+              />
+            </div>
+          </TabsContent>
+        ))}
+      </CodeBlockContent>
+    </CodeBlock>
+  </Tabs>
+);
 
 export default CopyWithTabsCode;
