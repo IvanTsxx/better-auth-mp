@@ -68,6 +68,7 @@ jobs:
 
       - name: Publish to npm
         run: |
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > packages/plugin/.npmrc
           cd packages/plugin
           npm publish --access public --tag beta
         env:
