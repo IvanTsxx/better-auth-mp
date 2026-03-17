@@ -2,7 +2,7 @@
 
 ## 1. Overview del Proyecto
 
-**Nombre del Plugin:** `better-auth-mp/plugin`
+**Nombre del Plugin:** `better-auth-mp`
 
 **Descripción:** Plugin para Better Auth que provee integración completa con las APIs de MercadoPago para pagos únicos (Checkout Pro), suscripciones recurrentes, y marketplace con split de pagos. Permite a desarrolladores implementar pagos de manera simple, type-safe y agnóstica al framework/DB.
 
@@ -49,7 +49,7 @@
 
 ```typescript
 import { betterAuth } from "better-auth";
-import { mercadopagoPlugin } from "better-auth-mp/plugin";
+import { mercadopagoPlugin } from "better-auth-mp";
 
 export const auth = betterAuth({
   plugins: [

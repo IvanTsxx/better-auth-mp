@@ -19,7 +19,6 @@ export const env = createEnv({
     DATABASE_URL: z.string().min(1),
     MP_ACCESS_TOKEN: z.string().min(1),
 
-    MP_RECEIVER_EMAIL: z.string().email().optional(),
     MP_WEBHOOK_SECRET: z.string().optional(),
     NODE_ENV: z
       .enum(["development", "production", "test"])

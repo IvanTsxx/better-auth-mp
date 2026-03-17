@@ -7,10 +7,16 @@ description: Instalar y configurar el plugin Better Auth MercadoPago.
 
 ```bash
 # npm
-npm install better-auth-mp/plugin mercadopago
+npm install better-auth-mp
+
+# pnpm
+pnpm add better-auth-mp
 
 # bun
-bun add better-auth-mp/plugin mercadopago
+bun add better-auth-mp
+
+# yarn
+yarn add better-auth-mp
 ```
 
 ## Configuración del servidor
@@ -20,7 +26,7 @@ Agregá el plugin a la configuración de tu servidor de Better Auth:
 ```ts title="lib/auth.ts"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
-import { mercadoPagoPlugin } from "better-auth-mp/plugin"
+import { mercadoPagoPlugin } from "better-auth-mp";
 import { prisma } from "./prisma"
 
 export const auth = betterAuth({
@@ -42,7 +48,7 @@ export const auth = betterAuth({
       // Opcional: se llama cuando cambia el estado de una suscripción
       onSubscriptionUpdate: async ({ subscription, status }) => {
         console.log("Suscripción actualizada:", subscription.externalReference, status)
-      },
+      },    
     }),
   ],
 })
@@ -61,25 +67,31 @@ export const auth = betterAuth({
 Registrá el plugin cliente para que el frontend pueda llamar a los endpoints del plugin:
 
 ```ts title="lib/auth-client.ts"
-import { createAuthClient } from "better-auth/react"
-import { mercadopagoPluginClient } from "better-auth-mp/plugin/client"
+import { mercadopagoPluginClient } from "better-auth-mp/client";
+import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
   baseURL: process.env.BETTER_AUTH_URL,
   plugins: [mercadopagoPluginClient()],
-})
+});
 ```
 
 ## Migración de base de datos
 
-El plugin define tres tablas adicionales. Ejecutá la migración de tu adaptador después de agregar el plugin:
+El plugin define tres tablas adicionales. Ejecutá la generación de tu adaptador después de agregar el plugin:
 
 ```bash
-# Prisma
-npx prisma migrate dev
+# npm
+npx auth@latest generate
 
-# Prisma (solo generate)
-npx prisma generate
+# pnpm
+pnpm dlx auth@latest generate
+
+# yarn
+yarn dlx auth@latest generate
+
+# bun
+bun x auth@latest generate
 ```
 
 Mirá la página de [Schema de Base de Datos](/docs//schema) para ver todos los campos.

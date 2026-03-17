@@ -1,6 +1,6 @@
 "use client";
 
-import { Bun, NPM, PNPM, Yarn, Vercel } from "@react-symbols/icons";
+import { Bun, NPM, PNPM, Yarn } from "@react-symbols/icons";
 import type { FC, SVGProps } from "react";
 
 import { CodeblockShiki } from "@/components/code-block/client/shiki";
@@ -51,13 +51,6 @@ const Commands: Command[] = [
     icon: Bun,
     install: "bun add better-auth-mp",
     name: "bun",
-  },
-  {
-    dlx: "bunx --bun",
-    icon: Vercel,
-    install:
-      "npx skills add https://github.com/ivantsxx/my-next-skills --skill architect-nextjs",
-    name: "skills",
   },
 ];
 

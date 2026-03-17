@@ -52,7 +52,7 @@
 
 ```typescript
 import { betterAuth } from "better-auth";
-import { mercadopagoPlugin } from "better-auth-mp/plugin";
+import { mercadopagoPlugin } from "better-auth-mp";
 
 export const auth = betterAuth({
   plugins: [
@@ -725,7 +725,7 @@ import {
   // Marketplace
   ConnectSellerButton,
   SellerInfoCard
-} from "better-auth-mp/plugin/react";
+} from "better-auth-mp/react";
 ```
 
 ### Ejemplo de uso
@@ -736,7 +736,7 @@ import {
 import { 
   initMercadoPago, 
   CardPaymentBrick 
-} from "better-auth-mp/plugin/react";
+} from "better-auth-mp/react";
 import { useEffect, useRef } from "react";
 
 export function CheckoutForm({ amount }: { amount: number }) {

@@ -7,10 +7,10 @@ description: Install and configure the Better Auth MercadoPago plugin.
 
 ```bash
 # npm
-npm install better-auth-mp/plugin mercadopago
+npm install better-auth-mp mercadopago
 
 # bun
-bun add better-auth-mp/plugin mercadopago
+bun add better-auth-mp mercadopago
 ```
 
 ## Server setup
@@ -20,7 +20,7 @@ Add the plugin to your Better Auth server configuration:
 ```ts title="lib/auth.ts"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
-import { mercadoPagoPlugin } from "better-auth-mp/plugin"
+import { mercadoPagoPlugin } from "better-auth-mp"
 import { prisma } from "./prisma"
 
 export const auth = betterAuth({
@@ -62,7 +62,7 @@ Register the client plugin so your frontend can call the plugin endpoints:
 
 ```ts title="lib/auth-client.ts"
 import { createAuthClient } from "better-auth/react"
-import { mercadopagoPluginClient } from "better-auth-mp/plugin/client"
+import { mercadopagoPluginClient } from "better-auth-mp/client"
 
 export const authClient = createAuthClient({
   baseURL: process.env.BETTER_AUTH_URL,
@@ -72,14 +72,20 @@ export const authClient = createAuthClient({
 
 ## Database migration
 
-The plugin defines three additional database tables. Run your adapter's migration after adding the plugin:
+The plugin defines three additional database tables. Run your adapter's generate after adding the plugin:
 
 ```bash
-# Prisma
-npx prisma migrate dev
+# npm
+npx auth@latest generate
 
-# Prisma (generate only)
-npx prisma generate
+# pnpm
+pnpm dlx auth@latest generate
+
+# yarn
+yarn dlx auth@latest generate
+
+# bun
+bun x auth@latest generate
 ```
 
 See the [Database Schema](/docs//schema) page for full field details.
