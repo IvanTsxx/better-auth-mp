@@ -37,7 +37,7 @@ const Commands: Command[] = [
   {
     dlx: "pnpm dlx",
     icon: PNPM,
-    install: "pnpm i better-auth-mp",
+    install: "pnpm add better-auth-mp",
     name: "pnpm",
   },
   {
@@ -99,7 +99,7 @@ const CodeBlockTabsPkg = ({ command, type }: CodeBlockTabsPkgProps) => {
               <CodeblockShiki
                 language="bash"
                 lineNumbers={true}
-                code={`${cmd[type]} ${command}`}
+                code={`${cmd[type]}`}
                 className="bg-background dark:bg-background"
               />
             </TabsContent>

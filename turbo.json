@@ -27,6 +27,9 @@
     "db:migrate": {
       "cache": false
     },
+    "db:deploy": {
+      "cache": false
+    },
     "db:generate": {
       "cache": false
     },

@@ -1,28 +1,32 @@
 export const initCode = [
   {
-    code: `import { betterAuth } from "better-auth";
-import { mercadopago } from "@better-auth/mercadopago";
+    code: `import { env } from "@repo/env/server";
+import { betterAuth } from "better-auth";
+import { mercadoPagoPlugin } from "better-auth-mp";
 
 export const auth = betterAuth({
+// ...other settings
   plugins: [
-    mercadopago({
-      accessToken: process.env.MP_ACCESS_TOKEN!,
-      // Puedes pasar más opciones aquí
+    mercadoPagoPlugin({
+      accessToken: env.MP_ACCESS_TOKEN,
+      baseUrl: env.BETTER_AUTH_URL,
+      webhookSecret: env.MP_WEBHOOK_SECRET,
     }),
   ],
-});`,
+});
+`,
     lang: "tsx",
     title: "auth.ts",
   },
   {
-    code: `import { createAuthClient } from "better-auth/react"; // o vue, svelte, solid
-import { mercadopagoClient } from "@better-auth/mercadopago/client";
+    code: `import { mercadopagoPluginClient } from "better-auth-mp/client";
+import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
-  plugins: [
-    mercadopagoClient(),
-  ],
-});`,
+  // ...other settings
+  plugins: [mercadopagoPluginClient()],
+});
+`,
     lang: "tsx",
     title: "auth-client.ts",
   },
