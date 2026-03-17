@@ -1,6 +1,5 @@
 "use client";
 
-import type { MercadopagoItem } from "better-auth-mp/types";
 import {
   Store,
   Users,
@@ -9,10 +8,11 @@ import {
   ArrowRight,
   Loader2,
   User,
+  AlertCircleIcon,
 } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { authClient } from "@/lib/auth-client";
 
 /**
  * Productos de marketplace de demo
@@ -33,7 +32,7 @@ const PRODUCTOS_MARKETPLACE = [
     description: "Bolso de cuero hecho a mano",
     id: "mp_001",
     name: "Bolso de Cuero Artesanal",
-    price: 12_500,
+    price: 1,
     seller: {
       email: "vendedor1@demo.com",
       name: "LeatherCraft Co.",
@@ -43,7 +42,7 @@ const PRODUCTOS_MARKETPLACE = [
     description: "Set de 3 jarrones de cerámica artesanal",
     id: "mp_002",
     name: "Set de Jarrones de Cerámica",
-    price: 4500,
+    price: 2,
     seller: {
       email: "vendedor2@demo.com",
       name: "Cerámica Artesanal",
@@ -53,7 +52,7 @@ const PRODUCTOS_MARKETPLACE = [
     description: "1kg de miel orgánica de flores silvestres",
     id: "mp_003",
     name: "Miel Orgánica",
-    price: 2800,
+    price: 3,
     seller: {
       email: "vendedor3@demo.com",
       name: "Finca BeeHappy",
@@ -70,7 +69,7 @@ function formatPrice(cents: number, currency = "ARS"): string {
   return new Intl.NumberFormat("es-AR", {
     currency,
     style: "currency",
-  }).format(cents / 100);
+  }).format(cents);
 }
 
 type ProductoDemo = (typeof PRODUCTOS_MARKETPLACE)[number];
@@ -81,8 +80,8 @@ export default function MarketplacePage() {
   );
   const [quantity, setQuantity] = useState(1);
   const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, _setIsLoading] = useState(false);
+  const [error, _setError] = useState<string | null>(null);
 
   const handleProductSelect = (product: ProductoDemo) => {
     setSelectedProduct(product);
@@ -102,6 +101,14 @@ export default function MarketplacePage() {
         <p className="text-muted-foreground mt-2">
           Ejemplo de pagos split (marketplace) con seguimiento de comisiones
         </p>
+
+        <Alert variant="warning" className="mt-2">
+          <AlertCircleIcon />
+          <AlertTitle>Esta implementacion aun esta en desarrollo</AlertTitle>
+          <AlertDescription>
+            Esto es experimental, puede que no funcione o encuentres errores.
+          </AlertDescription>
+        </Alert>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">

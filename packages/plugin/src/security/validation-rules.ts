@@ -20,7 +20,7 @@ const SUPPORTED_CURRENCIES = [
 ] as const;
 
 // Minimum and maximum payment amounts (in cents)
-const MIN_AMOUNT = 100;
+const MIN_AMOUNT = 0;
 const MAX_AMOUNT = 100_000_000;
 
 export type SupportedCurrency = (typeof SUPPORTED_CURRENCIES)[number];

@@ -36,7 +36,7 @@ const PRODUCTOS_DEMO = [
     image:
       "https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=300&fit=crop",
     name: "Membresía Premium",
-    price: 1500,
+    price: 1,
   },
   {
     description: "Libro digital con todos los secretos",
@@ -44,7 +44,7 @@ const PRODUCTOS_DEMO = [
     image:
       "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=300&fit=crop",
     name: "E-book: Guía Completa",
-    price: 499,
+    price: 2,
   },
   {
     description: "Videollamada de 1 hora con un experto",
@@ -52,7 +52,7 @@ const PRODUCTOS_DEMO = [
     image:
       "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=400&h=300&fit=crop",
     name: "Sesión de Consultoría",
-    price: 7500,
+    price: 3,
   },
 ];
 
