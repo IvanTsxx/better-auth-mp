@@ -36,7 +36,7 @@ export const Navbar = ({ lang }: { lang: string }) => (
           variant="ghost"
           render={
             <Link
-              href="https://github.com/better-auth/better-auth-mp"
+              href="https://github.com/ivantsxx/better-auth-mp"
               target="_blank"
               rel="noopener noreferrer"
             />
