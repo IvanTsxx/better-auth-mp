@@ -317,9 +317,9 @@ export default function PaymentsPage() {
                 <code>{`
 await authClient.mercadoPago.createPayment({
   backUrls: {
-    failure: "${window.location.origin}/payments/failure",
-    pending: "${window.location.origin}/payments/pending",
-    success: "${window.location.origin}/payments/success",
+    failure: "${typeof window !== "undefined" ? window.location.origin : ""}/payments/failure",
+    pending: "${typeof window !== "undefined" ? window.location.origin : ""}/payments/pending",
+    success: "${typeof window !== "undefined" ? window.location.origin : ""}/payments/success",
   },
   items: selectedItems,
 });`}</code>

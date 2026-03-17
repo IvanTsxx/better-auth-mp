@@ -3,6 +3,7 @@
 import { Clock, Home, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 import {
   Card,
@@ -30,7 +31,7 @@ function extractPaymentParams(searchParams: URLSearchParams) {
   };
 }
 
-export default function PaymentPendingPage() {
+function PaymentPendingContent() {
   const searchParams = useSearchParams();
   const params = extractPaymentParams(searchParams);
 
@@ -138,5 +139,21 @@ export default function PaymentPendingPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function PaymentPendingPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto flex min-h-screen items-center justify-center px-4 py-8">
+          <div className="text-muted-foreground">
+            Cargando estado del pago...
+          </div>
+        </div>
+      }
+    >
+      <PaymentPendingContent />
+    </Suspense>
   );
 }

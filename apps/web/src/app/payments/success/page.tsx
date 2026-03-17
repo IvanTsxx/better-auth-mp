@@ -3,6 +3,7 @@
 import { CheckCircle2, Home, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 import {
   Card,
@@ -30,7 +31,7 @@ function extractPaymentParams(searchParams: URLSearchParams) {
   };
 }
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessContent() {
   const searchParams = useSearchParams();
   const params = extractPaymentParams(searchParams);
 
@@ -126,5 +127,21 @@ export default function PaymentSuccessPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto flex  items-center justify-center px-4 py-8">
+          <div className="text-muted-foreground">
+            Cargando estado del pago...
+          </div>
+        </div>
+      }
+    >
+      <PaymentSuccessContent />
+    </Suspense>
   );
 }

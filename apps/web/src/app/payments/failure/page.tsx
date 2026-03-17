@@ -3,6 +3,7 @@
 import { XCircle, Home, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 import {
   Card,
@@ -31,7 +32,7 @@ function extractPaymentParams(searchParams: URLSearchParams) {
   };
 }
 
-export default function PaymentFailurePage() {
+function PaymentFailureContent() {
   const searchParams = useSearchParams();
   const params = extractPaymentParams(searchParams);
 
@@ -133,5 +134,21 @@ export default function PaymentFailurePage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function PaymentFailurePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto flex min-h-screen items-center justify-center px-4 py-8">
+          <div className="text-muted-foreground">
+            Cargando estado del pago...
+          </div>
+        </div>
+      }
+    >
+      <PaymentFailureContent />
+    </Suspense>
   );
 }
