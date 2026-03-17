@@ -1,5 +1,14 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "DATABASE_URL",
+    "BETTER_AUTH_SECRET",
+    "MP_ACCESS_TOKEN",
+    "MP_WEBHOOK_SECRET",
+    "BETTER_AUTH_URL",
+    "CORS_ORIGIN",
+    "NODE_ENV"
+  ],
   "ui": "tui",
   "tasks": {
     "build": {
