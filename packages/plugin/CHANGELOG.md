@@ -60,6 +60,6 @@ See our [public roadmap](https://github.com/IvanTsxx/better-auth-mp/issues) for 
 
 ## Support
 
-- 📖 [Documentation](https://better-auth-mp.vercel.app)
+- 📖 [Documentation](https://better-auth-mp-docs.vercel.app)
 - 🐛 [Issue Tracker](https://github.com/IvanTsxx/better-auth-mp/issues)
 - 💬 [Discussions](https://github.com/IvanTsxx/better-auth-mp/discussions)

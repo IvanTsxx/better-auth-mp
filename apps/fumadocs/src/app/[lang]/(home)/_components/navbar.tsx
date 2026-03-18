@@ -22,7 +22,7 @@ export const Navbar = ({ lang }: { lang: string }) => (
           DOCS
         </Link>
         <Link
-          href="https://better-auth-mp.vercel.app"
+          href="https://better-auth-mp-demo.vercel.app"
           target="_blank"
           rel="noopener noreferrer"
           className="shrink-0 px-8 py-5 border-b-2 border-transparent hover:text-zinc-300 transition-colors"

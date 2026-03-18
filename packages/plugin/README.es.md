@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="https://better-auth-mp.vercel.app/logo.png" alt="better-auth-mp logo" width="120" />
 
   <h1>better-auth-mp</h1>
 

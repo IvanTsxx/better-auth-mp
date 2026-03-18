@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     process.env.NEXT_PUBLIC_APP_URL ||
     (process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
-      : "https://better-auth-mp.vercel.app");
+      : "https://better-auth-mp-demo.vercel.app");
 
   return {
     rules: {
