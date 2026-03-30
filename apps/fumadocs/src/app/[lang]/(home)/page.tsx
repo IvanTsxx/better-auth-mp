@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
 import { CodeBlockTabsPkg } from "@/components/code-block/blocks/copy-with-tabs-package-manager";
+import { CodeBlockSkills } from "@/components/code-block/blocks/skills-install";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { CodeExamples } from "./_components/code-examples";
 import {
@@ -104,7 +106,28 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 ? "MercadoPago Plugin for better-auth is an npm package. It provides a comprehensive set of features out of the box, simplifies the addition of advanced functionalities and infrastructure to help own your payments at scale in any framework supported by better-auth."
                 : "El plugin de mercadopago para better-auth es un paquete de npm. Proporciona un conjunto completo de características listas para usar, simplifica la adición de funcionalidades avanzadas e infraestructura para ayudar a controlar tus pagos a escala en cualquier framework soportado por better-auth."}
             </p>
-            <CodeBlockTabsPkg type="install" command="better-auth-mp" />
+            <Tabs defaultValue="npm" className="w-full">
+              <TabsList className="bg-transparent border border-zinc-800 rounded-md mb-2 h-8 p-0.5 gap-0.5">
+                <TabsTrigger
+                  value="npm"
+                  className="text-xs h-7 px-3 rounded data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-100 text-zinc-500"
+                >
+                  npm
+                </TabsTrigger>
+                <TabsTrigger
+                  value="skills"
+                  className="text-xs h-7 px-3 rounded data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-100 text-zinc-500"
+                >
+                  skills
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="npm" className="mt-0">
+                <CodeBlockTabsPkg type="install" command="better-auth-mp" />
+              </TabsContent>
+              <TabsContent value="skills" className="mt-0">
+                <CodeBlockSkills />
+              </TabsContent>
+            </Tabs>
 
             <SectionContainer
               title={lang === "en" ? "FEATURES" : "CARACTERÍSTICAS"}

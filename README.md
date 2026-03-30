@@ -68,6 +68,24 @@ pnpm add better-auth-mp
 bun add better-auth-mp
 ```
 
+### Agent Skills
+
+If you use an AI coding agent (Claude Code, Antigravity, Codex, Cursor, OpenCode...) install the
+`better-auth-mp` skill so your agent knows how to integrate this plugin without extra prompting:
+
+```bash
+# npx
+npx skills add IvanTsxx/better-auth-mp
+
+# bunx
+bunx --bun skills add IvanTsxx/better-auth-mp
+
+# pnpm
+pnpm dlx skills add IvanTsxx/better-auth-mp
+```
+
+Compatible with [40+ AI coding agents](https://github.com/vercel-labs/skills#supported-agents).
+
 ### Peer Dependencies
 
 Make sure you have the required peer dependencies installed:

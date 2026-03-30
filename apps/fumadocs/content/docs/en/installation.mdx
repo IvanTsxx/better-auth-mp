@@ -13,6 +13,25 @@ npm install better-auth-mp mercadopago
 bun add better-auth-mp mercadopago
 ```
 
+## Agent Skills (Claude Code, Antigravity, Codex...)
+
+If you use an AI coding agent, install the `better-auth-mp` skill so your agent knows how to
+integrate this plugin without extra prompting:
+
+```bash
+# npx
+npx skills add IvanTsxx/better-auth-mp
+
+# bunx
+bunx --bun skills add IvanTsxx/better-auth-mp
+
+# pnpm
+pnpm dlx skills add IvanTsxx/better-auth-mp
+```
+
+The skill is compatible with **Claude Code**, **Antigravity**, **Codex**, **OpenCode**, **Cursor**,
+and [40+ more agents](https://github.com/vercel-labs/skills#supported-agents).
+
 ## Server setup
 
 Add the plugin to your Better Auth server configuration:

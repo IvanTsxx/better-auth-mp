@@ -19,6 +19,25 @@ bun add better-auth-mp
 yarn add better-auth-mp
 ```
 
+## Agent Skills (Claude Code, Antigravity, Codex...)
+
+Si usás un agente de IA para programar, instalá la skill `better-auth-mp` para que el agente
+sepa integrar este plugin sin necesidad de prompts adicionales:
+
+```bash
+# npx
+npx skills add IvanTsxx/better-auth-mp
+
+# bunx
+bunx --bun skills add IvanTsxx/better-auth-mp
+
+# pnpm
+pnpm dlx skills add IvanTsxx/better-auth-mp
+```
+
+La skill es compatible con **Claude Code**, **Antigravity**, **Codex**, **OpenCode**, **Cursor**
+y [más de 40 agentes](https://github.com/vercel-labs/skills#supported-agents).
+
 ## Configuración del servidor
 
 Agregá el plugin a la configuración de tu servidor de Better Auth:

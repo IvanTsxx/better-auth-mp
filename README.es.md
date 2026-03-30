@@ -68,6 +68,24 @@ pnpm add better-auth-mp
 bun add better-auth-mp
 ```
 
+### Agent Skills
+
+Si usás un agente de IA para programar (Claude Code, Antigravity, Codex, Cursor, OpenCode...)
+instalá la skill `better-auth-mp` para que el agente sepa integrar este plugin sin prompts extras:
+
+```bash
+# npx
+npx skills add IvanTsxx/better-auth-mp
+
+# bunx
+bunx --bun skills add IvanTsxx/better-auth-mp
+
+# pnpm
+pnpm dlx skills add IvanTsxx/better-auth-mp
+```
+
+Compatible con [más de 40 agentes de IA](https://github.com/vercel-labs/skills#supported-agents).
+
 ### Dependencias de pares (peer dependencies)
 
 Asegurate de tener instaladas las peer dependencies requeridas:
