@@ -71,6 +71,11 @@
       "sourceType": "github",
       "computedHash": "b122f4d1e91aa1d83027e050b5b37c3156203ee85458d7b1360bc48167c9e02a"
     },
+    "skills-cli": {
+      "source": "xixu-me/skills",
+      "sourceType": "github",
+      "computedHash": "b07bdbfc8206175919a9e6cfbab6e4f1f4a05fb32c0824bd346c8b4ecb006842"
+    },
     "turborepo": {
       "source": "vercel/turborepo",
       "sourceType": "github",
