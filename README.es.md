@@ -229,4 +229,4 @@ const subscription = authClient.mercadopago.useSubscription();
 
 [MIT](./LICENSE) — Copyright © 2025 better-auth-mp contributors.
 
-Consultá [DISCLAIMER.md](./DISCLAIMER.md) para información legal importante.
+Consultá [DISCLAIMER.md](./packages/plugin/DISCLAIMER.md) para información legal importante.

@@ -229,4 +229,4 @@ We welcome contributions! Please read our [CONTRIBUTING.md](./CONTRIBUTING.md) g
 
 [MIT](./LICENSE) — Copyright © 2025 better-auth-mp contributors.
 
-See [DISCLAIMER.md](./DISCLAIMER.md) for important legal information.
+See [DISCLAIMER.md](./packages/plugin/DISCLAIMER.md) for important legal information.
