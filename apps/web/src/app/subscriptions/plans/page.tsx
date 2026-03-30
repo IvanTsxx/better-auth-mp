@@ -1,6 +1,6 @@
 "use client";
 
-import { Package, Loader2, Plus, Trash2, CreditCard } from "lucide-react";
+import { Package, Loader2, Plus } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 

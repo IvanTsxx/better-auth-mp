@@ -32,7 +32,7 @@ const CodeBlockHeader = ({
 }: CodeBlockHeaderProps) => (
   <div
     className={cn(
-      "not-prose", // Disable Markdown Styles
+      "not-prose",
       "flex h-9 items-center justify-between px-2 py-1.5",
       "text-sm text-neutral-600 dark:text-neutral-400",
       className

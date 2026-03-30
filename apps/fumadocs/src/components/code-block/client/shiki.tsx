@@ -49,7 +49,7 @@ const CodeblockShiki = ({
       });
       setHighlightedHtml(html);
     }
-    void clientHighlight();
+    clientHighlight();
   }, [code, language, lineNumbers]);
 
   const classNames = cn("w-full overflow-x-auto", className);

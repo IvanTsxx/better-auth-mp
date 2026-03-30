@@ -77,15 +77,15 @@ const CopyWithTabsCode = () => (
         <div className="flex items-center space-x-1">
           <TabsList className="gap-1 border-0 bg-transparent dark:bg-transparent">
             {Code.map((c) => (
-                <TabsTrigger
-                  value={c.title}
-                  key={c.title}
-                  className="data-[state=active]:bg-transparent"
-                >
-                  <CodeBlockIcon language={c.lang} />
-                  <span>{c.title}</span>
-                </TabsTrigger>
-              ))}
+              <TabsTrigger
+                value={c.title}
+                key={c.title}
+                className="data-[state=active]:bg-transparent"
+              >
+                <CodeBlockIcon language={c.lang} />
+                <span>{c.title}</span>
+              </TabsTrigger>
+            ))}
           </TabsList>
         </div>
       </CodeBlockHeader>
