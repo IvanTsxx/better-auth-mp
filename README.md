@@ -28,7 +28,7 @@
 
 ---
 
-> ⚠️ **Disclaimer:** This plugin is community-maintained and is not officially affiliated with MercadoPago or Better Auth. See [DISCLAIMER.md](./DISCLAIMER.md) for full details.
+> ⚠️ **Disclaimer:** This plugin is community-maintained and is not officially affiliated with MercadoPago or Better Auth. See [DISCLAIMER.md](./packages/plugin/DISCLAIMER.md) for full details.
 
 ## Table of Contents
 

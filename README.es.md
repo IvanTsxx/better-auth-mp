@@ -28,7 +28,7 @@
 
 ---
 
-> ⚠️ **Descargo de responsabilidad:** Este plugin es mantenido por la comunidad y no está oficialmente afiliado a MercadoPago ni a Better Auth. Consultá el [DISCLAIMER.md](./DISCLAIMER.md) para más detalles.
+> ⚠️ **Descargo de responsabilidad:** Este plugin es mantenido por la comunidad y no está oficialmente afiliado a MercadoPago ni a Better Auth. Consultá el [DISCLAIMER.md](./packages/plugin/DISCLAIMER.md) para más detalles.
 
 ## Tabla de Contenidos
 
