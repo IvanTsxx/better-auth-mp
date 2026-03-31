@@ -122,7 +122,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="npm" className="mt-0">
-                <CodeBlockTabsPkg type="install" command="better-auth-mp" />
+                <CodeBlockTabsPkg type="install" />
               </TabsContent>
               <TabsContent value="skills" className="mt-0">
                 <CodeBlockSkills />

@@ -12,9 +12,11 @@ import {
 } from "@/components/code-block/code-block";
 import { CopyButton } from "@/components/code-block/copy-button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { usePackageManager } from "@/stores/package-manager";
+import type { PackageManager } from "@/stores/package-manager";
 
 interface SkillsCommand {
-  name: string;
+  name: PackageManager;
   command: string;
   icon: FC<SVGProps<SVGSVGElement>>;
 }
@@ -23,12 +25,12 @@ const SKILLS_COMMANDS: SkillsCommand[] = [
   {
     command: "npx skills add IvanTsxx/better-auth-mp",
     icon: NPM,
-    name: "npx",
+    name: "npm",
   },
   {
     command: "bunx --bun skills add IvanTsxx/better-auth-mp",
     icon: Bun,
-    name: "bunx",
+    name: "bun",
   },
   {
     command: "pnpm dlx skills add IvanTsxx/better-auth-mp",
@@ -43,12 +45,17 @@ const SKILLS_COMMANDS: SkillsCommand[] = [
 ];
 
 const CodeBlockSkills = () => {
-  const [defaultTab] = SKILLS_COMMANDS;
+  const { packageManager, setPackageManager } = usePackageManager();
+
+  const selected =
+    SKILLS_COMMANDS.find((cmd) => cmd.name === packageManager) ??
+    SKILLS_COMMANDS[0];
 
   return (
     <Tabs
       className="w-full gap-1 bg-background dark:bg-background"
-      defaultValue={defaultTab.name}
+      value={packageManager}
+      onValueChange={(value) => setPackageManager(value as PackageManager)}
     >
       <CodeBlock className="gap-2 bg-background dark:bg-background">
         <CodeBlockHeader className="bg-background dark:bg-background">
@@ -70,8 +77,10 @@ const CodeBlockSkills = () => {
               })}
             </TabsList>
           </div>
-          <CopyButton className="pl-1" content={`${defaultTab.command}`} />
+
+          <CopyButton className="pl-1" content={selected.command} />
         </CodeBlockHeader>
+
         <CodeBlockContent className="bg-background dark:bg-background">
           {SKILLS_COMMANDS.map((cmd) => (
             <TabsContent
@@ -81,7 +90,7 @@ const CodeBlockSkills = () => {
             >
               <CodeblockShiki
                 language="bash"
-                lineNumbers={true}
+                lineNumbers
                 code={cmd.command}
                 className="bg-background dark:bg-background"
               />

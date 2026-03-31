@@ -23,7 +23,6 @@ interface Command {
 }
 
 interface CodeBlockTabsPkgProps {
-  command: string;
   type: "install" | "dlx";
 }
 
@@ -54,12 +53,12 @@ const Commands: Command[] = [
   },
 ];
 
-const CodeBlockTabsPkg = ({ command, type }: CodeBlockTabsPkgProps) => {
+const CodeBlockTabsPkg = ({ type }: CodeBlockTabsPkgProps) => {
   const { packageManager, setPackageManager } = usePackageManager();
 
   const selectedPkg =
     Commands.find((pkg) => pkg.name === packageManager) ?? Commands[0];
-  const fullCommand = `${selectedPkg[type]} ${command}`;
+  const fullCommand = selectedPkg[type];
 
   return (
     <Tabs
